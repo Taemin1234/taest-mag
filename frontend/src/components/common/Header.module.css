@@ -1,5 +1,15 @@
-.heaer-wrap {
-    position: relative;
+.header_wrap {
+    position: fixed;
+    top: 0;
+    left: 0;
+    transition: transform 0.3s ease;
+}
+
+.hide {
+    transform: translateY(-100%);
+}
+.show {
+    transform: translateY(0);
 }
 
 .button {
