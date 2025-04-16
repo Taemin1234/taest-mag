@@ -1,7 +1,7 @@
 export default function Home() {
   return (
     <div>
-      adfafds
+      메인 페이지
     </div>
   );
 }
