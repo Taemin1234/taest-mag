@@ -1,6 +1,6 @@
 'use client';
 
-import styles from '../elsa/elsa.module.css'
+import styles from '../styles/elsa.module.css'
 import { useState } from 'react';
 import Link from 'next/link';
 import InputField from "@/components/InputField"

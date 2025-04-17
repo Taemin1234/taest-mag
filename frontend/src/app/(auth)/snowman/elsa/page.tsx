@@ -1,6 +1,6 @@
 'use client';
 
-import styles from './elsa.module.css'
+import styles from '../styles/elsa.module.css'
 import { useState } from 'react';
 import Link from 'next/link';
 import InputField from "@/components/InputField"
@@ -50,7 +50,7 @@ export default function LoginPage() {
           required
           minLength={6}
         />
-        
+
         <button
           type="submit"
           className={styles.btn_login}
