@@ -1,0 +1,84 @@
+.login_box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 400px;
+    padding: 40px;
+    transform: translate(-50%, -50%);
+    background: rgba(0,0,0,.5);
+    box-sizing: border-box;
+    box-shadow: 0 15px 25px rgba(0,0,0,.6);
+    border-radius: 10px;
+}
+
+.login_box h1 {
+    margin: 0 0 30px;
+    padding: 0;
+    color: #fff;
+    text-align: center;
+}
+
+.user_box {
+    position: relative;
+}
+
+.user_box input {
+    width: 100%;
+    padding: 10px 0;
+    font-size: 16px;
+    color: #fff;
+    margin-bottom: 30px;
+    border: none;
+    border-bottom: 1px solid #fff;
+    outline: none;
+    background: transparent;
+}
+
+.user_box label {
+    position: absolute;
+    top:0;
+    left: 0;
+    padding: 10px 0;
+    font-size: 16px;
+    color: #fff;
+    pointer-events: none;
+    transition: .5s;
+}
+
+.login_box .user_box input:focus ~ label,
+.login_box .user_box input:valid ~ label {
+  top: -20px;
+  left: 0;
+  color: #03e9f4;
+  font-size: 12px;
+}
+
+.btn_login {
+    width: 100%;
+    font-size: 18px;
+    font-weight: 700;
+    border-radius: 5px;
+    padding: 10px;
+    background-color: #ff7200;
+    color: #fff;
+    cursor: pointer;
+    transition: 0.4s ease;
+}
+.btn_login:hover {
+    background-color: #fff;
+    color: #ff7200;
+}
+
+.txt_wrap {
+    margin-top: 15px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;   
+}
+.txt_wrap a {
+    color: #fff;
+    text-decoration: underline;
+}
+.txt_wrap a:hover {
+    color: #ff7200;
+}

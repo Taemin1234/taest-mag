@@ -1,10 +1,11 @@
 'use client';
 
+import styles from './elsa.module.css'
 import { useState } from 'react';
 import Link from 'next/link';
 
 export default function LoginPage() {
-  const [form, setForm] = useState({ email: '', password: '' });
+  const [form, setForm] = useState({ username: '', password: '' });
   const [error, setError] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -14,7 +15,7 @@ export default function LoginPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // UI-only: 백엔드 연동 제외
-    if (!form.email || !form.password) {
+    if (!form.username || !form.password) {
       setError('이메일과 비밀번호를 모두 입력해주세요.');
       return;
     }
@@ -23,34 +24,26 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <form
-        onSubmit={handleSubmit}
-        className="w-full max-w-sm bg-white p-6 rounded-lg shadow-md space-y-6"
-      >
-        <h1 className="text-2xl font-bold text-center">로그인</h1>
-
+    <div className={styles.login_box}>
+      <h1>에디터 입장</h1>
+      <form onSubmit={handleSubmit}>
         {error && <p className="text-red-500 text-sm text-center">{error}</p>}
 
-        <div>
-          <label htmlFor="email" className="block text-sm font-medium mb-1">
-            이메일
-          </label>
+        <div className={styles.user_box}>
           <input
-            id="email"
-            name="email"
-            type="email"
-            value={form.email}
+            id="username"
+            name="username"
+            type="string"
+            value={form.username}
             onChange={handleChange}
             required
-            className="w-full px-3 py-2 border rounded focus:outline-none focus:ring"
           />
+          <label htmlFor="username">
+            아이디
+          </label>
         </div>
 
-        <div>
-          <label htmlFor="password" className="block text-sm font-medium mb-1">
-            비밀번호
-          </label>
+        <div className={styles.user_box}>
           <input
             id="password"
             name="password"
@@ -58,22 +51,24 @@ export default function LoginPage() {
             value={form.password}
             onChange={handleChange}
             required
-            className="w-full px-3 py-2 border rounded focus:outline-none focus:ring"
           />
+          <label htmlFor="password">
+            비밀번호
+          </label>
         </div>
 
         <button
           type="submit"
-          className="w-full bg-black text-white py-2 rounded hover:bg-gray-800 transition"
+          className={styles.btn_login}
         >
           로그인
         </button>
 
-        <div className="flex justify-between text-sm text-gray-500">
-          <Link href="/auth/reset-password" className="hover:underline">
+        <div className={styles.txt_wrap}>
+          <Link href="/snowman/reset-password" className={styles.txt1}>
             비밀번호 찾기
           </Link>
-          <Link href="/auth/signup" className="hover:underline">
+          <Link href="/snowman/signup" className={styles.txt1}>
             회원가입
           </Link>
         </div>
