@@ -110,7 +110,7 @@ export default function SignUpPage() {
           가입하기
         </button>
 
-        <p  className={styles.txt_wrap}>
+        <p className={styles.txt_wrap}>
           이미 계정이 있으신가요?{' '}
           <Link href="/snowman/elsa" className={styles.txt1}>
             로그인
