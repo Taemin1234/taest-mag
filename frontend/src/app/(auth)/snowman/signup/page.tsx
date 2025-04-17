@@ -1,15 +1,25 @@
 'use client';
 
+import styles from '../elsa/elsa.module.css'
 import { useState } from 'react';
+import Link from 'next/link';
+import InputField from "@/components/InputField"
+
+interface SignUpForm {
+  username: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+}
 
 export default function SignUpPage() {
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<SignUpForm>({
     username: '',
     email: '',
     password: '',
     confirmPassword: '',
   });
-  const [error, setError] = useState('');
+  const [error, setError] = useState<string>('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
@@ -17,94 +27,95 @@ export default function SignUpPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    // 비밀번호 확인
     if (form.password !== form.confirmPassword) {
       setError('비밀번호가 일치하지 않습니다.');
       return;
     }
+    // 필수 입력 확인
+    if (!form.username || !form.email || !form.password) {
+      setError('모든 필드를 입력해주세요.');
+      return;
+    }
     setError('');
-    // UI-only: 백엔드 연동 제외
+
+    // TODO: 백엔드 회원가입 API 연결 준비
+    // 예: await fetch('/api/auth/signup', { method: 'POST', body: JSON.stringify(form) });
+    console.log('Signup data:', {
+      username: form.username,
+      email: form.email,
+      password: form.password,
+    });
   };
 
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+    <div className={styles.login_box}>
+      <h1>회원가입</h1>
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-md bg-white p-6 rounded-lg shadow-md space-y-6"
       >
-        <h1 className="text-2xl font-bold text-center">회원가입</h1>
-
+        
         {error && (
           <p className="text-red-500 text-sm text-center">{error}</p>
         )}
 
-        <div>
-          <label htmlFor="username" className="block text-sm font-medium mb-1">
-            사용자 이름
-          </label>
-          <input
-            id="username"
-            name="username"
-            type="text"
-            value={form.username}
-            onChange={handleChange}
-            required
-            className="w-full px-3 py-2 border rounded focus:outline-none focus:ring"
-          />
-        </div>
+        <InputField
+          id="username"
+          name="username"
+          type='string'
+          label="아이디 (4자 이상 30자 이하)"
+          value={form.username}
+          onChange={handleChange}
+          required
+          minLength={4}
+          maxLength={30}
+        />
+        <InputField
+          id="email"
+          name="email"
+          type="email"
+          label="이메일"
+          value={form.email}
+          onChange={handleChange}
+          required
+        />
 
-        <div>
-          <label htmlFor="email" className="block text-sm font-medium mb-1">
-            이메일
-          </label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            value={form.email}
-            onChange={handleChange}
-            required
-            className="w-full px-3 py-2 border rounded focus:outline-none focus:ring"
-          />
-        </div>
+        <InputField
+          id="password"
+          name="password"
+          type="password"
+          label="비밀번호(6자 이상)"
+          value={form.password}
+          onChange={handleChange}
+          required
+          minLength={6}
+        />
 
-        <div>
-          <label htmlFor="password" className="block text-sm font-medium mb-1">
-            비밀번호
-          </label>
-          <input
-            id="password"
-            name="password"
-            type="password"
-            value={form.password}
-            onChange={handleChange}
-            required
-            minLength={6}
-            className="w-full px-3 py-2 border rounded focus:outline-none focus:ring"
-          />
-        </div>
-
-        <div>
-          <label htmlFor="confirmPassword" className="block text-sm font-medium mb-1">
-            비밀번호 확인
-          </label>
-          <input
-            id="confirmPassword"
-            name="confirmPassword"
-            type="password"
-            value={form.confirmPassword}
-            onChange={handleChange}
-            required
-            minLength={6}
-            className="w-full px-3 py-2 border rounded focus:outline-none focus:ring"
-          />
-        </div>
+        <InputField
+          id="confirmPassword"
+          name="confirmPassword"
+          type="password"
+          label="비밀번호 확인"
+          value={form.confirmPassword}
+          onChange={handleChange}
+          required
+          minLength={6}
+        />
 
         <button
           type="submit"
-          className="w-full bg-black text-white py-2 rounded hover:bg-gray-800 transition"
+          className={styles.btn_login}
         >
           가입하기
         </button>
+
+        <p  className={styles.txt_wrap}>
+          이미 계정이 있으신가요?{' '}
+          <Link href="/snowman/elsa" className={styles.txt1}>
+            로그인
+          </Link>
+        </p>
       </form>
     </div>
   );

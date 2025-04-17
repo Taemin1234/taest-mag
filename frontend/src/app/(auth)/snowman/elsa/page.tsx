@@ -3,6 +3,7 @@
 import styles from './elsa.module.css'
 import { useState } from 'react';
 import Link from 'next/link';
+import InputField from "@/components/InputField"
 
 export default function LoginPage() {
   const [form, setForm] = useState({ username: '', password: '' });
@@ -29,34 +30,27 @@ export default function LoginPage() {
       <form onSubmit={handleSubmit}>
         {error && <p className="text-red-500 text-sm text-center">{error}</p>}
 
-        <div className={styles.user_box}>
-          <input
-            id="username"
-            name="username"
-            type="string"
-            value={form.username}
-            onChange={handleChange}
-            required
-          />
-          <label htmlFor="username">
-            아이디
-          </label>
-        </div>
+        <InputField
+          id="username"
+          name="username"
+          label="아이디"
+          type='string'
+          value={form.username}
+          onChange={handleChange}
+          required
+        />
 
-        <div className={styles.user_box}>
-          <input
-            id="password"
-            name="password"
-            type="password"
-            value={form.password}
-            onChange={handleChange}
-            required
-          />
-          <label htmlFor="password">
-            비밀번호
-          </label>
-        </div>
-
+        <InputField
+          id="password"
+          name="password"
+          type="password"
+          label="비밀번호"
+          value={form.password}
+          onChange={handleChange}
+          required
+          minLength={6}
+        />
+        
         <button
           type="submit"
           className={styles.btn_login}
