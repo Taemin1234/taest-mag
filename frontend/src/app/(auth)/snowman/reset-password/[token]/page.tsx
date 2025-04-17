@@ -1,6 +1,6 @@
 'use client';
 
-import styles from '@/elsa/elsa.module.css'
+import styles from '../../elsa/elsa.module.css'
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import InputField from "@/components/InputField"
