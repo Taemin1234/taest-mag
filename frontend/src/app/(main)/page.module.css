@@ -1,3 +1,7 @@
+.main {
+  padding-top: 6rem;
+}
+
 .postlist_wrap {
-  min-height: 150vh;
+  /* min-height: 150vh; */
 }

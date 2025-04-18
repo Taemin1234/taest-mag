@@ -5,14 +5,14 @@
     width: 400px;
     padding: 40px;
     transform: translate(-50%, -50%);
-    background: rgba(0,0,0,.5);
+    background: rgba(0, 0, 0, .5);
     box-sizing: border-box;
-    box-shadow: 0 15px 25px rgba(0,0,0,.6);
-    border-radius: 10px;
+    box-shadow: 0 1.5rem 2.5rem rgba(0, 0, 0, .6);
+    border-radius: 1rem;
 }
 
 .login_box h1 {
-    margin: 0 0 30px;
+    margin: 0 0 3rem;
     padding: 0;
     color: #fff;
     text-align: center;
@@ -20,30 +20,33 @@
 
 .btn_login {
     width: 100%;
-    font-size: 18px;
+    font-size: 1.8rem;
     font-weight: 700;
-    border-radius: 5px;
-    padding: 10px;
+    border-radius: 0.5rem;
+    padding: 1rem;
     background-color: #ff7200;
     color: #fff;
     cursor: pointer;
     transition: 0.4s ease;
 }
+
 .btn_login:hover {
     background-color: #fff;
     color: #ff7200;
 }
 
 .txt_wrap {
-    margin-top: 15px;
+    margin-top: 1.5rem;
     width: 100%;
     display: flex;
-    justify-content: space-between;   
+    justify-content: space-between;
 }
+
 .txt_wrap a {
     color: #fff;
     text-decoration: underline;
 }
+
 .txt_wrap a:hover {
     color: #ff7200;
 }
