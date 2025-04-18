@@ -30,20 +30,36 @@ export default function Header() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // GNB 열릴 때 스크롤 제어
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    // unmount 시에도 원상 복구
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
+
   const toggleGNB = () => {
     setIsOpen((prev) => !prev);
   };
 
   return (
     <header className={`${styles.header_wrap} ${show ? styles.show : styles.hide}`}>
-      <h1 className="">
+      <h1>
         <Link href="/">ta(e)st 매거진</Link>
-        </h1>
+      </h1>
       <button
         onClick={toggleGNB}
-        className={styles.button}
+        className={`${styles.button} ${isOpen ? styles.close : styles.open}`}
       >
         메뉴
+        <span></span>
+        <span></span>
+        <span></span>
       </button>
       <GNB isOpen={isOpen} />
     </header>
