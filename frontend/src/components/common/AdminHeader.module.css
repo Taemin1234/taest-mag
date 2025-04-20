@@ -1,0 +1,25 @@
+.admin_header {
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    top: 0;
+    height: 80px;
+    width: 100%;
+    padding: 0 20px;
+    background-color: #cdcdcd;
+}
+
+.admin_header ul {
+    display: flex;
+    gap: 15px;
+}
+
+.admin_header ul li {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.admin_header ul li:hover {
+    color: var(--admin-theme);
+}

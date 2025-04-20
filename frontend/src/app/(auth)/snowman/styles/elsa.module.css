@@ -14,7 +14,7 @@
 .login_box h1 {
     margin: 0 0 3rem;
     padding: 0;
-    color: #fff;
+    color: var(--main-white);
     text-align: center;
 }
 
@@ -24,15 +24,15 @@
     font-weight: 700;
     border-radius: 0.5rem;
     padding: 1rem;
-    background-color: #ff7200;
-    color: #fff;
+    background-color: var(--admin-theme);
+    color: var(--main-white);
     cursor: pointer;
     transition: 0.4s ease;
 }
 
 .btn_login:hover {
-    background-color: #fff;
-    color: #ff7200;
+    background-color: var(--main-white);
+    color: var(--admin-theme);
 }
 
 .txt_wrap {
@@ -43,10 +43,10 @@
 }
 
 .txt_wrap a {
-    color: #fff;
+    color: var(--main-white);
     text-decoration: underline;
 }
 
 .txt_wrap a:hover {
-    color: #ff7200;
+    color: var(--admin-theme);
 }

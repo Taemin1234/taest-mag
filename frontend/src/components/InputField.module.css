@@ -6,10 +6,10 @@
     width: 100%;
     padding: 1rem 0;
     font-size: 1.6rem;
-    color: #fff;
+    color: var(--main-white);
     margin-bottom: 3rem;
     border: none;
-    border-bottom: 0.1rem solid #fff;
+    border-bottom: 0.1rem solid var(--main-white);
     outline: none;
     background: transparent;
 }
@@ -20,7 +20,7 @@
     left: 0;
     padding: 1rem 0;
     font-size: 1.6rem;
-    color: #fff;
+    color: var(--main-white);
     pointer-events: none;
     transition: .5s;
 }
@@ -30,7 +30,7 @@
 .user_box.touched input:invalid~label {
     top: -2rem;
     left: 0;
-    color: #ff7200;
+    color: var(--admin-theme);
     font-size: 1.2rem;
 }
 

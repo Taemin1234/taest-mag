@@ -1,3 +1,17 @@
+/* 색상  */
+:root {
+  --main-white: #fdfdfd;
+  --main-black: #2d2d2d;
+
+  --admin-theme: #FF8C00;
+  --main-theme: #ff4f00;
+  --food-theme: #FF8C00;
+  --people-theme: #00B493;
+  --living-theme: #B500F9;
+  --tech-theme: #008FFF;
+  --culture-theme: #C4FF00;
+}
+
 /* reset.css */
 
 *,
