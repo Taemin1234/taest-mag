@@ -26,7 +26,7 @@ export default function RequestResetPage() {
     <div className={styles.login_box}>
       <h1 className="text-2xl font-bold text-center">비밀번호 찾기</h1>
       <form onSubmit={handleSubmit}>
-        
+
         {error && <p className="text-red-500 text-sm text-center">{error}</p>}
         {success && <p className="text-green-500 text-sm text-center">{success}</p>}
 
@@ -48,10 +48,10 @@ export default function RequestResetPage() {
         </button>
 
         <div className={styles.txt_wrap}>
-          <Link href="/auth/login" className="hover:underline">
+          <Link href="/snowman/elsa" className="hover:underline">
             로그인
           </Link>
-          <Link href="/auth/signup" className="hover:underline">
+          <Link href="/snowman/signup" className="hover:underline">
             회원가입
           </Link>
         </div>

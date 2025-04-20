@@ -2,6 +2,7 @@
 :root {
   --main-white: #fdfdfd;
   --main-black: #2d2d2d;
+  --main-red: #dc2626;
 
   --admin-theme: #FF8C00;
   --main-theme: #ff4f00;
@@ -31,6 +32,7 @@ html {
 body {
   margin: 0;
   padding: 0;
+  font-size: 1.6rem;
   min-height: 100vh;
   background-color: #fff;
   color: #111;

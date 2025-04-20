@@ -1,0 +1,102 @@
+.admin_posts {
+    padding-top: 100px;
+}
+
+
+.chkbox_box {
+    background-color: #eee;
+    padding: 20px;
+}
+
+.chkbox_wrap+.chkbox_wrap {
+    margin-top: 15px;
+}
+
+.chkbox_wrap h2 {
+    font-size: 20px;
+}
+
+.post_table {
+    margin-top: 30px;
+    width: 100%;
+}
+
+.post_tool {
+    display: flex;
+    justify-content: space-between;
+}
+
+.post_tool .search_wrap,
+.page_view_wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.post_tool .search_wrap select,
+.post_tool .search_wrap .input_wrap,
+.page_view_wrap select {
+    border: solid 1px var(--main-black);
+    padding: 3px;
+}
+
+
+.btn_post_add {
+    background-color: var(--culture-theme);
+    padding: 10px 15px;
+    font-weight: 700;
+    color: var(--main-black);
+    border-radius: 5px;
+}
+
+.post_table table {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.post_table table thead {
+    background-color: #ccc;
+}
+
+.post_table table tbody tr {
+    border-bottom: solid 1px #ccc;
+}
+
+.post_table table tbody tr td:first-child {
+    text-align: center;
+}
+
+.post_table table tbody tr td {
+    padding: 10px;
+}
+
+.post_table table tbody tr td p {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.btn_wrap button {
+    color: var(--main-white);
+    padding: 5px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.btn_wrap button:hover {
+    opacity: 0.5;
+}
+
+.btn_wrap button+button {
+    margin-left: 5px;
+}
+
+.btn_wrap .btn_blue {
+    background-color: var(--tech-theme);
+}
+
+.btn_wrap .btn_red {
+    background-color: var(--main-red);
+}
