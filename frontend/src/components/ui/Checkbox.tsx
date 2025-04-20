@@ -19,11 +19,26 @@ const CheckboxGroup: React.FC<CheckboxGroupProps> = ({
     onChange,
     name,
 }) => {
+    const allSelected = options
+        .filter(o => o.value !== 'all') // 'all' 옵션 제외
+        .every(o => selectedValues.includes(o.value));
+
     const handleToggle = (value: string) => {
-        if (selectedValues.includes(value)) {
-            onChange(selectedValues.filter(v => v !== value));
+        if (value === 'all') {
+            // all 클릭 시 전체 선택/해제
+            if (allSelected) {
+                onChange([]); // 전부 해제
+            } else {
+                onChange(options.map(o => o.value) // 'all' 제외한 모든 value
+                    .filter(v => v !== 'all'));
+            }
         } else {
-            onChange([...selectedValues, value]);
+            // 개별 토글
+            if (selectedValues.includes(value)) {
+                onChange(selectedValues.filter(v => v !== value));
+            } else {
+                onChange([...selectedValues, value]);
+            }
         }
     };
 
@@ -35,7 +50,11 @@ const CheckboxGroup: React.FC<CheckboxGroupProps> = ({
                         type="checkbox"
                         name={name}
                         value={opt.value}
-                        checked={selectedValues.includes(opt.value)}
+                        checked={
+                            opt.value === 'all'
+                                ? allSelected
+                                : selectedValues.includes(opt.value)
+                        }
                         onChange={() => handleToggle(opt.value)}
                     />
                     {opt.label}
