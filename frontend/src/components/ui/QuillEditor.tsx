@@ -20,7 +20,7 @@ export default function QuillEditor({
   const modules = {
     toolbar: [
       // 헤더 드롭다운: h1, h2, 일반 텍스트
-      [{ header: [1, 2, false] }],
+      [{ header: [1, 2, 3, false] }],
       // 글꼴 선택 드롭다운
       [{ font: [] }],
       // 글자 크기 선택 드롭다운
@@ -31,18 +31,22 @@ export default function QuillEditor({
       [{ color: [] }, { background: [] }],
       // 리스트, 들여쓰기
       [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
+       // 스크립트(Script) 아래첨자, 윗첨자
+      [{ script: 'sub' }, { script: 'super' }],
       // 정렬
       [{ align: [] }],
+      // 오른쪽에서 왼쪽으로 쓰기
+      [{ direction: 'rtl' }],
       // 링크, 이미지, 비디오 삽입
       ['link', 'image', 'video'],
-      // 코드 블록
-      ['code-block'],
+      // 인용구, 코드 블록
+      ['blockquote','code-block'],
       // 서식 초기화
       ['clean'],
     ],
   };
 
-  // ② 지원 포맷 정의
+  // 지원 포맷 정의
   const formats = [
     'header',
     'font',
@@ -50,9 +54,10 @@ export default function QuillEditor({
     'bold', 'italic', 'underline', 'strike',
     'color', 'background',
     'list', 'indent',
-    'align',
+    'script',
+    'direction', 'align',
     'link', 'image', 'video',
-    'code-block',
+     'blockquote', 'code-block',
   ];
 
   return (

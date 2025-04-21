@@ -44,6 +44,10 @@ export default function uploadPosts () {
                     </label>
                     <QuillEditor/>
                 </div>
+                <div>
+                    <button>저장</button>
+                    <button>취소</button>
+                </div>
             </form>
         </div>
     )
