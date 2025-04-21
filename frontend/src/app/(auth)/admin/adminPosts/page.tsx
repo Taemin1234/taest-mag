@@ -6,9 +6,10 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Checkbox, { Option } from '@/components/ui/Checkbox';
 
-type Post = {
+interface Post {
     id: string;
     title: string;
+    subtitle?:string;
     category: string;
     editor: string;
     // ...다른 필드
