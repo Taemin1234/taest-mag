@@ -3,3 +3,21 @@
     flex-wrap: wrap;
     gap: 15px;
 }
+
+.btn_wrap {
+    display: flex;
+    justify-content: flex-end;
+    margin: 20px 0;
+}
+
+.addEditor {
+    border-radius: 5px;
+    font-size: 20px;
+    padding: 5px 10px;
+    background-color: var(--main-theme);
+    color: var(--main-white);
+}
+
+.addEditor:hover {
+    opacity: 0.5;
+}
