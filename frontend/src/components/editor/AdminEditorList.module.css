@@ -1,0 +1,81 @@
+.editorList {
+    min-width: 360px;
+    flex: 1;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 5px 5px 18px -3px rgba(64,64,64,0.75);
+}
+
+.editorList * + * {
+    margin-top: 10px;
+}
+
+.editorList p {
+    font-size: 16px;
+}
+
+.editHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.editHeader .index {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.editHeader .button_wrap button {
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: var(--main-white);
+}
+
+.editHeader .button_wrap button:hover {
+    opacity: 0.5;
+}
+
+.editHeader .button_wrap button + button {
+    margin-left: 10px;
+}
+
+.editHeader .button_wrap button.edit {
+    background-color: var(--tech-theme);
+}
+
+.editHeader .button_wrap button.delete {
+    background-color: var(--main-red);
+}
+
+.profile_box {
+    display: flex;
+    justify-content: flex-start;
+    align-items:end;
+    gap: 10px;
+}
+
+.social {
+    display: flex;
+    justify-content: flex-start;
+    gap: 20px;
+}
+
+.social li {
+    position: relative;
+    margin-top: 0;
+}
+
+.social li + li::before {
+    position: absolute;
+    content: '';
+    width: 2px;
+    height: 15px;
+    background-color: var(--admin-theme);
+    left: -10px;
+    top: 50%;
+    transform: translateY(-50%);   
+}
+
+.social li a {
+    text-decoration: underline;
+}

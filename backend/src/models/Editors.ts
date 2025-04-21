@@ -2,16 +2,16 @@ import mongoose, { Schema, Document } from 'mongoose';
 
 export interface IEditor extends Document {
   name: string;
-  shortDesc: string;
-  longDesc: string;
+  tagline: string;
+  des: string;
   imageUrl: string;
   socialLinks: string[];
 }
 
 const EditorSchema = new Schema<IEditor>({
   name: { type: String, required: true },
-  shortDesc: { type: String, required: true },
-  longDesc: { type: String },
+  tagline: { type: String, required: true },
+  des: { type: String },
   imageUrl: { type: String },
   socialLinks: [{ type: String }],
 });

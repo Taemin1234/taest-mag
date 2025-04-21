@@ -8,6 +8,9 @@ const AdminHeader = () => {
             <h1>ta(e)st 매거진</h1>
             <ul>
                 <li>
+                    <Link href="/admin/adminEditor">에디터 관리</Link>
+                </li>
+                <li>
                     <Link href="/admin/adminPosts">아티클 관리</Link>
                 </li>
                 <li>
