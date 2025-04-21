@@ -4,7 +4,10 @@ const mongoose = require("mongoose")
 const app = express();
 const port = 3001; // Next.js랑 충돌 방지 위해 포트 다르게
 
+import editorRoutes from './routes/editors';
+
 app.use(express.json()); // JSON 파싱 미들웨어
+app.use('/api/editors', editorRoutes);
 
 app.get("/", (req, res) => {
   res.send("🟢 Express 서버가 잘 작동 중입니다!");
