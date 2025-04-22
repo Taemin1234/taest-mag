@@ -1,0 +1,45 @@
+.sns_wrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sns_wrap .input_wrap {
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
+}
+
+.sns_wrap .input_wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sns_list_wrap {
+    display: flex;
+    flex-direction: column;
+}
+
+.sns_list,
+.sns_input {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+}
+
+.sns_list {
+    align-items: end;
+}
+
+.sns_wrap button.red {
+    background-color: var(--main-red);
+    color: var(--main-white);
+}
+
+.sns_wrap button.white {
+    background-color: var(--main-white);
+    color: var(--main-black);
+    border: solid 1px var(--main-black);
+}

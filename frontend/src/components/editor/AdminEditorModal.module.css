@@ -1,5 +1,8 @@
 .editorModal {
     position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     inset: 0;
     width: 100vw;
     height: 100vh;
@@ -11,7 +14,56 @@
     width: 80%;
     background-color: var(--main-white);
     border-radius: 5px;
-    margin: 0 auto;
-    margin-top: 100px;
     padding: 20px 30px;
+}
+
+.form_wrap {
+    margin-top: 20px;
+}
+
+.form_wrap > div {
+    display: flex;
+    gap: 10px;
+}
+
+.form_wrap > div + div {
+    margin-top: 15px;
+}
+
+.form_wrap > div label {
+    min-width: 150px;
+    font-size: 20px;
+}
+
+.form_wrap > div input,
+.form_wrap > div textarea {
+    width: 100%;
+}
+
+.editorModal button {
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.editorModal button:hover {
+    opacity: 0.5;
+}
+
+.editorModal button.red {
+    background-color: var(--main-red);
+    color: var(--main-white);
+}
+
+.editorModal button.white {
+    background-color: var(--main-white);
+    border: solid 1px var(--main-black);
+}
+
+.btn_wrap {
+    justify-content: flex-end;
+    margin-top: 30px !important;
+}
+
+.btn_wrap button {
+    padding: 10px 20px;
 }

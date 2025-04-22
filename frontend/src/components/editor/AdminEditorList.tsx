@@ -3,15 +3,8 @@
 import React from 'react';
 import Image from 'next/image';
 import styles from "./AdminEditorList.module.css"
+import { Editor } from "@/types"
 
-export interface Editor {
-    id: string;
-    name: string;
-    imageUrl: string;
-    tagline: string;
-    des: string;
-    socialLinks: { platform: string; url: string }[];
-}
 
 export interface AdminEditorListProps {
     editor: Editor;

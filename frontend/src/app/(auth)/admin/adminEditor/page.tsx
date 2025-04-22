@@ -2,6 +2,7 @@
 
 import styles from './adminEditor.module.css'
 import { useState, useEffect } from 'react';
+import { Editor } from "@/types"
 import AdminEditorList from '@/components/editor/AdminEditorList';
 import AdminEditorModal from '@/components/editor/AdminEditorModal';
 
