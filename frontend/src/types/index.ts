@@ -1,5 +1,5 @@
 export interface Editor {
-    id: number;
+    _id: string;
     name: string;
     imageUrl: string;
     tagline: string;

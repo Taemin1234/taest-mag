@@ -1,31 +1,30 @@
-import { Router } from 'express';
+import { Router, Request, Response } from 'express';
 import Editor from '../models/Editors';
 
 const router = Router();
 
-// 목록 조회
-router.get('/', async (req, res) => {
-  const list = await Editor.find();
-  res.json(list);
+// 전체 에디터 조회
+router.get('/', async (req: Request, res: Response) => {
+  const editors = await Editor.find();
+  res.json(editors);
 });
 
-// 생성
-router.post('/', async (req, res) => {
-  const editor = new Editor(req.body);
-  await editor.save();
+// 에디터 생성
+router.post('/', async (req: Request, res: Response) => {
+  const editor = await Editor.create(req.body);
   res.status(201).json(editor);
 });
 
-// 수정
-router.put('/:id', async (req, res) => {
-  const updated = await Editor.findByIdAndUpdate(req.params.id, req.body, { new: true });
-  res.json(updated);
+// 에디터 수정
+router.put('/:id', async (req: Request, res: Response) => {
+  const editor = await Editor.findByIdAndUpdate(req.params.id, req.body, { new: true });
+  res.json(editor);
 });
 
-// 삭제
-router.delete('/:id', async (req, res) => {
+// 에디터 삭제
+router.delete('/:id', async (req: Request, res: Response) => {
   await Editor.findByIdAndDelete(req.params.id);
-  res.status(204).end();
+  res.sendStatus(204);
 });
 
 export default router;
