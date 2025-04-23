@@ -19,12 +19,14 @@ export default function AdminEditorModal({ onClose }: EditorModalProps) {
         des: "",
         socialLinks: [{ platform: '', url: '' }],
     });
+    const [previewUrl, setPreviewUrl] = useState<string>("");
+    const [uploading, setUploading] = useState<boolean>(false);
 
     const handleSocialLinksChange = (newLinks: SNSLink[]) => {
         setEditorData(prev => ({ ...prev, socialLinks: newLinks }));
     };
 
-    const handleChange = (e) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setEditorData({
             ...editorData,
             [e.target.name]: e.target.value, // input에 지정한 name과 value 값
@@ -32,6 +34,35 @@ export default function AdminEditorModal({ onClose }: EditorModalProps) {
 
         console.log(editorData);
     };
+
+    // 이미지 파일 미리보기
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+         // 이미 업로드된 이미지가 있으면 차단
+         if (previewUrl) {
+            alert("이미지는 한 개만 업로드할 수 있습니다.")
+            return
+        }
+
+        const file = e.target.files?.[0];
+        if (!file) return;
+      
+        // FileReader보다 메모리 관리 측면에서 효율적
+        const url = URL.createObjectURL(file);
+        setPreviewUrl(url);
+        // 업로드는 나중에 handleSubmit 에서 처리
+
+        setEditorData(prev => ({ ...prev, imageUrl: url }));
+    };
+
+    // 파일 삭제
+    const handleRemoveImage = () => {
+        setPreviewUrl("");
+        setEditorData(prev => ({ ...prev, imageUrl: "" }));
+    };
+
+    const handleSubmit = async (e) => {
+        console.log('aa')
+    }
     
     return (
         <div className={styles.editorModal}>
@@ -39,23 +70,32 @@ export default function AdminEditorModal({ onClose }: EditorModalProps) {
                 <h2>
                     에디터 추가
                 </h2>
-                <form className={styles.form_wrap}>
+                <form onSubmit={handleSubmit} className={styles.form_wrap}>
                     <div>
                         <label>프로필 이미지</label>
                         <input
-                        type="file"
-                        name='imageUrl'
-                        accept="image/*"
-                        // onChange={handleFileChange}
+                            type="file"
+                            name='imageUrl'
+                            accept="image/*"
+                            onChange={handleFileChange}
+                            disabled={!!previewUrl}
                         />
-                        {/* {previewUrl && (
-                            <img
-                                src={previewUrl}
-                                alt="프리뷰"
-                                className="mt-2 h-20 w-20 object-cover rounded-full border"
-                            />
-                        )} */}
+                        {uploading && <p className={styles.uploading}>이미지 업로드 중...</p>}
+                        {previewUrl && (
+                            <div className={styles.previewImg_wrap}>
+                                <img
+                                    src={previewUrl}
+                                    alt="미리보기"
+                                    className={styles.previewImg}
+                                />
+                                <button
+                                    type='button'
+                                    onClick={handleRemoveImage}
+                                >X</button>
+                            </div>
+                        )}
                     </div>
+                    <p className={styles.noti}>미리보기 이미지는 실제 비율과 다를 수 있음</p>
                     <div>
                         <label>이름</label>
                         <input
