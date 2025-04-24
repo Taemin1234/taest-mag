@@ -1,18 +1,18 @@
 "use client"
 
-import styles from './AdminEditorModal.module.css'
-import { Editor, SNSLink } from "@/types"
-import { useState } from 'react'
+import React, { useState, useEffect, useRef  } from 'react';
+import styles from './AdminEditorModal.module.css';
+import { Editor, SNSLink } from '@/types';
+import AdminSNSInput from '@/components/editor/AdminSNSInput';
 import axios from 'axios'
-import AdminSNSInput from '@/components/editor/AdminSNSInput'
   
 interface EditorModalProps {
     editor: Editor | null;
     onClose: () => void;
-    // onSave: (editor: Editor) => void;
+    onSave: (editor: Editor, file?: File) => void;
 }
 
-export default function AdminEditorModal({ onClose }: EditorModalProps) {
+export default function AdminEditorModal({ editor, onClose, onSave }: EditorModalProps) {
     const [editorData, setEditorData] = useState<Editor>({
         name: "",
         imageUrl: "",
@@ -22,11 +22,27 @@ export default function AdminEditorModal({ onClose }: EditorModalProps) {
     });
     const [previewUrl, setPreviewUrl] = useState<string>("");
     const [uploading, setUploading] = useState<boolean>(false);
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
-    const handleSocialLinksChange = (newLinks: SNSLink[]) => {
-        setEditorData(prev => ({ ...prev, socialLinks: newLinks }));
-    };
+    // editor prop이 바뀔 때마다 state를 초기화
+    useEffect(() => {
+        if (editor) {
+            setEditorData(editor);
+            setPreviewUrl(editor.imageUrl);
+            
+        } else {
+            setEditorData({ 
+                name: '',
+                imageUrl: '',
+                tagline: '',
+                des: '',
+                socialLinks: [{ platform: '', url: '' }],
+            });
+            setPreviewUrl('');
+        }
+    }, [editor]);
 
+    // 필드 변경 핸들러
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setEditorData({
             ...editorData,
@@ -53,6 +69,11 @@ export default function AdminEditorModal({ onClose }: EditorModalProps) {
         setEditorData(prev => ({ ...prev, imageUrl: url }));
     };
 
+    // SNS 링크 변경
+    const handleSocialLinksChange = (newLinks: SNSLink[]) => {
+        setEditorData(prev => ({ ...prev, socialLinks: newLinks }));
+    };
+
     // 파일 삭제
     const handleRemoveImage = () => {
         setPreviewUrl("");
@@ -60,44 +81,13 @@ export default function AdminEditorModal({ onClose }: EditorModalProps) {
     };
 
     // 입력한 에디터 저장
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
-        try {
-          // 1) 만약 아직 Cloudinary에 업로드하지 않은 로컬 blob URL이라면
-          let uploadUrl = editorData.imageUrl
-          if (previewUrl && previewUrl.startsWith('blob:')) {
-            // FormData에 파일 첨부
-            const file = (document.querySelector('input[name="imageUrl"]') as HTMLInputElement)?.files?.[0]
-            if (file) {
-              const form = new FormData()
-              form.append('image', file)
-              // 백엔드 /api/upload 엔드포인트로 전송
-              const uploadRes = await axios.post(
-                'http://localhost:3001/api/upload',
-                form,
-                { headers: { 'Content-Type': 'multipart/form-data' } }
-              )
-              uploadUrl = uploadRes.data.url
-            }
-          }
-    
-          // 2) 에디터 데이터에 최종 imageUrl 반영
-          const payload: Editor = { ...editorData, imageUrl: uploadUrl }
-    
-          // 3) MongoDB에 저장
-          await axios.post(
-            'http://localhost:3001/api/editors',
-            payload,
-            { headers: { 'Content-Type': 'application/json' } }
-          )
-    
-          // 성공 시 모달 닫기
-          onClose()
-        } catch (err) {
-          console.error(err)
-          alert('저장 중 오류가 발생했습니다.')
-        }
-      }
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        // 파일 ref에서 실제 File 객체 추출
+        const file = fileInputRef.current?.files?.[0];
+        onSave(editorData, file);
+        onClose();
+      };
     
     return (
         <div className={styles.editorModal}>
@@ -109,6 +99,7 @@ export default function AdminEditorModal({ onClose }: EditorModalProps) {
                     <div>
                         <label>프로필 이미지</label>
                         <input
+                            ref={fileInputRef}
                             type="file"
                             name='imageUrl'
                             accept="image/*"
@@ -136,6 +127,7 @@ export default function AdminEditorModal({ onClose }: EditorModalProps) {
                         <input
                             type="text"
                             name='name'
+                            value={editorData.name}
                             onChange={handleChange}
                             required
                         />
@@ -145,6 +137,7 @@ export default function AdminEditorModal({ onClose }: EditorModalProps) {
                         <input
                             type="text"
                             name='tagline'
+                            value={editorData.tagline}
                             onChange={handleChange}
                         />
                     </div>
@@ -152,6 +145,7 @@ export default function AdminEditorModal({ onClose }: EditorModalProps) {
                         <label>긴 설명</label>
                         <textarea
                             name='des'
+                            value={editorData.des}
                             rows={4}
                             onChange={handleChange}
                         />

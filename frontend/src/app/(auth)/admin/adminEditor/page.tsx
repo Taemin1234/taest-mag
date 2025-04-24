@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { Editor } from "@/types"
 import AdminEditorList from '@/components/editor/AdminEditorList';
 import AdminEditorModal from '@/components/editor/AdminEditorModal';
+import type { AxiosResponse } from 'axios';
 import axios from 'axios';
 
 export default function AdminEditor() {
@@ -17,8 +18,8 @@ export default function AdminEditor() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-          const response = await axios.get("http://localhost:3001/api/editors");
-          setEditors(response.data);
+          const res = await axios.get("http://localhost:3001/api/editors");
+          setEditors(res.data);
       } catch (error) {
           console.log("에디터 로딩 실패: ", error);
       } finally {
@@ -42,9 +43,46 @@ export default function AdminEditor() {
     };
   }, [modalOpen]);
 
-  const openAdd = () => { setCurrentEditor(null); setModalOpen(true); };
-  const openEdit = (e: Editor) => { setCurrentEditor(e); setModalOpen(true); };
+  const openAdd = () => { setCurrentEditor(null); setModalOpen(true);};
+  const openEdit = (e: Editor) => { setCurrentEditor(e); setModalOpen(true);};
   const closeModal = () => setModalOpen(false);
+
+  //추가/수정 공용 저장 핸들러
+  const handleSave = async (data: Editor, file?: File) => {
+    try {
+      // 1) 이미지 업로드 (file이 있으면 Cloudinary로)
+      let imageUrl = data.imageUrl;
+      if (file) {
+        const form = new FormData();
+        form.append('image', file);
+        // 백엔드 /api/upload 엔드포인트로 전송
+        const uploadRes = await axios.post(
+          'http://localhost:3001/api/upload',
+          form,
+          { headers: { 'Content-Type': 'multipart/form-data' } }
+        );
+        imageUrl = uploadRes.data.url;
+      }
+  
+      // 2) payload 준비 / 에디터 데이터에 최종 imageUrl 반영
+      const payload: Editor = { ...data, imageUrl };
+  
+      // 3) 추가/수정 API 호출
+      let res: AxiosResponse<Editor>;
+      if (payload.id) {
+        res = await axios.put(`http://localhost:3001/api/editors/${payload.id}`, payload);
+        setEditors(prev =>
+          prev.map(e => e.id === payload.id ? res.data : e)
+        );
+      } else {
+        res = await axios.post('http://localhost:3001/api/editors', payload);
+        setEditors(prev => [...prev, res.data]);
+      }
+    } catch (err) {
+      console.error('저장 실패:', err);
+      alert('저장 중 오류가 발생했습니다.');
+    }
+  };
 
   // 삭제 이벤트
   const handleDelete = async (id: string) => {
@@ -76,9 +114,9 @@ export default function AdminEditor() {
             editors.map((editor) => (
               <AdminEditorList
                 key={editor.id}
-                editor={editor}    // <-- prop 이름 바뀜
-                onEdit={openEdit} // openEdit(id: string) 으로 정의되어 있다면 그대로 넘겨도 OK
-                onDelete={() => handleDelete(editor.id)}  
+                editor={editor}
+                onEdit={openEdit} // 모든 객체를 저장
+                onDelete={() => handleDelete(editor.id!)}  
               />
             ))
           )}
@@ -86,8 +124,9 @@ export default function AdminEditor() {
 
       {modalOpen && (
         <AdminEditorModal
-          // editor={currentEditor}
+          editor={currentEditor}
           onClose={closeModal}
+          onSave={handleSave}
         />
       )}
     </div>

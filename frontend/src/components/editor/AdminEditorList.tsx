@@ -7,7 +7,7 @@ import { Editor } from "@/types"
 
 export interface AdminEditorListProps {
     editor: Editor;
-    onEdit: (id: string) => void;
+    onEdit: (editor: Editor) => void;
     onDelete: (id: string) => void;
 }
 
@@ -20,13 +20,13 @@ export default function AdminEditorList({ editor, onEdit, onDelete }: AdminEdito
             <p className={styles.index}>No. {slug}</p>
             <div className={styles.button_wrap}>
                 <button
-                    onClick={() => onEdit(id)}
+                    onClick={() => onEdit(editor)}
                     className={styles.edit}
                 >
                     수정
                 </button>
                 <button
-                    onClick={() => onDelete(id)}
+                    onClick={() => onDelete(id!)}
                     className={styles.delete}
                 >
                     삭제
