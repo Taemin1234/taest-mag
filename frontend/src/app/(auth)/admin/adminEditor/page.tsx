@@ -69,7 +69,7 @@ export default function AdminEditor() {
   
       // 3) 추가/수정 API 호출
       let res: AxiosResponse<Editor>;
-      if (payload.id) {
+      if (payload.id) { // 수정일때 (id 유무로 판단)
         res = await axios.put(`http://localhost:3001/api/editors/${payload.id}`, payload);
         setEditors(prev =>
           prev.map(e => e.id === payload.id ? res.data : e)

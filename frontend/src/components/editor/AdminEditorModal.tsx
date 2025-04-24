@@ -4,7 +4,6 @@ import React, { useState, useEffect, useRef  } from 'react';
 import styles from './AdminEditorModal.module.css';
 import { Editor, SNSLink } from '@/types';
 import AdminSNSInput from '@/components/editor/AdminSNSInput';
-import axios from 'axios'
   
 interface EditorModalProps {
     editor: Editor | null;
@@ -74,7 +73,7 @@ export default function AdminEditorModal({ editor, onClose, onSave }: EditorModa
         setEditorData(prev => ({ ...prev, socialLinks: newLinks }));
     };
 
-    // 파일 삭제
+    // 이미지 파일 삭제
     const handleRemoveImage = () => {
         setPreviewUrl("");
         setEditorData(prev => ({ ...prev, imageUrl: "" }));
