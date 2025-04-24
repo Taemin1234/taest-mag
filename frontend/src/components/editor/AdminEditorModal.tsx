@@ -3,6 +3,7 @@
 import styles from './AdminEditorModal.module.css'
 import { Editor, SNSLink } from "@/types"
 import { useState } from 'react'
+import axios from 'axios'
 import AdminSNSInput from '@/components/editor/AdminSNSInput'
   
 interface EditorModalProps {
@@ -12,7 +13,7 @@ interface EditorModalProps {
 }
 
 export default function AdminEditorModal({ onClose }: EditorModalProps) {
-    const [editorData, setEditorData] = useState<Editor[]>({
+    const [editorData, setEditorData] = useState<Editor>({
         name: "",
         imageUrl: "",
         tagline: "",
@@ -26,13 +27,11 @@ export default function AdminEditorModal({ onClose }: EditorModalProps) {
         setEditorData(prev => ({ ...prev, socialLinks: newLinks }));
     };
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setEditorData({
             ...editorData,
             [e.target.name]: e.target.value, // input에 지정한 name과 value 값
         });
-
-        console.log(editorData);
     };
 
     // 이미지 파일 미리보기
@@ -60,9 +59,45 @@ export default function AdminEditorModal({ onClose }: EditorModalProps) {
         setEditorData(prev => ({ ...prev, imageUrl: "" }));
     };
 
-    const handleSubmit = async (e) => {
-        console.log('aa')
-    }
+    // 입력한 에디터 저장
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        try {
+          // 1) 만약 아직 Cloudinary에 업로드하지 않은 로컬 blob URL이라면
+          let uploadUrl = editorData.imageUrl
+          if (previewUrl && previewUrl.startsWith('blob:')) {
+            // FormData에 파일 첨부
+            const file = (document.querySelector('input[name="imageUrl"]') as HTMLInputElement)?.files?.[0]
+            if (file) {
+              const form = new FormData()
+              form.append('image', file)
+              // 백엔드 /api/upload 엔드포인트로 전송
+              const uploadRes = await axios.post(
+                'http://localhost:3001/api/upload',
+                form,
+                { headers: { 'Content-Type': 'multipart/form-data' } }
+              )
+              uploadUrl = uploadRes.data.url
+            }
+          }
+    
+          // 2) 에디터 데이터에 최종 imageUrl 반영
+          const payload: Editor = { ...editorData, imageUrl: uploadUrl }
+    
+          // 3) MongoDB에 저장
+          await axios.post(
+            'http://localhost:3001/api/editors',
+            payload,
+            { headers: { 'Content-Type': 'application/json' } }
+          )
+    
+          // 성공 시 모달 닫기
+          onClose()
+        } catch (err) {
+          console.error(err)
+          alert('저장 중 오류가 발생했습니다.')
+        }
+      }
     
     return (
         <div className={styles.editorModal}>

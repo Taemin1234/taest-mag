@@ -2,12 +2,23 @@
 
 import React from 'react';
 import { SNSLink } from "@/types"
-import styles from './AdminSNSInputList.module.css';
+import styles from './AdminSNSInput.module.css';
 
 interface SNSProps {
     links: SNSLink[];
     onChange: (links: SNSLink[]) => void;
 }
+
+const platformOptions = [
+  'Facebook',
+  'Instagram',
+  'Naver Blog',
+  'X(Twitter)',
+  'LinkedIn',
+  'YouTube',
+  'GitHub',
+  'Personal Website',
+];
 
 export default function AdminSNSInputList({ links, onChange }: SNSProps) {
 
@@ -46,14 +57,18 @@ export default function AdminSNSInputList({ links, onChange }: SNSProps) {
             {links.map((link, idx) => (
                 <div key={idx} className={styles.sns_list}>
                     <div className={styles.sns_input}>
-                        <div>
+                        <div className={styles.select_wrap}>
                             <span>SNS명</span>
-                            <input
-                                type="text"
-                                name='platform'
-                                value={link.platform}
-                                onChange={e => handleNameChange(idx, e.target.value)}
-                            />
+                            <select
+                              name="platform"
+                              value={link.platform}
+                              onChange={e => handleNameChange(idx, e.target.value)}
+                            >
+                              <option value="" disabled>플랫폼 선택</option>
+                              {platformOptions.map(opt => (
+                                <option key={opt} value={opt}>{opt}</option>
+                              ))}
+                            </select>
                         </div>
                         <div>
                             <span>SNS주소</span>

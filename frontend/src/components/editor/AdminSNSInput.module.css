@@ -29,6 +29,11 @@
     gap: 10px;
 }
 
+.sns_input .select_wrap {
+    display: flex;
+    flex-direction: column;
+}
+
 .sns_list {
     align-items: end;
 }
