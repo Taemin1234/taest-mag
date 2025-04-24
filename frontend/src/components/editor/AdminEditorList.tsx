@@ -5,7 +5,6 @@ import Image from 'next/image';
 import styles from "./AdminEditorList.module.css"
 import { Editor } from "@/types"
 
-
 export interface AdminEditorListProps {
     editor: Editor;
     onEdit: (id: string) => void;
@@ -13,12 +12,12 @@ export interface AdminEditorListProps {
 }
 
 export default function AdminEditorList({ editor, onEdit, onDelete }: AdminEditorListProps) {
-    const { id, name, imageUrl, tagline, des, socialLinks } = editor;
+    const { id, slug, name, imageUrl, tagline, des, socialLinks } = editor;
   
     return (
       <li className={styles.editorList}>
         <div className={styles.editHeader}>
-            <p className={styles.index}>No. {id}</p>
+            <p className={styles.index}>No. {slug}</p>
             <div className={styles.button_wrap}>
                 <button
                     onClick={() => onEdit(id)}

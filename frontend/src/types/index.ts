@@ -1,6 +1,6 @@
 export interface Editor {
     slug?: number;
-    _id?: string;  
+    id?: string;  
     name: string;
     imageUrl: string;
     tagline: string;
