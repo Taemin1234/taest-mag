@@ -2,7 +2,9 @@ import express from 'express';
 import connectDB from './db';
 import editorRoutes from './routes/editors';
 import uploadRouter from './routes/upload';
+import authRouter from './routes/auth';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -10,14 +12,17 @@ const PORT = process.env.PORT || 3001;
 // MongoDB 연결
 connectDB();
 
+// CORS 설정
 app.use(cors({ 
   origin: 'http://localhost:3000',
   credentials: true, 
 }));
 
 app.use(express.json());
+app.use(cookieParser());
 app.use('/api/editors', editorRoutes);
 app.use('/api/upload', uploadRouter);
+app.use('/api/auth', authRouter);
 
 
 app.get('/', (_req, res) => {

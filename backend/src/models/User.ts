@@ -8,6 +8,7 @@ export interface IUser extends Document {
   email: string;
   username: string;
   password: string;
+  role: 'superadmin' | 'admin' | 'editor';
   isLoggedIn: boolean;
   isActive: boolean;
   failedLoginAttempts: number;
@@ -43,6 +44,11 @@ const UserSchema: Schema<IUser> = new Schema(
       required: true,
       select: false, // 쿼리 시 기본적으로 제외됨
     },
+    role: {
+      type: String,
+      enum: ['superadmin', 'admin', 'editor'],
+      default: 'editor',
+    },
     isLoggedIn: {
       type: Boolean,
       default: false,
@@ -77,14 +83,18 @@ const UserSchema: Schema<IUser> = new Schema(
 
 // 비밀번호 해시 처리 전처리
 UserSchema.pre<IUser>('save', async function (next) {
+  // 비밀번호 필드가 새로 설정되었는지 확인
   if (!this.isModified('password')) return next();
+  // 변경되었을 때 salt생성
   const salt = await bcrypt.genSalt(10);
+  // 비밀번호를 해시하고 덮어쓰기
   this.password = await bcrypt.hash(this.password, salt);
   next();
 });
 
 // 비밀번호 비교 메서드 추가
 UserSchema.methods.comparePassword = async function (plainPassword: string): Promise<boolean> {
+  // 입력한 비밀번호와 저장된 해시 비번을 비교
   return await bcrypt.compare(plainPassword, this.password);
 };
 
