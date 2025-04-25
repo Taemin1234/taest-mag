@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken'; // 사용자 검증
 import User, { IUser } from '../models/User';
 import { authenticate } from '../middleware/authenticate'; //쿠키에 있는 토큰이 유효한지 검사
 import crypto from 'crypto';
+import axios from 'axios';
 // 이메일 전송 유틸 - 실제 구현 필요
 import sendEmail from '../utils/sendEmail';
 
@@ -32,18 +33,79 @@ router.post('/signup', async (req: Request, res: Response) => {
 // 로그인
 router.post('/login', async (req: Request, res: Response) => {
   try {
-    const { email, password } = req.body;
-    const user = await User.findOne({ email }).select('+password');
-    if (!user) return res.status(401).json({ message: '이메일 또는 비밀번호가 일치하지 않습니다.' });
+    const { username, password } = req.body;
+    const user = await User.findOne({ username }).select('+password');
+    if (!user) return res.status(401).json({ message: '아이디 또는 비밀번호가 일치하지 않습니다.' });
 
+    // 비활성화 검증
+    if (!user.isActive) {
+        return res
+            .status(401)
+            .json({ message: "비활성화된 계정입니다. 관리자에게 문의하세요." });
+    }
+
+    // 중복 로그인 검증
+    if (user.isLoggedIn) {
+        return res
+            .status(401)
+            .json({ message: "이미 다른 기기에서 로그인되어 있습니다." });
+    }
+
+    // Users 스키마에서 비밀번호 검증
     const isMatch = await user.comparePassword(password);
-    if (!isMatch) return res.status(401).json({ message: '이메일 또는 비밀번호가 일치하지 않습니다.' });
+
+    // 검증실패 5번의 기회제공
+    if (!isMatch) {
+        user.failedLoginAttempts += 1;
+        user.lastLoginAttempt = new Date();
+
+        //5번 이상 실패했을 때
+        if (user.failedLoginAttempts >= 5) {
+            //계정 비활성화
+            user.isActive = false;
+            // 비활성화를 업데이트
+            await user.save();
+            return res.status(401).json({
+                message: "비밀번호를 5회 이상 틀려 계정이 비활성화되었습니다.",
+            });
+        }
+
+        // 5번 이하 실패 사항 서버에 저장
+        await user.save();
+        return res.status(401).json({
+            message: "비밀번호가 일치하지 않습니다.",
+            remainingAttempts: 5 - user.failedLoginAttempts,
+        });
+    }
+
+    // 비밀번호 입력에 성공했을 시
+    // 시도 횟수, 마지막 로그인 시도는 초기화
+    // 중복 로그인 방지를 위해 isLoggedIn을 true로 변경
+    user.failedLoginAttempts = 0;
+    user.lastLoginAttempt = new Date();
+    user.isLoggedIn = true;
+
+    // 로그인을 시도하는 ip 주소의 계정 저장
+    try {
+        // axios 패키지 사용
+        // 아래 주소는 json 형식으로 공인 ip 추출
+        const response = await axios.get("https://api.ipify.org?format=json");
+        const ipAddress = response.data.ip;
+
+        // ip 업데이트
+        user.ipAddress = ipAddress;
+    } catch (ipError: any) {
+        console.error("IP 주소를 가져오는 중 오류 발생:", ipError.message);
+    }
+
+    // 위 값을 서버에 저장
+    await user.save();
 
     // JWT 발급
     const token = jwt.sign(
       { id: user.id, role: user.role },
       process.env.JWT_SECRET as string,
-      { expiresIn: '1h' }
+      { expiresIn: '12h' }
     );
 
     // httpOnly 쿠키에 저장
@@ -51,7 +113,7 @@ router.post('/login', async (req: Request, res: Response) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
-      maxAge: 3600 * 1000,
+      maxAge: 12 * 60 * 60 * 1000,
     });
 
     res.json({ message: '로그인 성공' });

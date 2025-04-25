@@ -2,26 +2,50 @@
 
 import styles from '../styles/elsa.module.css'
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import InputField from "@/components/InputField"
+import axios from 'axios';
 
 export default function LoginPage() {
   const [form, setForm] = useState({ username: '', password: '' });
   const [error, setError] = useState('');
 
+  const router = useRouter();
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // UI-only: 백엔드 연동 제외
+
     if (!form.username || !form.password) {
-      setError('이메일과 비밀번호를 모두 입력해주세요.');
+      setError('아이디와 비밀번호를 모두 입력해주세요.');
       return;
     }
     setError('');
-    // 로그인 처리 로직 placeholder
+    
+    try {
+      // 2) 백엔드 로그인 API 호출
+      const res = await axios.post('http://localhost:3001/api/auth/login', form,
+      {
+        headers: { 'Content-Type': 'application/json' },
+        withCredentials: true,
+      }
+    );
+
+      // 3) 응답 처리
+      if (res.status !== 200) {
+        throw new Error(res.data.message || '로그인에 실패했습니다.');
+      }
+
+      // 4) 로그인 성공 시 로그인 페이지로 이동
+      router.push('/admin/adminPosts');
+    } catch (err: any) {
+      console.error(err);
+      setError(err.response?.data?.message || err.message);
+    }
   };
 
   return (
