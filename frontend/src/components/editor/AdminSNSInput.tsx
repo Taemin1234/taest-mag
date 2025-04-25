@@ -34,13 +34,16 @@ export default function AdminSNSInputList({ links, onChange }: SNSProps) {
     onChange(next);
   };
 
-
   const addLink = () => {
-    const last = links[links.length - 1]; //마지막 항목
-    if (last.platform.trim() !== '' && last.url.trim() !== '') {
-      onChange([...links, { platform: '', url: '' }]);
+    setLinksIfAllowed([...links, { platform: '', url: '' }]);
+  };
+
+  const setLinksIfAllowed = (newLinks: SNSLink[]) => {
+    const last = links[links.length - 1];
+    if (!last || (last.platform.trim() && last.url.trim())) {
+      onChange(newLinks);
     } else {
-        alert('내용을 입력해주세요')
+      alert('먼저 현재 입력창을 채워주세요.');
     }
   };
 
@@ -53,7 +56,8 @@ export default function AdminSNSInputList({ links, onChange }: SNSProps) {
       <div className={styles.input_wrap}>
         <label>SNS 주소</label>
 
-        <div className={styles.sns_list_wrap}>
+        {links.length > 0 && (
+          <div className={styles.sns_list_wrap}>
             {links.map((link, idx) => (
                 <div key={idx} className={styles.sns_list}>
                     <div className={styles.sns_input}>
@@ -84,13 +88,13 @@ export default function AdminSNSInputList({ links, onChange }: SNSProps) {
                         type="button"
                         className={styles.red}
                         onClick={() => removeLink(idx)}
-                        disabled={links.length === 1} // 한 개일 땐 삭제 비활성화
                     >
                         삭제
                     </button>
                 </div>
             ))}
         </div>
+        )}
 
       </div>
       <button

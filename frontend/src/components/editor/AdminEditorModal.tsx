@@ -17,7 +17,7 @@ export default function AdminEditorModal({ editor, onClose, onSave }: EditorModa
         imageUrl: "",
         tagline: "",
         des: "",
-        socialLinks: [{ platform: '', url: '' }],
+        socialLinks: [],
     });
     const [previewUrl, setPreviewUrl] = useState<string>("");
     const [uploading, setUploading] = useState<boolean>(false);
@@ -35,7 +35,7 @@ export default function AdminEditorModal({ editor, onClose, onSave }: EditorModa
                 imageUrl: '',
                 tagline: '',
                 des: '',
-                socialLinks: [{ platform: '', url: '' }],
+                socialLinks: [],
             });
             setPreviewUrl('');
         }
@@ -70,7 +70,7 @@ export default function AdminEditorModal({ editor, onClose, onSave }: EditorModa
 
     // SNS 링크 변경
     const handleSocialLinksChange = (newLinks: SNSLink[]) => {
-        setEditorData(prev => ({ ...prev, socialLinks: newLinks }));
+        setEditorData(prev => ({ ...prev, socialLinks: newLinks.length ? newLinks : [],}));
     };
 
     // 이미지 파일 삭제
@@ -84,7 +84,11 @@ export default function AdminEditorModal({ editor, onClose, onSave }: EditorModa
         e.preventDefault();
         // 파일 ref에서 실제 File 객체 추출
         const file = fileInputRef.current?.files?.[0];
-        onSave(editorData, file);
+        const payload: Editor = {
+            ...editorData,
+            socialLinks: editorData.socialLinks ?? [],
+          };
+        onSave(payload, file);
         onClose();
       };
     
@@ -150,7 +154,11 @@ export default function AdminEditorModal({ editor, onClose, onSave }: EditorModa
                         />
                     </div>
                     <AdminSNSInput
-                        links={editorData.socialLinks}
+                        links={
+                            editorData.socialLinks && editorData.socialLinks.length > 0
+                              ? editorData.socialLinks
+                              : []
+                          }
                         onChange={handleSocialLinksChange}
                     />
                     <div className={styles.btn_wrap}>

@@ -1,11 +1,22 @@
 import styles from './AdminHeader.module.css'
 import React from 'react'
 import Link from 'next/link';
+import Image from 'next/image';
 
 const AdminHeader = () => {
     return (
         <header className={styles.admin_header}>
-            <h1>ta(e)st 매거진</h1>
+            <h1>
+                <Link href="/" className={styles.main_logo}>
+                    <Image
+                        src={'/main_logo.png'}
+                        alt={'테이스트 매거진 로고'}
+                        width={155}
+                        height={80}
+                        className={styles.img}
+                    />
+                </Link>
+            </h1>
             <ul>
                 <li>
                     <Link href="/admin/adminEditor">에디터 관리</Link>

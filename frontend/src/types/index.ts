@@ -5,7 +5,7 @@ export interface Editor {
     imageUrl: string;
     tagline: string;
     des: string;
-    socialLinks: SNSLink[];
+    socialLinks?: SNSLink[];
 }
 
 export interface SNSLink {

@@ -65,7 +65,11 @@ export default function AdminEditor() {
       }
   
       // 2) payload 준비 / 에디터 데이터에 최종 imageUrl 반영
-      const payload: Editor = { ...data, imageUrl };
+      const payload: Editor = {
+        ...data,
+        socialLinks: data.socialLinks ?? [],
+        imageUrl, 
+      };
   
       // 3) 추가/수정 API 호출
       let res: AxiosResponse<Editor>;

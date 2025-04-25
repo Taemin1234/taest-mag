@@ -12,7 +12,7 @@ export interface AdminEditorListProps {
 }
 
 export default function AdminEditorList({ editor, onEdit, onDelete }: AdminEditorListProps) {
-    const { id, slug, name, imageUrl, tagline, des, socialLinks } = editor;
+    const { id, slug, name, imageUrl, tagline, des, socialLinks = [] } = editor;
   
     return (
       <li className={styles.editorList}>
@@ -39,7 +39,7 @@ export default function AdminEditorList({ editor, onEdit, onDelete }: AdminEdito
                 alt={imageUrl ? `${name} 프로필 이미지` : '기본 프로필 이미지'}
                 width={64}
                 height={64}
-                className="rounded-full"
+                className={styles.img}
             />
             <div>
                 <h3>{name}</h3>
