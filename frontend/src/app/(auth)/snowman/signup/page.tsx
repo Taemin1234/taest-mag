@@ -3,7 +3,9 @@
 import styles from '../styles/elsa.module.css'
 import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import InputField from "@/components/InputField"
+import axios from 'axios';
 
 interface SignUpForm {
   username: string;
@@ -21,11 +23,13 @@ export default function SignUpPage() {
   });
   const [error, setError] = useState<string>('');
 
+  const router = useRouter();
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     // 비밀번호 확인
     if (form.password !== form.confirmPassword) {
@@ -39,13 +43,28 @@ export default function SignUpPage() {
     }
     setError('');
 
-    // TODO: 백엔드 회원가입 API 연결 준비
-    // 예: await fetch('/api/auth/signup', { method: 'POST', body: JSON.stringify(form) });
-    console.log('Signup data:', {
-      username: form.username,
-      email: form.email,
-      password: form.password,
-    });
+    try {
+      // 2) 백엔드 회원가입 API 호출
+      const res = await axios.post('http://localhost:3001/api/auth/signup', {
+        username: form.username,
+        email: form.email,
+        password: form.password,
+      },
+      {
+        headers: { 'Content-Type': 'application/json' },
+      });
+
+      // 3) 응답 처리
+      if (res.status !== 201) {
+        throw new Error(res.data.message || '회원가입에 실패했습니다.');
+      }
+
+      // 4) 회원가입 성공 시 로그인 페이지로 이동
+      router.push('/snowman/elsa');
+    } catch (err: any) {
+      console.error(err);
+      setError(err.response?.data?.message || err.message);
+    }
   };
 
 
