@@ -1,9 +1,32 @@
+'use client'
+
 import styles from './AdminHeader.module.css'
 import React from 'react'
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
+import axios from "axios";
 
 const AdminHeader = () => {
+    const router = useRouter();
+
+    const handleLogout = async () => {
+        try {
+            const response = await axios.post(
+                "/api/auth/logout",
+                {},
+                { withCredentials: true } // 쿠키 전송
+            );
+    
+            // 로그아웃 성공 시 로그인 페이지로 이동
+            if (response.status === 200) {
+                router.replace('/snowman/elsa');
+            }
+        } catch (error) {
+            console.log("로그아웃 실패: ", error);
+        }
+    };
+
     return (
         <header className={styles.admin_header}>
             <h1>
@@ -26,7 +49,7 @@ const AdminHeader = () => {
                 </li>
                 <li>
                     <button
-                        className="hover:bg-gray-700 px-3 py-2 rounded text-white"
+                        onClick={handleLogout}
                     >
                         로그아웃
                     </button>

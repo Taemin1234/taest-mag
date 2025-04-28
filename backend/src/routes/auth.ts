@@ -112,7 +112,8 @@ router.post('/login', async (req: Request, res: Response) => {
     res.cookie('token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      sameSite: 'none',
+      path: '/',
       maxAge: 12 * 60 * 60 * 1000,
     });
 
@@ -172,9 +173,21 @@ router.post('/reset-password/:token', async (req: Request, res: Response) => {
 });
 
 // 로그아웃
-router.post('/logout', authenticate, (_req: Request, res: Response) => {
-  res.clearCookie('token');
-  res.json({ message: '로그아웃되었습니다.' });
+router.post('/logout', authenticate, async (req: AuthRequest, res: Response) => {
+  try {
+    // 1) 쿠키삭제
+    res.clearCookie('token');
+
+    // 2) DB 업데이트: isLoggedIn = false
+    const userId = req.user!._id;
+    await User.findByIdAndUpdate(userId, { isLoggedIn: false });
+
+    // 3) 성공 응답
+    res.json({ message: '로그아웃되었습니다.' });
+  } catch (err) {
+    console.error('로그아웃 오류:', err);
+    res.status(500).json({ message: '로그아웃 중 서버 오류가 발생했습니다.' });
+  }
 });
 
 export default router;

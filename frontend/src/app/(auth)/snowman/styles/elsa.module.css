@@ -50,3 +50,8 @@
 .txt_wrap a:hover {
     color: var(--admin-theme);
 }
+
+.msg_error {
+    text-align: right;
+    color: var(--main-red);
+}

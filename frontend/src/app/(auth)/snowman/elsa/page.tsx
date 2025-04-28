@@ -7,9 +7,14 @@ import Link from 'next/link';
 import InputField from "@/components/InputField"
 import axios from 'axios';
 
+interface LoginError {
+  message: string;
+  remainingAttempts?: number;
+}
+
 export default function LoginPage() {
   const [form, setForm] = useState({ username: '', password: '' });
-  const [error, setError] = useState('');
+  const [error, setError] = useState<LoginError | null>(null);
 
   const router = useRouter();
 
@@ -19,32 +24,30 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (!form.username || !form.password) {
-      setError('아이디와 비밀번호를 모두 입력해주세요.');
-      return;
-    }
-    setError('');
     
     try {
       // 2) 백엔드 로그인 API 호출
       const res = await axios.post('http://localhost:3001/api/auth/login', form,
-      {
-        headers: { 'Content-Type': 'application/json' },
-        withCredentials: true,
-      }
-    );
+        {
+          headers: { 'Content-Type': 'application/json' },
+          withCredentials: true,
+        }
+      );
 
       // 3) 응답 처리
-      if (res.status !== 200) {
-        throw new Error(res.data.message || '로그인에 실패했습니다.');
-      }
+      // if (res.status !== 200) {
+      //   throw new Error(res.data.message || '로그인에 실패했습니다.');
+      // }
 
       // 4) 로그인 성공 시 로그인 페이지로 이동
       router.push('/admin/adminPosts');
+
     } catch (err: any) {
-      console.error(err);
-      setError(err.response?.data?.message || err.message);
+      const errMsg = err.response?.data;
+      setError({
+        message: errMsg?.message || '로그인 중 오류가 발생했습니다.',
+        remainingAttempts: errMsg?.remainingAttempts,
+      });
     }
   };
 
@@ -52,7 +55,6 @@ export default function LoginPage() {
     <div className={styles.login_box}>
       <h1>에디터 입장</h1>
       <form onSubmit={handleSubmit}>
-        {error && <p className="text-red-500 text-sm text-center">{error}</p>}
 
         <InputField
           id="username"
@@ -75,6 +77,18 @@ export default function LoginPage() {
           minLength={6}
         />
 
+        {error && (
+          <>
+            <p className={styles.msg_error}>
+              {error.message}            
+            </p>
+            <p className={styles.msg_error}>
+              {error.remainingAttempts != null &&
+                ` (남은 시도: ${error.remainingAttempts}/5회)`}
+            </p>
+          </>
+        )}
+        
         <button
           type="submit"
           className={styles.btn_login}

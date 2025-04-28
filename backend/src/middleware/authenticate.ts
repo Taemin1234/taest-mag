@@ -6,9 +6,12 @@ export interface AuthRequest extends Request {
   user?: { id: string; role: string };
 }
 
-export const authenticate = (req: AuthRequest, res: Response, next: NextFunction) => {
+export const authenticate = (req: AuthRequest, res: Response, next: NextFunction): void => {
   const token = req.cookies.token;       // cookie-parser 필요
-  if (!token) return res.status(401).send('토큰이 없습니다.');
+  if (!token) {
+    res.status(401).send('토큰이 없습니다.');
+    return;
+  } 
   try {
     const payload = jwt.verify(token, process.env.JWT_SECRET!) as any;
     req.user = { id: payload.id, role: payload.role };
