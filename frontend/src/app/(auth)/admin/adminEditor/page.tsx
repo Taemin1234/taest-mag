@@ -18,7 +18,7 @@ export default function AdminEditor() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-          const res = await axios.get("http://localhost:3001/api/editors");
+          const res = await axios.get("/api/editors");
           setEditors(res.data);
       } catch (error) {
           console.log("에디터 로딩 실패: ", error);

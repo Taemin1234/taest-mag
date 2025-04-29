@@ -27,7 +27,7 @@ export default function LoginPage() {
     
     try {
       // 2) 백엔드 로그인 API 호출
-      const res = await axios.post('http://localhost:3001/api/auth/login', form,
+      const res = await axios.post('/api/auth/login', form,
         {
           headers: { 'Content-Type': 'application/json' },
           withCredentials: true,

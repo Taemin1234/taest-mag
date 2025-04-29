@@ -15,17 +15,40 @@ const router = express.Router();
 router.post('/signup', async (req: Request, res: Response) => {
   try {
     const { email, username, password } = req.body;
-    // 이메일 중복검사
-    const existing = await User.findOne({ email });
-    if (existing) return res.status(400).json({ message: '이미 가입된 이메일입니다.' });
+
+     // 1) 이메일 또는 아이디 중복검사
+     const existing = await User.findOne({
+      $or: [
+        { email },
+        { username },
+      ],
+    });
+
+    if (existing) {
+      if (existing.email === email) {
+        return res
+          .status(400)
+          .json({ field: 'email', message: '이미 가입된 이메일입니다.' });
+      }
+      if (existing.username === username) {
+        return res
+          .status(400)
+          .json({ field: 'username', message: '이미 사용 중인 아이디입니다.' });
+      }
+    }
 
     //새 User 인스턴스 생성 및 저장 (mongoDB저장)
     const user = new User({ email, username, password });
     await user.save();  // pre-save 훅에서 패스워드 해시
 
     res.status(201).json({ message: '회원가입 완료' });
-  } catch (err) {
-    console.error(err);
+  } catch (err:any) {
+    if (err.code === 11000) {
+      const dupField = Object.keys(err.keyValue)[0];
+      return res
+        .status(400)
+        .json({ field: dupField, message: `${dupField}이(가) 중복됩니다.` });
+    }
     res.status(500).json({ message: '서버 오류' });
   }
 });
@@ -112,7 +135,9 @@ router.post('/login', async (req: Request, res: Response) => {
     res.cookie('token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'none',
+      sameSite: process.env.NODE_ENV === 'production'     // dev: 'lax', prod: 'none'
+    ? 'none'
+    : 'lax',
       path: '/',
       maxAge: 12 * 60 * 60 * 1000,
     });
@@ -121,6 +146,24 @@ router.post('/login', async (req: Request, res: Response) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: '서버 오류' });
+  }
+});
+
+// 로그아웃
+router.post('/logout', authenticate, async (req: AuthRequest, res: Response) => {
+  try {
+    // 1) 쿠키삭제
+    res.clearCookie('token');
+
+    // 2) DB 업데이트: isLoggedIn = false
+    const userId = req.user!.id;
+    await User.findByIdAndUpdate(userId, { isLoggedIn: false });
+
+    // 3) 성공 응답
+    res.json({ message: '로그아웃되었습니다.' });
+  } catch (err) {
+    console.error('로그아웃 오류:', err);
+    res.status(500).json({ message: '로그아웃 중 서버 오류가 발생했습니다.' });
   }
 });
 
@@ -172,22 +215,6 @@ router.post('/reset-password/:token', async (req: Request, res: Response) => {
   }
 });
 
-// 로그아웃
-router.post('/logout', authenticate, async (req: AuthRequest, res: Response) => {
-  try {
-    // 1) 쿠키삭제
-    res.clearCookie('token');
 
-    // 2) DB 업데이트: isLoggedIn = false
-    const userId = req.user!._id;
-    await User.findByIdAndUpdate(userId, { isLoggedIn: false });
-
-    // 3) 성공 응답
-    res.json({ message: '로그아웃되었습니다.' });
-  } catch (err) {
-    console.error('로그아웃 오류:', err);
-    res.status(500).json({ message: '로그아웃 중 서버 오류가 발생했습니다.' });
-  }
-});
 
 export default router;
