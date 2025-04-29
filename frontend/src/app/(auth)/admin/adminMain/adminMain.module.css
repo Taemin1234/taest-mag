@@ -1,0 +1,30 @@
+.adminMain {
+    width: 100%;
+}
+
+.adminMain ul {
+    display: flex;
+    justify-content: flex-start;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.adminMain ul li {
+    position: relative;
+    flex: 1;
+    width: 300px;
+    height: 200px;
+    text-align: center;
+    border: solid 2px var(--main-black);
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.adminMain ul li a {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
