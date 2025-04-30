@@ -1,10 +1,6 @@
 import React from 'react';
 import styles from './Checkbox.module.css'
-
-export type Option = {
-    label: string;
-    value: string;
-};
+import { Option } from "@/types"
 
 interface CheckboxGroupProps {
     options: Option[];               // 렌더링할 옵션 목록

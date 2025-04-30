@@ -4,7 +4,10 @@ import React from 'react'
 import styles from './adminPosts.module.css'
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import Checkbox, { Option } from '@/components/ui/Checkbox';
+import { Editor, Option } from "@/types"
+import Checkbox from '@/components/ui/Checkbox';
+import { CATEGORIES } from '@/constants/categories'
+import axios from 'axios';
 
 interface Post {
     id: string;
@@ -12,31 +15,39 @@ interface Post {
     subtitle?:string;
     category: string;
     editor: string;
-    // ...다른 필드
 };
 
-const categories: Option[] = [
-    { label: 'All', value: 'all' },
-    { label: 'Food', value: 'food' },
-    { label: 'Tech', value: 'tech' },
-    { label: 'Culture', value: 'culture' },
-    { label: 'Living', value: 'living' },
-    { label: 'People', value: 'people' },
-];
-
-const editors: Option[] = [
-    { label: 'All', value: 'all' },
-    { label: '태1', value: '태1' },
-    { label: '태2', value: '태2' },
-    { label: '혜1', value: '혜1' },
-];
-
-const adminPosts = () => {
+const AdminPosts = () => {
     const [posts, setPosts] = useState<Post[]>([]);
+    const [editorName, setEditorName] = useState<Option[]>([]);
     const [selectedCats, setSelectedCats] = useState<string[]>([]);
     const [selectedEditors, setSelectedEditors] = useState<string[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
 
 
+    // 에디터 목록 불러오기
+    useEffect(() => {
+        const fetchPosts = async () => {
+            try {
+                const res = await axios.get<Editor[]>("/api/editors");
+                const data = res.data;
+
+                const opts = data.map(editor => ({
+                    value: editor.name,      // 예: id를 value로
+                    label: editor.name,    // name을 label로
+                  }));
+                  setEditorName(opts);
+            } catch (error) {
+                console.log("에디터 로딩 실패: ", error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchPosts();
+    }, []);
+
+    
     // 예시: API에서 게시글 불러오기
     // useEffect(() => {
     //     fetch('/api/admin/posts')
@@ -86,7 +97,7 @@ const adminPosts = () => {
                     <h2 className={styles.chkbox_tit}>카테고리 선택</h2>
                     <Checkbox
                         name="category"
-                        options={categories}
+                        options={CATEGORIES}
                         selectedValues={selectedCats}
                         onChange={setSelectedCats}
                     />
@@ -96,7 +107,7 @@ const adminPosts = () => {
                     <h2 className={styles.chkbox_tit}>에디터 선택</h2>
                     <Checkbox
                         name="editor"
-                        options={editors}
+                        options={editorName}
                         selectedValues={selectedEditors}
                         onChange={setSelectedEditors}
                     />
@@ -119,7 +130,7 @@ const adminPosts = () => {
                     </div>
 
                     <div className={styles.page_view_wrap}>
-                        <div>총 00개의 게시물 |</div>
+                        <div>총 {dummyPost.length}개의 게시물 |</div>
                         <div>
                             <label>
                                 페이지당 표시:{" "}
@@ -130,12 +141,12 @@ const adminPosts = () => {
                                 ))}
                             </select>
                         </div>
-                        <a
-                            href="admin/uploadPosts"
+                        <Link
+                            href="/admin/posts/new"
                             className={styles.btn_post_add}
                         >
                             글 추가하기
-                        </a>
+                        </Link>
                     </div>
 
                 </div>
@@ -181,4 +192,4 @@ const adminPosts = () => {
     )
 }
 
-export default adminPosts
+export default AdminPosts

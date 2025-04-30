@@ -2,23 +2,13 @@
 
 import React from 'react';
 import { SNSLink } from "@/types"
+import { platformOptions } from '@/constants/snsPlatforms'
 import styles from './AdminSNSInput.module.css';
 
 interface SNSProps {
     links: SNSLink[];
     onChange: (links: SNSLink[]) => void;
 }
-
-const platformOptions = [
-  'Facebook',
-  'Instagram',
-  'Naver Blog',
-  'X(Twitter)',
-  'LinkedIn',
-  'YouTube',
-  'GitHub',
-  'Personal Website',
-];
 
 export default function AdminSNSInputList({ links, onChange }: SNSProps) {
 

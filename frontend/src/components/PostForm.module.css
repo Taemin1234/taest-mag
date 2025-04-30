@@ -1,0 +1,52 @@
+.form_wrap > div{
+    margin-top: 20px;
+}
+
+.form_wrap > div > label {
+    margin-right: 20px;
+    font-size: 18px;
+    width: 100%;
+    background-color: antiquewhite;
+}
+
+.form_wrap > div > label ~ input{
+    width: 100%;
+    margin-top: 5px;
+    height: 35px;
+    padding: 5px;
+}
+
+.form_wrap > div > label ~ select {
+    height: 35px;
+}
+.editorContainer :global(.quill) {
+    margin-top: 15px
+}
+.editorContainer :global(.ql-container) {
+    min-height: 450px;
+}
+
+.button_wrap {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 15px;
+}
+
+.button_wrap button {
+    border-radius: 5px;
+    padding: 10px 20px;
+    background-color: var(--main-white);
+    color: var(--main-black);
+    border: solid 1px var(--main-black);
+}
+
+.button_wrap button:hover {
+    opacity: 0.5;
+}
+
+.button_wrap button.red {
+    background-color: var(--main-red);
+    color: var(--main-white);
+    border: none;
+}

@@ -12,3 +12,9 @@ export interface SNSLink {
     platform: string;
     url: string;
 }
+
+export interface Option {
+    label: string;
+    value: string;
+    subCategories?: Option[];
+};
