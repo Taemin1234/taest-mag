@@ -1,4 +1,3 @@
-// app/post/[id]/edit/page.tsx (Client Component)
 'use client';
 
 import { useParams } from 'next/navigation';
@@ -16,7 +15,6 @@ export default function EditPostPage() {
     axios
       .get(`/api/posts/${slug}`)
       .then(res => {
-        // const { title, subtitle, category, subCategory, editor, content } = res.data;
         setInitialData(res.data);
       })
       .catch(err => {
