@@ -4,18 +4,10 @@ import React from 'react'
 import styles from './adminPosts.module.css'
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Editor, Option } from "@/types"
+import { Editor, Option, Post } from "@/types"
 import Checkbox from '@/components/ui/Checkbox';
 import { CATEGORIES } from '@/constants/categories'
 import axios from 'axios';
-
-interface Post {
-    id: string;
-    title: string;
-    subtitle?:string;
-    category: string;
-    editor: string;
-};
 
 const AdminPosts = () => {
     const [posts, setPosts] = useState<Post[]>([]);
@@ -48,12 +40,21 @@ const AdminPosts = () => {
     }, []);
 
     
-    // 예시: API에서 게시글 불러오기
-    // useEffect(() => {
-    //     fetch('/api/admin/posts')
-    //         .then(res => res.json())
-    //         .then(data => setPosts(data));
-    // }, []);
+    // API에서 게시글 불러오기
+    useEffect(() => {
+        const fetchPosts = async () => {
+            try {
+                const res = await axios.get("/api/posts");
+                setPosts(res.data);
+            } catch (error) {
+                console.log("게시물 로딩 실패: ", error);
+            } finally {
+              setIsLoading(false);
+            }
+          };
+      
+          fetchPosts();
+    }, []);
 
     const dummyPost = [
         {
@@ -130,7 +131,7 @@ const AdminPosts = () => {
                     </div>
 
                     <div className={styles.page_view_wrap}>
-                        <div>총 {dummyPost.length}개의 게시물 |</div>
+                        <div>총 {posts.length}개의 게시물 |</div>
                         <div>
                             <label>
                                 페이지당 표시:{" "}
@@ -170,16 +171,18 @@ const AdminPosts = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {dummyPost.map(post => (
-                            <tr key={post.id}>
-                                <td>{post.id}</td>
+                        {posts.map(post => (
+                            <tr key={post.slug}>
+                                <td>{post.postNum}</td>
                                 <td><p>{post.title}</p></td>
                                 <td><p>{post.content}</p></td>
-                                <td>{post.createdAt}</td>
-                                <td>{post.updatedAt}</td>
+                                <td>{new Date(post.createdAt).toLocaleDateString('ko-KR')}</td>
+                                <td>{new Date(post.updatedAt).toLocaleDateString('ko-KR')}</td>
                                 <td>
                                     <div className={styles.btn_wrap}>
-                                        <button className={styles.btn_blue}>수정</button>
+                                        <Link href={`/admin/posts/${post.slug}/edit`}>
+                                            <button className={styles.btn_blue}>수정</button>
+                                        </Link>
                                         <button className={styles.btn_red}>삭제</button>
                                     </div>
                                 </td>

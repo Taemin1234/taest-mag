@@ -24,7 +24,7 @@ app.use(cookieParser());
 app.use('/api/editors', editorRoutes);
 app.use('/api/upload', uploadRouter);
 app.use('/api/auth', authRouter);
-app.use('/api/post', postRouter);
+app.use('/api/posts', postRouter);
 
 
 app.get('/', (_req, res) => {

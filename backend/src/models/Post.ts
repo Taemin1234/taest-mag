@@ -6,14 +6,11 @@ export interface IPost extends Document {
   title: string;                  // 제목
   subtitle?: string;              // 소제목 (선택)
   editor: string;         // 작성자(에디터) 참조
-//   category: {
-//     main: string;                 // 대분류
-//     sub: string;                  // 소분류
-//   };
   category:string;
   subCategory:string;
   content: string;                // React-Quill에서 생성된 HTML 문자열
-  slug?: string;                  // URL 슬러그 (선택)
+  slug: string;                  // URL 슬러그 (선택)
+  postNum:number;
   createdAt: Date;                // 자동 생성
   updatedAt: Date;                // 자동 갱신
 } 
@@ -60,6 +57,10 @@ const PostSchema = new Schema<IPost>(
       unique: true,
       // auto-increment나 UUID 등으로 별도 생성
     },
+    postNum: {
+        type:Number,
+        unique:true,
+    },
   },
   {
     timestamps: true,  // createdAt, updatedAt 자동 관리
@@ -69,16 +70,17 @@ const PostSchema = new Schema<IPost>(
 // 6자리 난수 기반 슬러그 자동 생성 훅
 PostSchema.pre<IPost>('validate', async function (next) {
     if (this.isNew) {
+      let randNum: number;
       let candidateSlug: string;
       let exists: IPost | null;
       do {
-        const rand = Math.floor(Math.random() * 1_000_000)
-          .toString()
-          .padStart(6, '0');
+        randNum = Math.floor(Math.random() * 1_000_000);
+        const rand = randNum.toString().padStart(6, '0');
         candidateSlug = `${this.category}-${this.subCategory}-${rand}`;
         exists = await mongoose.models.Post.findOne({ slug: candidateSlug }) as IPost;
       } while (exists);
       this.slug = candidateSlug;
+      this.postNum = randNum;
     }
     next();
 });

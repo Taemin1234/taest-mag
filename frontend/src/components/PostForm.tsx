@@ -9,7 +9,7 @@ import Dropdown from '@/components/ui/DropDown';
 import { CATEGORIES } from '@/constants/categories';
 import axios from 'axios';
 
-interface FormData {
+export interface FormData {
     title: string;
     subtitle: string;
     category: string;
@@ -20,26 +20,40 @@ interface FormData {
 
 interface PostFormProps {
     pageTitle: string;
+    initialData?: FormData;
+    onSubmit?: (data: FormData) => Promise<void>;
   }
 
-export default function PostForm({ pageTitle }: PostFormProps) {
-    const [formData, setFormData] = useState<FormData>({
+export default function PostForm({ 
+    pageTitle,
+    initialData,
+    onSubmit,
+}: PostFormProps) {
+    // initialData가 있으면 수정 모드, 없으면 새 글 모드
+    const [formData, setFormData] = useState<FormData>(
+        initialData ?? {
         title: '',
         subtitle: '',
         category: '',
         subCategory: '',
         editor: '',
         content: '',
-    });
+        }
+    )
     const [editorName, setEditorName] = useState<Option[]>([]);
-    const [selectedEditors, setSelectedEditors] = useState<string>();
     const [isLoading, setIsLoading] = useState(true);
 
     const [category, setCategory] = useState<string | undefined>(undefined);
-    const [subCategory, setSubCategory] = useState<string | undefined>(undefined);
     const [error, setError] = useState<string | null>(null)
 
     const router = useRouter()
+
+    // Edit 모드로 진입해 initialData가 바뀌면 폼에 반영
+    useEffect(() => {
+        if (initialData) {
+            setFormData(initialData)
+        }
+    }, [initialData])
 
     // 에디터 목록 불러오기
     useEffect(() => {
@@ -66,7 +80,7 @@ export default function PostForm({ pageTitle }: PostFormProps) {
     // 에디터 내용 변경 핸들러
     const handleChange = (name: keyof FormData, value: string) => {
         setFormData(prev => ({ ...prev, [name]: value }));
-        console.log(formData)
+        // console.log(formData)
     };
 
     // 선택된 대분류의 서브카테고리만 뽑아오기
@@ -76,19 +90,13 @@ export default function PostForm({ pageTitle }: PostFormProps) {
         e.preventDefault()
         setError(null)
         try {
-          // API 호출: 게시물 생성
-          await axios.post(
-            '/api/post',
-            {
-                title: formData.title,
-                subtitle: formData.subtitle,
-                editor: formData.editor,
-                category: formData.category,
-                subCategory: formData.subCategory,
-                content: formData.content,
-              },
-            { withCredentials: true }
-          )
+            if (onSubmit) {
+                // 수정 모드: 상위 페이지에서 넘겨준 콜백 호출
+                await onSubmit(formData)
+              } else {
+                // 새 글 작성 모드: 기본 POST
+                await axios.post('/api/posts', formData, { withCredentials: true })
+              }
           // 성공 시 리스트 페이지로 이동
           router.push('/admin/adminPosts')
         } catch (err: any) {
@@ -100,6 +108,7 @@ export default function PostForm({ pageTitle }: PostFormProps) {
     return (
         <div>
             <h1>{pageTitle}</h1>
+            {error && <p className={styles.error}>{error}</p>}
             <form className={styles.form_wrap} onSubmit={handleSubmit}>
                 <div>
                     <label htmlFor="title">
@@ -132,7 +141,6 @@ export default function PostForm({ pageTitle }: PostFormProps) {
                     options={editorName}
                     value={formData.editor}
                     onChange={val => {
-                        setSelectedEditors
                         handleChange('editor', val)
                     }}
                     label={'에디터 선택'}
@@ -147,7 +155,6 @@ export default function PostForm({ pageTitle }: PostFormProps) {
                     value={formData.category}
                     onChange={val => {
                         setCategory(val);
-                        setSubCategory(undefined);  // 대분류 바뀌면 서브카테고리 리셋
                         handleChange('category', val)
                     }}
                     required={true}
@@ -162,7 +169,6 @@ export default function PostForm({ pageTitle }: PostFormProps) {
                         options={subOptions.map(s => ({ label: s.label, value: s.value }))}
                         value={formData.subCategory}
                         onChange={val => {
-                            setSubCategory
                             handleChange('subCategory', val)
                         }}
                         required
@@ -179,7 +185,7 @@ export default function PostForm({ pageTitle }: PostFormProps) {
                 </div>
                 <div className={styles.button_wrap}>
                     <button className={styles.red} onClick={() => router.back()}>취소</button>
-                    <button type="submit">저장</button>
+                    <button type="submit">{initialData ? '수정' : '저장'}</button>
                 </div>
             </form>
         </div>
