@@ -25,6 +25,9 @@
 .editorContainer :global(.ql-container) {
     min-height: 450px;
 }
+.editorContainer :global(.ql-editor) {
+    min-height: 450px;
+}
 
 .button_wrap {
     display: flex;

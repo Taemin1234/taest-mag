@@ -2,18 +2,20 @@
 
 import styles from './PostForm.module.css'
 import React, { useState, useEffect } from "react";
+import { useRouter } from 'next/navigation'
 import { Option, Editor } from "@/types"
 import QuillEditor from '@/components/ui/QuillEditor';
-import Dropdown from './ui/DropDown';
+import Dropdown from '@/components/ui/DropDown';
 import { CATEGORIES } from '@/constants/categories';
 import axios from 'axios';
 
 interface FormData {
     title: string;
     subtitle: string;
-    content: string;
     category: string;
+    subCategory: string;
     editor: string;
+    content: string;
 }
 
 interface PostFormProps {
@@ -24,9 +26,10 @@ export default function PostForm({ pageTitle }: PostFormProps) {
     const [formData, setFormData] = useState<FormData>({
         title: '',
         subtitle: '',
-        content: '',
         category: '',
+        subCategory: '',
         editor: '',
+        content: '',
     });
     const [editorName, setEditorName] = useState<Option[]>([]);
     const [selectedEditors, setSelectedEditors] = useState<string>();
@@ -34,6 +37,9 @@ export default function PostForm({ pageTitle }: PostFormProps) {
 
     const [category, setCategory] = useState<string | undefined>(undefined);
     const [subCategory, setSubCategory] = useState<string | undefined>(undefined);
+    const [error, setError] = useState<string | null>(null)
+
+    const router = useRouter()
 
     // 에디터 목록 불러오기
     useEffect(() => {
@@ -58,34 +64,77 @@ export default function PostForm({ pageTitle }: PostFormProps) {
     }, []);
 
     // 에디터 내용 변경 핸들러
-    const handleContentChange = (val: string) => {
-        setFormData(prev => ({ ...prev, content: val }));
+    const handleChange = (name: keyof FormData, value: string) => {
+        setFormData(prev => ({ ...prev, [name]: value }));
+        console.log(formData)
     };
 
     // 선택된 대분류의 서브카테고리만 뽑아오기
     const subOptions = CATEGORIES.find(c => c.value === category)?.subCategories ?? [];
 
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault()
+        setError(null)
+        try {
+          // API 호출: 게시물 생성
+          await axios.post(
+            '/api/post',
+            {
+                title: formData.title,
+                subtitle: formData.subtitle,
+                editor: formData.editor,
+                category: formData.category,
+                subCategory: formData.subCategory,
+                content: formData.content,
+              },
+            { withCredentials: true }
+          )
+          // 성공 시 리스트 페이지로 이동
+          router.push('/admin/adminPosts')
+        } catch (err: any) {
+          console.error('게시물 저장 실패:', err)
+          setError(err.response?.data?.message || '게시물 저장 중 오류가 발생했습니다.')
+        }
+      }
+
     return (
         <div>
             <h1>{pageTitle}</h1>
-            <form className={styles.form_wrap}>
+            <form className={styles.form_wrap} onSubmit={handleSubmit}>
                 <div>
                     <label htmlFor="title">
                         제목
                     </label>
-                    <input type="text" id="title" required />
+                    <input 
+                        type="text" 
+                        id="title" 
+                        name="title" 
+                        value={formData.title} 
+                        onChange={e => handleChange('title', e.target.value)} 
+                        required
+                    />
                 </div>
                 <div>
                     <label htmlFor="subtitle">
                         부제목
                     </label>
-                    <input type="text" id="subtitle" required />
+                    <input 
+                        type="text" 
+                        id="subtitle" 
+                        name="subtitle"
+                        required
+                        value={formData.subtitle}
+                        onChange={e => handleChange('subtitle', e.target.value)}
+                    />
                 </div>
                 <Dropdown 
                     name="editor"
                     options={editorName}
-                    value={selectedEditors}
-                    onChange={setSelectedEditors}
+                    value={formData.editor}
+                    onChange={val => {
+                        setSelectedEditors
+                        handleChange('editor', val)
+                    }}
                     label={'에디터 선택'}
                     placeholder={'에디터를 선택해주세요'}
                     required={true}
@@ -95,10 +144,11 @@ export default function PostForm({ pageTitle }: PostFormProps) {
                     label="대분류"
                     placeholder="카테고리 선택"
                     options={CATEGORIES.map(c => ({ label: c.label, value: c.value }))}
-                    value={category}
+                    value={formData.category}
                     onChange={val => {
-                    setCategory(val);
-                    setSubCategory(undefined);  // 대분류 바뀌면 서브카테고리 리셋
+                        setCategory(val);
+                        setSubCategory(undefined);  // 대분류 바뀌면 서브카테고리 리셋
+                        handleChange('category', val)
                     }}
                     required={true}
                 />
@@ -106,13 +156,16 @@ export default function PostForm({ pageTitle }: PostFormProps) {
                 {/* 2단계: 서브카테고리 (대분류를 선택해야 보임) */}
                 {subOptions.length > 0 && (
                     <Dropdown
-                    name="subCategory"
-                    label="소분류"
-                    placeholder="소분류 선택"
-                    options={subOptions.map(s => ({ label: s.label, value: s.value }))}
-                    value={subCategory}
-                    onChange={setSubCategory}
-                    required
+                        name="subCategory"
+                        label="소분류"
+                        placeholder="소분류 선택"
+                        options={subOptions.map(s => ({ label: s.label, value: s.value }))}
+                        value={formData.subCategory}
+                        onChange={val => {
+                            setSubCategory
+                            handleChange('subCategory', val)
+                        }}
+                        required
                     />
                 )}
                 <div className={styles.editorContainer}>
@@ -121,12 +174,12 @@ export default function PostForm({ pageTitle }: PostFormProps) {
                     </label>
                     <QuillEditor
                         value={formData.content}          // 현재 폼의 content
-                        onChange={handleContentChange}    // 내용이 바뀌면 이 함수가 실행
+                        onChange={val => handleChange('content', val)}// 내용이 바뀌면 이 함수가 실행
                     />
                 </div>
                 <div className={styles.button_wrap}>
-                    <button className={styles.red}>취소</button>
-                    <button>저장</button>
+                    <button className={styles.red} onClick={() => router.back()}>취소</button>
+                    <button type="submit">저장</button>
                 </div>
             </form>
         </div>

@@ -3,6 +3,7 @@ import connectDB from './db';
 import editorRoutes from './routes/editors';
 import uploadRouter from './routes/upload';
 import authRouter from './routes/auth';
+import postRouter from './routes/posts'
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 
@@ -23,6 +24,7 @@ app.use(cookieParser());
 app.use('/api/editors', editorRoutes);
 app.use('/api/upload', uploadRouter);
 app.use('/api/auth', authRouter);
+app.use('/api/post', postRouter);
 
 
 app.get('/', (_req, res) => {
