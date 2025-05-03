@@ -1,6 +1,4 @@
-.admin_posts {
-
-}
+.admin_posts {}
 
 .chkbox_box {
     background-color: #eee;
@@ -33,7 +31,7 @@
 }
 
 .post_tool .search_wrap select,
-.post_tool .search_wrap .input_wrap,
+.post_tool .search_wrap .input_wrap input,
 .page_view_wrap select {
     border: solid 1px var(--main-black);
     padding: 3px;

@@ -27,8 +27,8 @@ const AdminPosts = () => {
                 const opts = data.map(editor => ({
                     value: editor.name,      // 예: id를 value로
                     label: editor.name,    // name을 label로
-                  }));
-                  setEditorName(opts);
+                }));
+                setEditorName(opts);
             } catch (error) {
                 console.log("에디터 로딩 실패: ", error);
             } finally {
@@ -39,7 +39,7 @@ const AdminPosts = () => {
         fetchPosts();
     }, []);
 
-    
+
     // API에서 게시글 불러오기
     useEffect(() => {
         const fetchPosts = async () => {
@@ -49,39 +49,28 @@ const AdminPosts = () => {
             } catch (error) {
                 console.log("게시물 로딩 실패: ", error);
             } finally {
-              setIsLoading(false);
+                setIsLoading(false);
             }
-          };
-      
-          fetchPosts();
+        };
+
+        fetchPosts();
     }, []);
 
-    const dummyPost = [
-        {
-            id: 1432,
-            title: '나랑드 사이다 나랑드 사이다나랑드 사이다사이다나랑드사이다나랑드',
-            content: '컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠',
-            view: 98,
-            createdAt: '2025-03-12',
-            updatedAt: '2033.16.56'
-        },
-        {
-            id: 214352,
-            title: '콜라라 사이다',
-            content: '컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠',
-            view: 928,
-            createdAt: '2025-03-12',
-            updatedAt: '2033.16.56'
-        },
-        {
-            id: 1433434,
-            title: '카리나 가위위',
-            content: '컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠',
-            view: 938,
-            createdAt: '2025-03-12',
-            updatedAt: '2033.16.56'
+    // 삭제 이벤트
+    const handleDelete = async (slug: string) => {
+        if (!window.confirm('삭제하시겠어요? 돌이킬수 없습니다?')) return;
+        try {
+            await axios.delete(`/api/posts/${slug}`, {
+                withCredentials: true
+            });
+            setPosts(prev =>
+                prev.filter(posts => posts.slug !== slug)
+            );
+        } catch (error) {
+            console.error('삭제 실패:', error);
+            alert('삭제 중 오류가 발생했습니다.');
         }
-    ]
+    };
 
     // 필터링 로직
     const filtered = posts.filter(post => {
@@ -183,7 +172,7 @@ const AdminPosts = () => {
                                         <Link href={`/admin/posts/${post.slug}/edit`}>
                                             <button className={styles.btn_blue}>수정</button>
                                         </Link>
-                                        <button className={styles.btn_red}>삭제</button>
+                                        <button className={styles.btn_red} onClick={() => handleDelete(post.slug)}>삭제</button>
                                     </div>
                                 </td>
                             </tr>
