@@ -16,6 +16,10 @@ const AdminPosts = () => {
     const [selectedEditors, setSelectedEditors] = useState<string[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
+    // 페이지네이션
+    const [pageSize, setPageSize] = useState(10);
+    const [currentPage, setCurrentPage] = useState(1);
+
 
     // 에디터 목록 불러오기
     useEffect(() => {
@@ -79,6 +83,38 @@ const AdminPosts = () => {
         return okCat && okEditor;
     });
 
+    ///////////////////////////////////////
+    // 페이지 네이션
+
+    // 한 그룹에 몇 개의 페이지 번호를 보여줄지
+    const groupSize = 10;
+    // 현재 페이지가 속한 그룹 인덱스 (0부터)
+    const currentGroup = Math.floor((currentPage - 1) / groupSize);
+
+    // 전체 페이지 개수
+    const totalPages = Math.ceil(posts.length / pageSize);
+
+    // 이 그룹의 시작/끝 페이지 번호
+    const startPage = currentGroup * groupSize + 1;
+    const endPage = Math.min(startPage + groupSize - 1, totalPages);
+
+    // 페이지 번호 배열
+    const pageNumbers = [];
+    for (let p = startPage; p <= endPage; p++) {
+        pageNumbers.push(p);
+    }
+
+    // 현재 페이지에 보일 게시물
+    const startIdx = (currentPage - 1) * pageSize;
+    const currentPosts = posts.slice(startIdx, startIdx + pageSize);
+
+    // 페이지 당 항목 수 조정 함수
+    const handlePageSizeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setPageSize(Number(e.target.value));
+        setCurrentPage(1); // 페이지 사이즈 변경 시 1페이지로 리셋
+    };
+
+
     return (
         <div className={styles.admin_posts}>
             <h1>게시글 관리</h1>
@@ -125,7 +161,7 @@ const AdminPosts = () => {
                             <label>
                                 페이지당 표시:{" "}
                             </label>
-                            <select>
+                            <select value={pageSize} onChange={handlePageSizeChange}>
                                 {[10, 25, 50, 100].map((size) => (
                                     <option key={size} value={size}>{`${size}개`}</option>
                                 ))}
@@ -160,7 +196,7 @@ const AdminPosts = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {posts.map(post => (
+                        {currentPosts.map(post => (
                             <tr key={post.slug}>
                                 <td>{post.postNum}</td>
                                 <td><p>{post.title}</p></td>
@@ -179,6 +215,31 @@ const AdminPosts = () => {
                         ))}
                     </tbody>
                 </table>
+                <nav className={styles.pagination_wrap}>
+                    <button
+                        onClick={() => setCurrentPage(startPage - 1)}
+                        disabled={startPage === 1}
+                    >
+                        &lt;
+                    </button>
+
+                    {pageNumbers.map(p => (
+                        <button
+                            key={p}
+                            onClick={() => setCurrentPage(p)}
+                            disabled={p === currentPage}
+                        >
+                            {p}
+                        </button>
+                    ))}
+
+                    <button
+                        onClick={() => setCurrentPage(endPage + 1)}
+                        disabled={endPage === totalPages}
+                    >
+                        &gt;
+                    </button>
+                </nav>
             </section>
         </div >
     )

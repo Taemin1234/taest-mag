@@ -97,3 +97,27 @@
 .btn_wrap .btn_red {
     background-color: var(--main-red);
 }
+
+.pagination_wrap {
+    width: 100%;
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.pagination_wrap button {
+    font-weight: 700;
+}
+
+.pagination_wrap button:first-child {
+    margin-right: 20px;
+}
+
+.pagination_wrap button:last-child {
+    margin-left: 20px;
+}
+
+.pagination_wrap button:hover {
+    color: var(--main-theme);
+}
