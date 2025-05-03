@@ -1,13 +1,15 @@
 'use client';
 
-import React from 'react'
 import styles from './adminPosts.module.css'
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Editor, Option, Post } from "@/types"
 import Checkbox from '@/components/ui/Checkbox';
+import TypeSearchbar from '@/components/ui/TypeSearchbar'
 import { CATEGORIES } from '@/constants/categories'
 import axios from 'axios';
+
+
 
 const AdminPosts = () => {
     const [posts, setPosts] = useState<Post[]>([]);
@@ -19,6 +21,10 @@ const AdminPosts = () => {
     // 페이지네이션
     const [pageSize, setPageSize] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
+
+    // 검색
+    const [searchType, setSearchType] = useState<'title' | 'content'>('title');
+    const [searchQuery, setSearchQuery] = useState('');
 
 
     // 에디터 목록 불러오기
@@ -80,7 +86,13 @@ const AdminPosts = () => {
     const filtered = posts.filter(post => {
         const okCat = selectedCats.length === 0 || selectedCats.includes(post.category);
         const okEditor = selectedEditors.length === 0 || selectedEditors.includes(post.editor);
-        return okCat && okEditor;
+        const text = (searchType === 'title'
+            ? post.title
+            : post.content
+        ).toLowerCase();
+        const okSearch = searchQuery.trim() === ''
+            || text.includes(searchQuery.trim().toLowerCase());
+        return okCat && okEditor && okSearch;
     });
 
     ///////////////////////////////////////
@@ -92,7 +104,7 @@ const AdminPosts = () => {
     const currentGroup = Math.floor((currentPage - 1) / groupSize);
 
     // 전체 페이지 개수
-    const totalPages = Math.ceil(posts.length / pageSize);
+    const totalPages = Math.ceil(filtered.length / pageSize);
 
     // 이 그룹의 시작/끝 페이지 번호
     const startPage = currentGroup * groupSize + 1;
@@ -106,7 +118,7 @@ const AdminPosts = () => {
 
     // 현재 페이지에 보일 게시물
     const startIdx = (currentPage - 1) * pageSize;
-    const currentPosts = posts.slice(startIdx, startIdx + pageSize);
+    const currentPosts = filtered.slice(startIdx, startIdx + pageSize);
 
     // 페이지 당 항목 수 조정 함수
     const handlePageSizeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -142,21 +154,15 @@ const AdminPosts = () => {
 
             <section className={styles.post_table}>
                 <div className={styles.post_tool}>
-                    <div className={styles.search_wrap}>
-                        <select>
-                            <option value="title">제목</option>
-                            <option value="content">글 내용</option>
-                        </select>
-                        <div className={styles.input_wrap}>
-                            <input
-                                type="text"
-                                placeholder="검색어를 입력하세요"
-                            />
-                        </div>
-                    </div>
+                    <TypeSearchbar
+                        searchType={searchType}
+                        onSearchTypeChange={setSearchType}
+                        query={searchQuery}
+                        onQueryChange={setSearchQuery}
+                    />
 
                     <div className={styles.page_view_wrap}>
-                        <div>총 {posts.length}개의 게시물 |</div>
+                        <div>총 {filtered.length}개의 게시물 |</div>
                         <div>
                             <label>
                                 페이지당 표시:{" "}

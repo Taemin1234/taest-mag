@@ -1,0 +1,11 @@
+.search_wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.input_wrap input,
+.search_wrap select {
+    border: solid 1px var(--main-black);
+    padding: 3px;
+}
