@@ -1,4 +1,6 @@
 import express from 'express';
+import dotenv from 'dotenv';
+dotenv.config();
 import connectDB from './db';
 import editorRoutes from './routes/editors';
 import uploadRouter from './routes/upload';
@@ -14,9 +16,9 @@ const PORT = process.env.PORT || 3001;
 connectDB();
 
 // CORS 설정
-app.use(cors({ 
+app.use(cors({
   origin: 'http://localhost:3000',
-  credentials: true, 
+  credentials: true,
 }));
 
 app.use(express.json());
