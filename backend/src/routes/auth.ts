@@ -172,7 +172,7 @@ router.post('/forgot-password', async (req: Request, res: Response) => {
   try {
     const { email } = req.body;
     const user = await User.findOne({ email });
-    if (!user) return res.status(404).json({ message: '등록된 이메일이 없습니다.' });
+    if (!user) return res.status(404).json({ message: '비밀번호 재설정 이메일을 보냈습니다.' });
 
     // 토큰 생성 + 해시 저장 (generatePasswordResetToken 메서드 사용)
     const resetToken = await (user as IUser).generatePasswordResetToken();
@@ -214,7 +214,5 @@ router.post('/reset-password/:token', async (req: Request, res: Response) => {
     res.status(500).json({ message: '서버 오류' });
   }
 });
-
-
 
 export default router;

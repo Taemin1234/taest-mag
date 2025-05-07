@@ -8,7 +8,7 @@ export interface IUser extends Document {
   email: string;
   username: string;
   password: string;
-  role: 'superadmin' | 'admin' | 'editor';
+  role: 'superman' | 'ironman' | 'human';
   isLoggedIn: boolean;
   isActive: boolean;
   failedLoginAttempts: number;
@@ -46,8 +46,8 @@ const UserSchema: Schema<IUser> = new Schema(
     },
     role: {
       type: String,
-      enum: ['superadmin', 'admin', 'editor'],
-      default: 'editor',
+      enum: ['superman', 'ironman', 'human'],
+      default: 'human',
     },
     isLoggedIn: {
       type: Boolean,
