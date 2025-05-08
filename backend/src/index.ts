@@ -6,6 +6,7 @@ import editorRoutes from './routes/editors';
 import uploadRouter from './routes/upload';
 import authRouter from './routes/auth';
 import postRouter from './routes/posts'
+import userRouter from './routes/user'
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 
@@ -27,6 +28,7 @@ app.use('/api/editors', editorRoutes);
 app.use('/api/upload', uploadRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/posts', postRouter);
+app.use('/api/user', userRouter);
 
 
 app.get('/', (_req, res) => {

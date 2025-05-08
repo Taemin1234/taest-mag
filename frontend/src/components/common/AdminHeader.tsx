@@ -7,29 +7,39 @@ import Link from 'next/link';
 import Image from 'next/image';
 import axios from "axios";
 
-type User = { role: 'superadmin'|'admin'|'editor' };
+interface Role { role: 'superman'|'ironman'|'human' };
 
 const AdminHeader = () => {
     const router = useRouter();
-    const [tier, setTier] = useState<User | null>(null);
+    const [tier, setTier] = useState<Role | null>(null);
 
     useEffect(() => {
-        fetch('/api/user')            // 로그인 유저 정보(역할 포함) 리턴 엔드포인트
-          .then(res => res.json())
-          .then(setTier)
-          .catch(() => setTier(null));
-      }, []);
+        const fetchUserRole = async () => {
+            try {
+                const res = await axios.get<{ role: Role }>('/api/user/user', {
+                  withCredentials: true,       // httpOnly 쿠키 전송
+                });
+                setTier(res.data.role)               
+              } catch (err) {
+                console.error('Failed to fetch user role:', err);
+                setTier(null);
+              }
+        };
+        fetchUserRole();
+    }, []);
+
+    console.log(tier)
 
     const handleLogout = async () => {
         try {
-            const response = await axios.post(
+            const res = await axios.post(
                 "/api/auth/logout",
                 {},
                 { withCredentials: true } // 쿠키 전송
             );
     
             // 로그아웃 성공 시 로그인 페이지로 이동
-            if (response.status === 200) {
+            if (res.status === 200) {
                 router.replace('/snowman/elsa');
             }
         } catch (error) {
@@ -57,7 +67,7 @@ const AdminHeader = () => {
                 <li>
                     <Link href="/admin/adminPosts">아티클 관리</Link>
                 </li>
-                {tier.role === 'superman' && (
+                {tier?.toString() === 'superman' && (
                     <li>
                         <Link href="/admin/adminTier">티어 관리</Link>
                     </li>
