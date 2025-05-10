@@ -1,34 +1,21 @@
 'use client'
 
 import styles from './AdminHeader.module.css'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useRouter } from 'next/navigation';
+import { useUserStore } from '@/store/useRoleStore'
 import Link from 'next/link';
 import Image from 'next/image';
 import axios from "axios";
 
-interface Role { role: 'superman'|'ironman'|'human' };
-
 const AdminHeader = () => {
     const router = useRouter();
-    const [tier, setTier] = useState<Role | null>(null);
+    const tier = useUserStore((s) => s.tier)
+    const fetchUserRole = useUserStore((s) => s.fetchUserRole)
 
     useEffect(() => {
-        const fetchUserRole = async () => {
-            try {
-                const res = await axios.get<{ role: Role }>('/api/user/user', {
-                  withCredentials: true,       // httpOnly 쿠키 전송
-                });
-                setTier(res.data.role)               
-              } catch (err) {
-                console.error('Failed to fetch user role:', err);
-                setTier(null);
-              }
-        };
-        fetchUserRole();
-    }, []);
-
-    console.log(tier)
+        fetchUserRole()
+    }, [fetchUserRole])
 
     const handleLogout = async () => {
         try {
@@ -37,7 +24,7 @@ const AdminHeader = () => {
                 {},
                 { withCredentials: true } // 쿠키 전송
             );
-    
+
             // 로그아웃 성공 시 로그인 페이지로 이동
             if (res.status === 200) {
                 router.replace('/snowman/elsa');
