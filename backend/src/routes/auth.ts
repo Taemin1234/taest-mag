@@ -142,6 +142,19 @@ router.post('/login', async (req: Request, res: Response) => {
       maxAge: 12 * 60 * 60 * 1000,
     });
 
+    // 티어 저장
+    const role = user.role
+
+    res.cookie('user-tier', role, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production'     // dev: 'lax', prod: 'none'
+    ? 'none'
+    : 'lax',
+      path: '/',
+      maxAge: 12 * 60 * 60 * 1000,
+    });
+
     res.json({ message: '로그인 성공' });
   } catch (err) {
     console.error(err);

@@ -48,12 +48,19 @@ const AdminHeader = () => {
                 </Link>
             </h1>
             <ul>
-                <li>
-                    <Link href="/admin/adminEditor">에디터 관리</Link>
-                </li>
-                <li>
-                    <Link href="/admin/adminPosts">아티클 관리</Link>
-                </li>
+                {tier?.toString() === 'human' || (
+                    <li>
+                        <Link href="/admin/adminEditor">에디터 관리</Link>
+                    </li>
+                    
+                )}
+                 {tier?.toString() === 'human' || (
+                     <li>
+                        <Link href="/admin/adminPosts">아티클 관리</Link>
+                    </li>
+                    
+                )}
+               
                 {tier?.toString() === 'superman' && (
                     <li>
                         <Link href="/admin/adminTier">티어 관리</Link>
