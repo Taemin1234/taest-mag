@@ -23,7 +23,7 @@ export default function AdminMain() {
                         {li.title}
                        </Link>
                     </li>
-                )
+                    )
                 )}
             </ul>
         </div>

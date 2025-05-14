@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { IUser } from '../models/User';
 
+// 역할 확인 미들웨어
 export const authorize =
   (allowedRoles: IUser['role'][]) => // 허용할 역할 목록 받아오기
   (req: Request, res: Response, next: NextFunction) => {

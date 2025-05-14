@@ -7,6 +7,8 @@ import uploadRouter from './routes/upload';
 import authRouter from './routes/auth';
 import postRouter from './routes/posts'
 import userRouter from './routes/user'
+import adminRouter from './routes/admin'
+import { authenticate } from './middleware/authenticate'
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 
@@ -30,6 +32,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/posts', postRouter);
 app.use('/api/user', userRouter);
 
+app.use('/admin', adminRouter)
 
 app.get('/', (_req, res) => {
   res.send('🟢 Express 서버가 잘 작동 중입니다!');
