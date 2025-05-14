@@ -8,7 +8,6 @@ import authRouter from './routes/auth';
 import postRouter from './routes/posts'
 import userRouter from './routes/user'
 import adminRouter from './routes/admin'
-import { authenticate } from './middleware/authenticate'
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 
