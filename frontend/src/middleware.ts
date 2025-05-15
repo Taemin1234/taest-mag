@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server'
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl
   const tier = req.cookies.get('user-tier')?.value
+  const token = req.cookies.get('token')?.value
 
    // /admin 이하 모든 경로에 대해
   if (pathname.startsWith('/admin')) {
@@ -21,9 +22,16 @@ export function middleware(req: NextRequest) {
     // 3) 그 외(admin 등)은 다음으로 통과
   }
 
+  // 이미 로그인 되었을 때 관리자페이지로 리다이렉트
+   if (pathname.startsWith('/snowman') && token) {
+    const toAdmin = req.nextUrl.clone()
+    toAdmin.pathname = '/admin'
+    return NextResponse.redirect(toAdmin)
+  }
+
   return NextResponse.next()
 }
 
 export const config = {
-  matcher: ['/admin/:path*'],
+  matcher: ['/admin/:path*', '/snowman/:path*'],
 }
