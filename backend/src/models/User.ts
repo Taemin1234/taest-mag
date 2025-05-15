@@ -14,6 +14,7 @@ export interface IUser extends Document {
   failedLoginAttempts: number;
   lastLoginAttempt?: Date;
   ipAddress?: string;
+  loginAt: Date;
   createdAt: Date;
   updatedAt: Date;
   resetPasswordToken?: string;
@@ -67,6 +68,10 @@ const UserSchema: Schema<IUser> = new Schema(
     ipAddress: {
       type: String,
     },
+    loginAt: { 
+      type: Date, 
+      default: Date.now 
+    },
     resetPasswordToken: { // 재설정 링크의 고유 인증 키
       type: String,
       select: false, // 보안상 기본 조회 제외
@@ -80,6 +85,8 @@ const UserSchema: Schema<IUser> = new Schema(
     timestamps: true, // createdAt, updatedAt 자동 생성
   }
 );
+
+UserSchema.index({ isLoggedIn: 1, loginAt: 1 });
 
 // 비밀번호 해시 처리 전처리
 UserSchema.pre<IUser>('save', async function (next) {

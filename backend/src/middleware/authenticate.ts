@@ -25,13 +25,16 @@ export const authenticate = async (req: AuthRequest, res: Response, next: NextFu
       res.clearCookie('token', { path: '/' });
       
       // 2-2) DB isLoggedIn 초기화
-      const decoded = jwt.decode(token) as { id?: string };
+      const decoded = jwt.decode(token) as { id?: string } || null;
       if (decoded?.id) {
-        await User.findByIdAndUpdate(decoded.id, { isLoggedIn: false });
+        try {
+          await User.findByIdAndUpdate(decoded.id, { isLoggedIn: false });
+        } catch (dbErr) {
+          console.error('isLoggedIn 초기화 오류:', dbErr);
+        }
       }
       res.status(401).send('토큰이 만료되었습니다. 다시 로그인해주세요.');
-    } else {
-      res.status(401).send('유효하지 않은 토큰입니다.');
     }
+    res.status(401).send('유효하지 않은 토큰입니다.');
   }
 };

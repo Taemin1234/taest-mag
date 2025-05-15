@@ -107,6 +107,7 @@ router.post('/login', async (req: Request, res: Response) => {
     user.failedLoginAttempts = 0;
     user.lastLoginAttempt = new Date();
     user.isLoggedIn = true;
+    user.loginAt = new Date();
 
     // 로그인을 시도하는 ip 주소의 계정 저장
     try {
