@@ -35,4 +35,4 @@ export interface Post {
 };
 
 // 등급
-export interface Role { role: 'superman' | 'ironman' | 'human' };
+export type Role = 'superman' | 'ironman' | 'human';

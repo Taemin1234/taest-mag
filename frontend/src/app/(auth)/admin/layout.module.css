@@ -1,3 +1,7 @@
 .admin_main {
     padding: 150px 30px 50px;
 }
+
+.admin_main_noaccess {
+    padding: 0;
+}

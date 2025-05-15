@@ -12,4 +12,13 @@
 .noti {
     font-size: 40px;
     font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.noAccess button {
+    padding: 10px 20px;
+    border: solid 1px var(--main-black);
+    font-weight: 700;
+    border-radius: 5px;
+    background-color: var(--main-white);
 }

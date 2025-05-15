@@ -168,6 +168,7 @@ router.post('/logout', authenticate, async (req: AuthRequest, res: Response) => 
   try {
     // 1) 쿠키삭제
     res.clearCookie('token');
+    res.clearCookie('user-tier');
 
     // 2) DB 업데이트: isLoggedIn = false
     const userId = req.user!.id;
