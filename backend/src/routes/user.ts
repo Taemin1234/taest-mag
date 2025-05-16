@@ -40,27 +40,24 @@ router.get('/:id', async (req: Request, res: Response) => {
 });
 
 /**
- * 4) 사용자 정보 수정
- *    - 일반 정보(예: isActive) 변경: ironman, superman
- *    - 역할(role) 변경: superman만
+ * 4) 사용자 역할 수정
  */
-router.put('/:id', async (req: Request, res: Response) => {
-  const updates: Partial<IUser> = {};
-  if (req.body.isActive !== undefined) updates.isActive = req.body.isActive;
-
-  // role 변경 요청이 있을 때는 superman만 허용
-  if (req.body.role) {
-    const currentUser = (req as any).user as IUser;
-    if (currentUser.role !== 'superman') {
-      return res.status(403).json({ message: '권한이 없습니다. role 변경은 superman만 가능합니다.' });
+router.patch('/role', authenticate, authorize(['superman']), 
+  async (req: Request, res: Response) => {
+  const { email, role } = req.body
+    try {
+      // 이메일로 사용자 찾아서 role만 업데이트
+      const user = await User.findOneAndUpdate(
+        { email },
+        { role },
+        { new: true }
+      )
+      if (!user) return res.status(404).json({ message: '사용자를 찾을 수 없습니다.' })
+      return res.json({ message: '티어 변경 완료', user })
+    } catch (err) {
+      console.error(err)
+      return res.status(500).json({ message: '서버 오류' })
     }
-    updates.role = req.body.role;
-  }
-
-  const user = await User.findByIdAndUpdate(req.params.id, updates, { new: true })
-    .select('-password -resetPasswordToken -resetPasswordExpires');
-  if (!user) return res.status(404).json({ message: '사용자를 찾을 수 없습니다.' });
-  res.json(user);
 });
 
 /**

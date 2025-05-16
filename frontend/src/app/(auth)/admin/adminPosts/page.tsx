@@ -9,8 +9,6 @@ import TypeSearchbar from '@/components/ui/TypeSearchbar'
 import { CATEGORIES } from '@/constants/categories'
 import axios from 'axios';
 
-
-
 const AdminPosts = () => {
     const [posts, setPosts] = useState<Post[]>([]);
     const [editorName, setEditorName] = useState<Option[]>([]);

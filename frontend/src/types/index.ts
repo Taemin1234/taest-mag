@@ -36,3 +36,11 @@ export interface Post {
 
 // 등급
 export type Role = 'superman' | 'ironman' | 'human';
+
+// 유저
+export interface Users {
+    username : string;
+    email : string;
+    role : string;
+    lastLoginAttempt : Date;
+}

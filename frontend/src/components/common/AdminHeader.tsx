@@ -2,19 +2,24 @@
 
 import styles from './AdminHeader.module.css'
 import React from 'react'
-import { useRouter } from 'next/navigation';
 import { Role } from '@/types'
 import Link from 'next/link';
 import Image from 'next/image';
 import useLogout from '@/hooks/useLogout'
+import { adminList } from '@/constants/adminList'
 
 interface AdminHeaderProps {
   tier: Role | null
 }
 
 const AdminHeader = ({tier} : AdminHeaderProps) => {
-    const router = useRouter();
     const logout = useLogout()
+
+    const filteredList = tier === 'superman'
+        ? adminList
+        : tier === 'ironman'
+          ? adminList.filter(item => item.accessTier === 'ironman')
+          : [] 
 
     return (
         <header className={styles.admin_header}>
@@ -29,26 +34,23 @@ const AdminHeader = ({tier} : AdminHeaderProps) => {
                     />
                 </Link>
             </h1>
-            <ul>
-               <li>
-                    <Link href="/admin/adminEditor">에디터 관리</Link>
-                </li>
-                <li>
-                    <Link href="/admin/adminPosts">아티클 관리</Link>
-                </li>
-                {tier?.toString() === 'superman' && (
-                    <li>
-                        <Link href="/admin/adminTier">티어 관리</Link>
-                    </li>
-                )}
-                <li>
-                    <button
-                        onClick={logout}
-                    >
-                        로그아웃
-                    </button>
-                </li>
-            </ul>
+            <div className={styles.flex}>
+                <ul>
+                    {filteredList.map((li) => (
+                        <li key={li.title}>
+                            <Link href={li.href}>
+                                {li.title}
+                            </Link>
+                        </li>)
+                    )}
+                </ul>
+                <button
+                    className={styles.button}
+                    onClick={logout}
+                >
+                    로그아웃
+                </button>
+            </div>
         </header>
     )
 }

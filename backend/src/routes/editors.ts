@@ -18,7 +18,7 @@ router.post('/', authenticate, async (req: Request, res: Response) => {
 });
 
 // 에디터 수정
-router.put('/:id', authenticate, authorize(['ironman']), async (req: Request, res: Response) => {
+router.put('/:id', authenticate, authorize(['ironman', 'superman']), async (req: Request, res: Response) => {
   const editor = await Editor.findByIdAndUpdate(req.params.id, req.body, { new: true });
   res.json(editor);
 });
