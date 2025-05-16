@@ -1,0 +1,17 @@
+.table_wrap {
+    width: 100%;
+    margin-top: 20px;
+}
+.table_wrap tr th,
+.table_wrap tr td {
+    border-bottom: solid 1px var(--main-black);
+    padding: 10px 0;
+    text-align: center;
+}
+
+.button {
+    border-radius: 5px;
+    background-color: var(--main-theme);
+    color: var(--main-white);
+    padding: 5px 7px;
+}

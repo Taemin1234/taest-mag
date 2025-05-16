@@ -1,5 +1,6 @@
 'use client';
 
+import styles from './adminTier.module.css'
 import { useState, useEffect } from 'react'
 import { Users, Role } from '@/types'
 import axios from 'axios'
@@ -62,14 +63,15 @@ export default function AdminTier() {
     <div>
       <h1>티어 업그레이드</h1>
       {loading && <p>업데이트 중…</p>}
-      <table>
+      <table className={styles.table_wrap}>
         <thead>
           <tr>
             <th>이메일</th>
-            <th>유저네임</th>
+            <th>아이디</th>
             <th>현재 티어</th>
             <th>마지막 로그인</th>
             <th>티어 변경</th>
+            <th>확인</th>
           </tr>
         </thead>
         <tbody>
@@ -92,8 +94,8 @@ export default function AdminTier() {
                 </select>
               </td>
               <td>
-                <button onClick={() => handleRoleSubmit(user.email)}>
-                    티어 변경하기
+                <button className={styles.button} onClick={() => handleRoleSubmit(user.email)}>
+                    변경하기
                 </button>
               </td>
             </tr>
