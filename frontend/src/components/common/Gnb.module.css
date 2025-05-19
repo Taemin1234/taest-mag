@@ -4,5 +4,28 @@
     width: 100vw;
     height: 100vh;
     padding: 0 2rem;
+    background-color: var(--main-white);
     z-index: 9;
 }
+
+.gnb_wrap > ul.depth1 {
+    margin-top: 7rem;
+}
+
+.gnb_wrap > ul > li {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    background-color: var(--main-black);
+    color: var(--main-white);
+    margin-bottom: 10px;
+    padding: 10px 20px;
+}
+
+.gnb_wrap > ul > li > ul.depth2 {
+    display: none;
+}
+
+/* 1. 헤네시, 이름만 들어도 멋있어
+
+	헤네시.
+	위스키나 브랜디 등 독한 술을 즐기지 않아도 한번쯤 들어봤을 이름이다. */
