@@ -9,8 +9,8 @@ export default function GNB({ isOpen }: { isOpen: boolean }) {
   return (
     <nav className={styles.gnb_wrap}>
       <ul className={styles.depth1}>
-        <li>
-          <Link href="/category/food">FOOD</Link>
+        <li className={styles.open}>
+          <span>FOOD</span>
           <ul className={styles.depth2}>
             <li>
               <Link href="/category/food">전체</Link>
@@ -25,7 +25,7 @@ export default function GNB({ isOpen }: { isOpen: boolean }) {
 
         </li>
         <li>
-          <Link href="/category/culture">CULTURE</Link>
+          <span>CULTURE</span>
           <ul className={styles.depth2}>
             <li>
               <Link href="/category/culture">전체</Link>
@@ -40,7 +40,7 @@ export default function GNB({ isOpen }: { isOpen: boolean }) {
 
         </li>
         <li>
-          <Link href="/category/tech">TECH</Link>
+          <span>TECH</span>
           <ul className={styles.depth2}>
             <li>
               <Link href="/category/tech">전체</Link>
@@ -55,7 +55,7 @@ export default function GNB({ isOpen }: { isOpen: boolean }) {
 
         </li>
         <li>
-          <Link href="/category/living">LIVING</Link>
+          <span>LIVING</span>
           <ul className={styles.depth2}>
             <li>
               <Link href="/category/living">전체</Link>
@@ -70,7 +70,7 @@ export default function GNB({ isOpen }: { isOpen: boolean }) {
 
         </li>
         <li>
-          <Link href="/category/people">PEOPLE</Link>
+          <span>PEOPLE</span>
           <ul className={styles.depth2}>
             <li>
               <Link href="/category/people">전체</Link>
