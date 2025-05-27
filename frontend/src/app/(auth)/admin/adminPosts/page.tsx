@@ -7,7 +7,7 @@ import { Editor, Option, Post } from "@/types"
 import Checkbox from '@/components/ui/Checkbox';
 import TypeSearchbar from '@/components/ui/TypeSearchbar'
 import { CATEGORIES } from '@/constants/categories'
-import axios from 'axios';
+import { fetchEditors, fetchPosts } from '@/lib/api'
 
 const AdminPosts = () => {
     const [posts, setPosts] = useState<Post[]>([]);
@@ -27,50 +27,48 @@ const AdminPosts = () => {
 
     // 에디터 목록 불러오기
     useEffect(() => {
-        const fetchPosts = async () => {
-            try {
-                const res = await axios.get<Editor[]>("/api/editors");
-                const data = res.data;
-
-                const opts = data.map(editor => ({
-                    value: editor.name,      // 예: id를 value로
-                    label: editor.name,    // name을 label로
-                }));
-                setEditorName(opts);
-            } catch (error) {
-                console.log("에디터 로딩 실패: ", error);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
-        fetchPosts();
+        setIsLoading(true)
+        fetchEditors()
+        .then((data: Editor[]) => {
+            const opts: Option[] = data.map((editor) => ({
+            value: editor.name,
+            label: editor.name,
+            }))
+            setEditorName(opts)
+        })
+        .catch((err) => {
+            console.error('에디터 로딩 실패:', err)
+        })
+        .finally(() => {
+            setIsLoading(false)
+        })
     }, []);
 
 
-    // API에서 게시글 불러오기
+    // 게시글 불러오기
     useEffect(() => {
-        const fetchPosts = async () => {
-            try {
-                const res = await axios.get("/api/posts");
-                setPosts(res.data);
-            } catch (error) {
-                console.log("게시물 로딩 실패: ", error);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
-        fetchPosts();
+        setIsLoading(true)
+        fetchPosts()
+        .then((data: Post[]) => {
+            setPosts(data)
+        })
+        .catch((err) => {
+            console.error('게시물 로딩 실패:', err)
+        })
+        .finally(() => {
+            setIsLoading(false)
+        })
     }, []);
 
     // 삭제 이벤트
     const handleDelete = async (slug: string) => {
         if (!window.confirm('삭제하시겠어요? 돌이킬수 없습니다?')) return;
         try {
-            await axios.delete(`/api/posts/${slug}`, {
-                withCredentials: true
-            });
+            const res = await fetch(`/api/posts/${slug}`, {
+                method: 'DELETE',
+                credentials: 'include',
+            })
+            if (!res.ok) throw new Error(`${res.status} ${res.statusText}`)
             setPosts(prev =>
                 prev.filter(posts => posts.slug !== slug)
             );
