@@ -1,7 +1,7 @@
 "use client"
 
 import styles from './PostForm.module.css'
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect ,useRef } from "react";
 import { useRouter } from 'next/navigation'
 import { Option, Editor } from "@/types"
 import QuillEditor from '@/components/ui/QuillEditor';
@@ -14,6 +14,7 @@ export interface FormData {
     subtitle: string;
     category: string;
     subCategory: string;
+    thumbnailUrl:string;
     editor: string;
     content: string;
 }
@@ -36,22 +37,25 @@ export default function PostForm({
         subtitle: '',
         category: '',
         subCategory: '',
+        thumbnailUrl:'',
         editor: '',
         content: '',
         }
     )
     const [editorName, setEditorName] = useState<Option[]>([]);
+    const [previewUrl, setPreviewUrl] = useState<string>("");
     const [isLoading, setIsLoading] = useState(true);
 
     const [category, setCategory] = useState<string | undefined>(undefined);
     const [error, setError] = useState<string | null>(null)
-
+    const fileInputRef = useRef<HTMLInputElement>(null);
     const router = useRouter()
 
     // Edit 모드로 진입해 initialData가 바뀌면 폼에 반영
     useEffect(() => {
         if (initialData) {
-            setFormData(initialData)
+            setFormData(initialData);
+            setPreviewUrl(initialData.thumbnailUrl);
         }
     }, [initialData])
 
@@ -103,7 +107,32 @@ export default function PostForm({
           console.error('게시물 저장 실패:', err)
           setError(err.response?.data?.message || '게시물 저장 중 오류가 발생했습니다.')
         }
-      }
+    }
+
+    // 이미지 파일 미리보기
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+            // 이미 업로드된 이미지가 있으면 차단
+            if (previewUrl) {
+            alert("이미지는 한 개만 업로드할 수 있습니다.")
+            return
+        }
+
+        const file = e.target.files?.[0];
+        if (!file) return;
+        
+        // FileReader보다 메모리 관리 측면에서 효율적
+        const url = URL.createObjectURL(file);
+        setPreviewUrl(url);
+        // 업로드는 나중에 handleSubmit 에서 처리
+
+        setFormData(prev => ({ ...prev, thumbnailUrl: url }));
+    };
+
+    // 이미지 파일 삭제
+    const handleRemoveImage = () => {
+        setPreviewUrl("");
+        setFormData(prev => ({ ...prev, thumbnailUrl: "" }));
+    };
 
     return (
         <div>
@@ -174,6 +203,30 @@ export default function PostForm({
                         required
                     />
                 )}
+                <div>
+                    <label>썸네일 이미지</label>
+                    <input
+                        ref={fileInputRef}
+                        type="file"
+                        name='thumbnailUrl'
+                        accept="image/*"
+                        onChange={handleFileChange}
+                        disabled={!!previewUrl}
+                    />
+                    {previewUrl && (
+                        <div className={styles.previewImg_wrap}>
+                            <img
+                                src={previewUrl}
+                                alt="미리보기"
+                                className={styles.previewImg}
+                            />
+                            <button
+                                type='button'
+                                onClick={handleRemoveImage}
+                            >X</button>
+                        </div>
+                    )}
+                </div>
                 <div className={styles.editorContainer}>
                     <label htmlFor="content">
                         내용
