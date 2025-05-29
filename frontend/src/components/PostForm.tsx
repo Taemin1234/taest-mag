@@ -26,20 +26,20 @@ interface PostFormProps {
     onSubmit?: (data: FormData) => Promise<void>;
 }
 
-export default function PostForm({ 
+export default function PostForm({
     pageTitle,
     initialData,
     onSubmit,
 }: PostFormProps) {
     const [formData, setFormData] = useState<FormData>(
         initialData ?? {
-        title: '',
-        subtitle: '',
-        category: '',
-        subCategory: '',
-        thumbnailUrl: '',
-        editor: '',
-        content: '',
+            title: '',
+            subtitle: '',
+            category: '',
+            subCategory: '',
+            thumbnailUrl: '',
+            editor: '',
+            content: '',
         }
     )
     const [editorName, setEditorName] = useState<Option[]>([]);
@@ -51,6 +51,15 @@ export default function PostForm({
     const [category, setCategory] = useState<string | undefined>(undefined);
     const [error, setError] = useState<string | null>(null)
     const router = useRouter()
+
+    // 썸네일 필수 검증
+    useEffect(() => {
+        if (!initialData && !thumbnailFile) {
+            setError('썸네일 이미지를 꼭 등록해주세요.');
+        } else {
+            setError(null);
+        }
+    }, [initialData, thumbnailFile]);
 
     // Edit 모드로 진입해 initialData가 바뀌면 폼에 반영
     useEffect(() => {
@@ -70,7 +79,7 @@ export default function PostForm({
 
                 const opts = data.map(editor => ({
                     value: editor.name,
-                    label: editor.name, 
+                    label: editor.name,
                 }));
                 setEditorName(opts);
             } catch (error) {
@@ -106,17 +115,17 @@ export default function PostForm({
         setFormData(prev => ({ ...prev, thumbnailUrl: "" }));
     };
 
-    // 썸네일 필수 검증
-    if (!initialData && !thumbnailFile) {
-        setError('썸네일 이미지를 꼭 등록해주세요.');
-        setUploading(false);
-        return;
-      }
-
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         setError(null)
         setUploading(true)
+
+        // 썸네일 필수 검증
+        if (!initialData && !thumbnailFile) {
+            setError('썸네일 이미지를 꼭 등록해주세요.');
+            setUploading(false);
+            return;
+        }
 
         try {
             let finalThumbnailUrl = formData.thumbnailUrl;
@@ -125,7 +134,7 @@ export default function PostForm({
             if (thumbnailFile) {
                 const imageFormData = new FormData();
                 imageFormData.append('image', thumbnailFile);
-                
+
                 try {
                     const imageRes = await axios.post('/api/upload?type=posts', imageFormData, {
                         headers: {
@@ -174,12 +183,12 @@ export default function PostForm({
                     <label htmlFor="title">
                         제목
                     </label>
-                    <input 
-                        type="text" 
-                        id="title" 
-                        name="title" 
-                        value={formData.title} 
-                        onChange={e => handleChange('title', e.target.value)} 
+                    <input
+                        type="text"
+                        id="title"
+                        name="title"
+                        value={formData.title}
+                        onChange={e => handleChange('title', e.target.value)}
                         required
                     />
                 </div>
@@ -187,16 +196,16 @@ export default function PostForm({
                     <label htmlFor="subtitle">
                         부제목
                     </label>
-                    <input 
-                        type="text" 
-                        id="subtitle" 
+                    <input
+                        type="text"
+                        id="subtitle"
                         name="subtitle"
                         required
                         value={formData.subtitle}
                         onChange={e => handleChange('subtitle', e.target.value)}
                     />
                 </div>
-                <Dropdown 
+                <Dropdown
                     name="editor"
                     options={editorName}
                     value={formData.editor}

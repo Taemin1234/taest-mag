@@ -8,6 +8,7 @@
     width: 100%;
     padding: 0 20px;
     background-color: #cdcdcd;
+    z-index: 10;
 }
 
 .admin_header .flex,
