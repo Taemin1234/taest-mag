@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef  } from 'react';
 import styles from './AdminEditorModal.module.css';
 import { Editor, SNSLink } from '@/types';
 import AdminSNSInput from '@/components/editor/AdminSNSInput';
+import ImageUploader from '@/components/ui/ImageUploader'
   
 interface EditorModalProps {
     editor: Editor | null;
@@ -27,8 +28,7 @@ export default function AdminEditorModal({ editor, onClose, onSave }: EditorModa
     useEffect(() => {
         if (editor) {
             setEditorData(editor);
-            setPreviewUrl(editor.imageUrl);
-            
+            setPreviewUrl(editor.imageUrl);   
         } else {
             setEditorData({ 
                 name: '',
@@ -124,7 +124,6 @@ export default function AdminEditorModal({ editor, onClose, onSave }: EditorModa
                             </div>
                         )}
                     </div>
-                    <p className={styles.noti}>미리보기 이미지는 실제 비율과 다를 수 있음</p>
                     <div>
                         <label>이름</label>
                         <input
