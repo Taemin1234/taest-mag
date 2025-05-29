@@ -26,27 +26,30 @@ export default function ImageUploader({
   }
 
   return (
-    <div className={styles.uploader}>
-      <label>{label}</label>
-      <input
-        ref={inp}
-        type="file"
-        name={name}
-        accept="image/*"
-        onChange={handleChange}
-        disabled={disabled || uploading}
-      />
-      {uploading && <p className={styles.uploading}>업로드 중…</p>}
-      {previewUrl && (
-        <div className={styles.previewWrap}>
-          <img src={previewUrl} alt="미리보기" className={styles.preview} />
-          <button type="button" onClick={() => {
-            onRemove()
-            if (inp.current) inp.current.value = ''
-          }}>X</button>
-        </div>
-      )}
+    <>
+      <div className={styles.uploader}>
+        <label>{label}</label>
+        <input
+          ref={inp}
+          type="file"
+          name={name}
+          accept="image/*"
+          onChange={handleChange}
+          disabled={disabled || uploading}
+        />
+        {uploading && <p className={styles.uploading}>업로드 중…</p>}
+        {previewUrl && (
+          <div className={styles.previewWrap}>
+            <img src={previewUrl} alt="미리보기" className={styles.previewImg} />
+            <button type="button" onClick={() => {
+              onRemove()
+              if (inp.current) inp.current.value = ''
+            }}>X</button>
+          </div>
+        )}
+        
+      </div>
       <p className={styles.noti}>미리보기 이미지는 실제 비율과 다를 수 있음</p>
-    </div>
+    </>
   )
 }

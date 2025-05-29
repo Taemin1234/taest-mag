@@ -1,12 +1,13 @@
 "use client"
 
 import styles from './PostForm.module.css'
-import React, { useState, useEffect ,useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from 'next/navigation'
 import { Option, Editor } from "@/types"
 import QuillEditor from '@/components/ui/QuillEditor';
 import Dropdown from '@/components/ui/DropDown';
 import { CATEGORIES } from '@/constants/categories';
+import ImageUploader from '@/components/ui/ImageUploader';
 import axios from 'axios';
 
 export interface FormData {
@@ -14,7 +15,7 @@ export interface FormData {
     subtitle: string;
     category: string;
     subCategory: string;
-    thumbnailUrl:string;
+    thumbnailUrl: string;
     editor: string;
     content: string;
 }
@@ -23,21 +24,20 @@ interface PostFormProps {
     pageTitle: string;
     initialData?: FormData;
     onSubmit?: (data: FormData) => Promise<void>;
-  }
+}
 
 export default function PostForm({ 
     pageTitle,
     initialData,
     onSubmit,
 }: PostFormProps) {
-    // initialData가 있으면 수정 모드, 없으면 새 글 모드
     const [formData, setFormData] = useState<FormData>(
         initialData ?? {
         title: '',
         subtitle: '',
         category: '',
         subCategory: '',
-        thumbnailUrl:'',
+        thumbnailUrl: '',
         editor: '',
         content: '',
         }
@@ -45,10 +45,11 @@ export default function PostForm({
     const [editorName, setEditorName] = useState<Option[]>([]);
     const [previewUrl, setPreviewUrl] = useState<string>("");
     const [isLoading, setIsLoading] = useState(true);
+    const [uploading, setUploading] = useState(false);
+    const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
 
     const [category, setCategory] = useState<string | undefined>(undefined);
     const [error, setError] = useState<string | null>(null)
-    const fileInputRef = useRef<HTMLInputElement>(null);
     const router = useRouter()
 
     // Edit 모드로 진입해 initialData가 바뀌면 폼에 반영
@@ -56,6 +57,7 @@ export default function PostForm({
         if (initialData) {
             setFormData(initialData);
             setPreviewUrl(initialData.thumbnailUrl);
+            setCategory(initialData.category);
         }
     }, [initialData])
 
@@ -69,8 +71,8 @@ export default function PostForm({
                 const opts = data.map(editor => ({
                     value: editor.name,
                     label: editor.name, 
-                  }));
-                  setEditorName(opts);
+                }));
+                setEditorName(opts);
             } catch (error) {
                 console.log("에디터 로딩 실패: ", error);
             } finally {
@@ -84,55 +86,84 @@ export default function PostForm({
     // 에디터 내용 변경 핸들러
     const handleChange = (name: keyof FormData, value: string) => {
         setFormData(prev => ({ ...prev, [name]: value }));
-        // console.log(formData)
     };
 
     // 선택된 대분류의 서브카테고리만 뽑아오기
     const subOptions = CATEGORIES.find(c => c.value === category)?.subCategories ?? [];
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault()
-        setError(null)
-        try {
-            if (onSubmit) {
-                // 수정 모드: 상위 페이지에서 넘겨준 콜백 호출
-                await onSubmit(formData)
-              } else {
-                // 새 글 작성 모드: 기본 POST
-                await axios.post('/api/posts', formData, { withCredentials: true })
-              }
-          // 성공 시 리스트 페이지로 이동
-          router.push('/admin/adminPosts')
-        } catch (err: any) {
-          console.error('게시물 저장 실패:', err)
-          setError(err.response?.data?.message || '게시물 저장 중 오류가 발생했습니다.')
-        }
-    }
-
-    // 이미지 파일 미리보기
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-            // 이미 업로드된 이미지가 있으면 차단
-            if (previewUrl) {
-            alert("이미지는 한 개만 업로드할 수 있습니다.")
-            return
-        }
-
-        const file = e.target.files?.[0];
-        if (!file) return;
-        
-        // FileReader보다 메모리 관리 측면에서 효율적
+    // 이미지 파일 변경 핸들러
+    const handleFileChange = (file: File) => {
         const url = URL.createObjectURL(file);
         setPreviewUrl(url);
-        // 업로드는 나중에 handleSubmit 에서 처리
-
+        setThumbnailFile(file);
         setFormData(prev => ({ ...prev, thumbnailUrl: url }));
     };
 
     // 이미지 파일 삭제
     const handleRemoveImage = () => {
         setPreviewUrl("");
+        setThumbnailFile(null);
         setFormData(prev => ({ ...prev, thumbnailUrl: "" }));
     };
+
+    // 썸네일 필수 검증
+    if (!initialData && !thumbnailFile) {
+        setError('썸네일 이미지를 꼭 등록해주세요.');
+        setUploading(false);
+        return;
+      }
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault()
+        setError(null)
+        setUploading(true)
+
+        try {
+            let finalThumbnailUrl = formData.thumbnailUrl;
+
+            // 새로운 이미지 파일이 있다면 먼저 업로드
+            if (thumbnailFile) {
+                const imageFormData = new FormData();
+                imageFormData.append('image', thumbnailFile);
+                
+                try {
+                    const imageRes = await axios.post('/api/upload?type=posts', imageFormData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                        },
+                        withCredentials: true
+                    });
+                    finalThumbnailUrl = imageRes.data.url; // 실제 업로드된 이미지 URL로 교체
+                } catch (error) {
+                    console.error('이미지 업로드 실패:', error);
+                    setError('이미지 업로드에 실패했습니다.');
+                    setUploading(false);
+                    return;
+                }
+            }
+
+            // 최종 게시물 데이터 준비
+            const finalFormData = {
+                ...formData,
+                thumbnailUrl: finalThumbnailUrl
+            };
+
+            if (onSubmit) {
+                // 수정 모드: 상위 페이지에서 넘겨준 콜백 호출
+                await onSubmit(finalFormData)
+            } else {
+                // 새 글 작성 모드: 기본 POST
+                await axios.post('/api/posts', finalFormData, { withCredentials: true })
+            }
+            // 성공 시 리스트 페이지로 이동
+            router.push('/admin/adminPosts')
+        } catch (err: any) {
+            console.error('게시물 저장 실패:', err)
+            setError(err.response?.data?.message || '게시물 저장 중 오류가 발생했습니다.')
+        } finally {
+            setUploading(false)
+        }
+    }
 
     return (
         <div>
@@ -203,30 +234,15 @@ export default function PostForm({
                         required
                     />
                 )}
-                <div>
-                    <label>썸네일 이미지</label>
-                    <input
-                        ref={fileInputRef}
-                        type="file"
-                        name='thumbnailUrl'
-                        accept="image/*"
-                        onChange={handleFileChange}
-                        disabled={!!previewUrl}
-                    />
-                    {previewUrl && (
-                        <div className={styles.previewImg_wrap}>
-                            <img
-                                src={previewUrl}
-                                alt="미리보기"
-                                className={styles.previewImg}
-                            />
-                            <button
-                                type='button'
-                                onClick={handleRemoveImage}
-                            >X</button>
-                        </div>
-                    )}
-                </div>
+                <ImageUploader
+                    label="썸네일 이미지"
+                    name="thumbnailUrl"
+                    disabled={false}
+                    uploading={uploading}
+                    previewUrl={previewUrl}
+                    onFileChange={handleFileChange}
+                    onRemove={handleRemoveImage}
+                />
                 <div className={styles.editorContainer}>
                     <label htmlFor="content">
                         내용
