@@ -9,7 +9,7 @@ import ImageUploader from '@/components/ui/ImageUploader'
 interface EditorModalProps {
     editor: Editor | null;
     onClose: () => void;
-    onSave: (editor: Editor, file?: File) => void;
+    onSave: (editor: Editor) => void;
 }
 
 export default function AdminEditorModal({ editor, onClose, onSave }: EditorModalProps) {
@@ -23,6 +23,7 @@ export default function AdminEditorModal({ editor, onClose, onSave }: EditorModa
     const [previewUrl, setPreviewUrl] = useState<string>("");
     const [uploading, setUploading] = useState<boolean>(false);
     const [imageFile, setImageFile] = useState<File | null>(null);
+    const [error, setError] = useState<string | null>(null);
 
     // editor prop이 바뀔 때마다 state를 초기화
     useEffect(() => {
@@ -51,6 +52,7 @@ export default function AdminEditorModal({ editor, onClose, onSave }: EditorModa
 
     // 이미지 파일 변경 핸들러
     const handleFileChange = (file: File) => {
+        setError(null);
         const url = URL.createObjectURL(file);
         setPreviewUrl(url);
         setImageFile(file);
@@ -70,13 +72,60 @@ export default function AdminEditorModal({ editor, onClose, onSave }: EditorModa
     };
 
     // 입력한 에디터 저장
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setError(null);
+
+        let finalUrl = editorData.imageUrl;
+
+         // 새 이미지가 선택되었다면 업로드
+        if (imageFile) {
+            setUploading(true);
+            try {
+                // 1) FormData 에 파일 붙이기
+                const form = new FormData();
+                form.append('profile', imageFile);
+            
+                // 2) fetch로 POST 요청 보내기
+                const response = await fetch('/api/upload/profile', {
+                method: 'POST',
+                body: form,
+                // 쿠키 전송을 위해 include
+                credentials: 'include',
+                });
+            
+                // 3) HTTP 에러 체크
+                if (!response.ok) {
+                // 서버가 에러 메시지를 JSON으로 내려준다면 파싱
+                let errMsg = '이미지 업로드 중 오류가 발생했습니다.';
+                try {
+                    const errData = await response.json();
+                    if (errData.message) errMsg = errData.message;
+                } catch {
+                    /* ignore parse errors */
+                }
+                throw new Error(errMsg);
+                }
+            
+                // 4) 성공 시 JSON 파싱하여 URL 꺼내기
+                const data = (await response.json()) as { url: string };
+                finalUrl = data.url;
+            
+            } catch (err: any) {
+                console.error('이미지 업로드 실패:', err);
+                setError(err.message || '이미지 업로드 중 오류가 발생했습니다.');
+                setUploading(false);
+                return;
+            }
+            setUploading(false);
+        }
+  
+
         const payload: Editor = {
             ...editorData,
-            socialLinks: editorData.socialLinks ?? [],
+            imageUrl: finalUrl,
         };
-        onSave(payload, imageFile || undefined);
+        onSave(payload);
         onClose();
     };
     

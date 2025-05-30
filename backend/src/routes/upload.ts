@@ -1,92 +1,104 @@
-import express, { Request, Response } from 'express';
+import express, { Request, Response, NextFunction, RequestHandler } from 'express';
 import multer from 'multer';
-import cloudinary from '../utils/cloudinary';
+import { cloudinary, UploadApiOptions, UploadApiResponse } from '../utils/cloudinary';
+import streamifier from 'streamifier';
 
 const router = express.Router();
 // 메모리 스토리지: 파일을 메모리(버퍼 buffer)로 다룹니다
 const storage = multer.memoryStorage();
 
-// 썸네일 전용: 최대 1MB
-const thumbnailUpload = multer({
-  storage,
-  limits: { fileSize: 1 * 1024 * 1024 }  // 1MB
-}).single('thumbnail');
+const imageOnly = (req: any, file: Express.Multer.File, cb:any) => {
+  if (!file.mimetype.startsWith('image/')) {
+    return cb(new Error('이미지 파일만 업로드 가능합니다.'));
+  }
+  cb(null, true);
+};
 
-// 프로필 사진 전용: 최대 5MB
-const profileUpload = multer({
-  storage,
-  limits: { fileSize: 5 * 1024 * 1024 }  // 5MB
-}).single('profile');
+// 파일 크기 제한
+const KB = 1024;
+const MB = 1024 * KB;
 
-// interface Files {
-//   thumbnail?: Express.Multer.File[];
-//   profile?: Express.Multer.File[];
-// }
+const createUploader = (maxSize: number) =>
+  multer({ storage, limits: { fileSize: maxSize }, fileFilter: imageOnly });
 
-// interface RequestWithFiles extends Request {
-//   file?: any;
-//   files?: {
-//     [fieldname: string]: Express.Multer.File[];
-//   };
-// }
+// 프로필 업로드 전용 Multer
+const profileUpload = createUploader(1 * MB);
 
-// 스트림 업로드 헬퍼: folder 이름을 인자로 받도록 변경
-const streamUpload = (fileBuffer: Buffer, folder: string) =>
-  new Promise<any>((resolve, reject) => {
+// 썸네일 업로드 전용 Multer
+const thumbnailUpload = createUploader(5 * MB);
+
+// quill 업로드 전용 Multer
+const quillUpload  = createUploader(5 * MB);
+
+const streamUpload = (buffer: Buffer, options: UploadApiOptions = {}) =>
+  new Promise<UploadApiResponse>((resolve, reject) => {
     const stream = cloudinary.uploader.upload_stream(
-      { folder }, // 동적으로 폴더 지정
+      options, // 동적으로 폴더 지정
       (error, result) => {
-        if (error) return reject(error);
+        if (error) {
+          return reject(error);
+        }
+        if (!result) {
+          return reject(new Error('Cloudinary did not return a result'));
+        }
         resolve(result);
       }
     );
-    stream.end(fileBuffer);
+    streamifier.createReadStream(buffer).pipe(stream);
   });
 
-// POST /api/upload
+
+// --- 프로필 라우트 ---
 router.post(
-  '/',
-  // thumbnail, profile 이라는 이름의 파일 필드 두 개를 동시에 처리
-  thumbnailUpload,
-  profileUpload,
-  async (req: Request, res: Response): Promise<void> => {
+  '/profile',
+  profileUpload.single('profile'),
+  (async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const files = req.files as { [fieldname: string]: Express.Multer.File[] };
-      if (!files) {
-        res.status(400).json({ message: 'No files uploaded' });
-        return
+      if (!req.file) {
+        res.status(400).json({ message: '파일 없음' });
+        return;
       }
-
-      let thumbnailUrl: string | undefined;
-      let profileUrl: string | undefined;
-
-      // 썸네일 업로드
-      const thumbFile = files.thumbnail?.[0];
-      if (thumbFile) {
-        const thumbResult = await streamUpload(
-          thumbFile.buffer,
-          'posts/thumbnails'
-        );
-        thumbnailUrl = thumbResult.secure_url;
-      }
-
-      // 프로필 사진 업로드
-      const profileFile = files.profile?.[0];
-      if (profileFile) {
-        const profileResult = await streamUpload(
-          profileFile.buffer,
-          'users/profiles'
-        );
-        profileUrl = profileResult.secure_url;
-      }
-
-      // 업로드된 URL들 응답
-      res.json({ thumbnailUrl, profileUrl });
+      const result = await streamUpload(req.file.buffer, { folder: 'profiles' });
+      res.json({ url: result.secure_url });
     } catch (err) {
-      console.error('Upload error:', err);
-      res.status(500).json({ message: 'Upload failed' });
+      next(err);
     }
-  }
+  }) as RequestHandler
+);
+
+// --- 썸네일 라우트 ---
+router.post(
+  '/thumbnail',
+  thumbnailUpload.single('thumbnail'),
+  (async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      if (!req.file) {
+        res.status(400).json({ message: '파일 없음' });
+        return;
+      }
+      const result = await streamUpload(req.file.buffer, { folder: 'thumbnails' });
+      res.json({ url: result.secure_url });
+    } catch (err) {
+      next(err);
+    }
+  }) as RequestHandler
+);
+
+router.post(
+  '/quill',
+  quillUpload.single('quill'),
+  (async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      if (!req.file) {
+        res.status(400).json({ message: '파일 없음' });
+        return;
+      }
+      const result = await streamUpload(req.file.buffer, { folder: 'quill' });
+      res.json({ url: result.secure_url });
+    } catch (err) {
+      next(err);
+    }
+  }) as RequestHandler
 );
 
 export default router;
