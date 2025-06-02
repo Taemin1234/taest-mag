@@ -48,7 +48,7 @@ export default function ImageUploader({
    // 컴포넌트 언마운트 시 Blob URL 해제 (previewUrl이 blob: 인 경우)
    useEffect(() => {
     return () => {
-      if (previewUrl.startsWith('blob:')) {
+      if (typeof previewUrl === 'string' && previewUrl.startsWith('blob:')) {
         URL.revokeObjectURL(previewUrl);
       }
     };

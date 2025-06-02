@@ -47,9 +47,9 @@ export default function PostForm({
     const [isLoading, setIsLoading] = useState(true);
     const [uploading, setUploading] = useState(false);
     const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
-
-    const [category, setCategory] = useState<string | undefined>(undefined);
     const [error, setError] = useState<string | null>(null)
+    const [category, setCategory] = useState<string | undefined>(undefined);
+    
     const router = useRouter()
 
     // 썸네일 필수 검증
@@ -115,6 +115,7 @@ export default function PostForm({
         setFormData(prev => ({ ...prev, thumbnailUrl: "" }));
     };
 
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         setError(null)
@@ -132,23 +133,17 @@ export default function PostForm({
 
             // 새로운 이미지 파일이 있다면 먼저 업로드
             if (thumbnailFile) {
-                const imageFormData = new FormData();
-                imageFormData.append('image', thumbnailFile);
+                const thumbForm = new FormData();
+                thumbForm.append('thumbnail', thumbnailFile);
 
-                try {
-                    const imageRes = await axios.post('/api/upload?type=posts', imageFormData, {
-                        headers: {
-                            'Content-Type': 'multipart/form-data',
-                        },
-                        withCredentials: true
-                    });
-                    finalThumbnailUrl = imageRes.data.url; // 실제 업로드된 이미지 URL로 교체
-                } catch (error) {
-                    console.error('이미지 업로드 실패:', error);
-                    setError('이미지 업로드에 실패했습니다.');
-                    setUploading(false);
-                    return;
-                }
+                const thumbRes = await fetch('/api/upload/thumbnail', {
+                    method: 'POST',
+                    body: thumbForm,
+                    credentials: 'include'
+                  });
+                  if (!thumbRes.ok) throw new Error("썸네일 업로드 실패");
+                  const thumbData = (await thumbRes.json()) as { url: string };
+                  finalThumbnailUrl = thumbData.url;
             }
 
             // 최종 게시물 데이터 준비
@@ -162,7 +157,16 @@ export default function PostForm({
                 await onSubmit(finalFormData)
             } else {
                 // 새 글 작성 모드: 기본 POST
-                await axios.post('/api/posts', finalFormData, { withCredentials: true })
+                const postRes = await fetch('/api/posts', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify(finalFormData),
+                });
+                if (!postRes.ok) {
+                    const errData = await postRes.json().catch(() => ({}));
+                    throw new Error(errData.message || '게시물 저장 실패');
+                }
             }
             // 성공 시 리스트 페이지로 이동
             router.push('/admin/adminPosts')

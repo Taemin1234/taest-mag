@@ -36,12 +36,13 @@ const handleImageUpload = () => {
     if (!file) return;
 
     const form = new FormData();
-    form.append('image', file);
+    form.append('quill', file);
 
     try {
-      const res = await fetch('/api/upload', {
+      const res = await fetch('/api/upload/quill', {
         method: 'POST',
         body: form,
+        credentials: 'include'
       });
       const data = await res.json();
       const url = data.url as string;
@@ -54,6 +55,7 @@ const handleImageUpload = () => {
       editor.setSelection(range.index + 1);
     } catch (err) {
       console.error('Image upload failed', err);
+      alert('이미지 업로드 중 오류가 발생했습니다.');
     }
   };
 };
@@ -105,7 +107,7 @@ const handleImageUpload = () => {
     'script',
     'direction', 'align',
     'link', 'image', 'video',
-     'blockquote', 'code-block',
+    'blockquote', 'code-block',
   ];
 
   return (
