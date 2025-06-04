@@ -2,15 +2,26 @@
 
 import styles from './Gnb.module.css'
 import Link from 'next/link';
+import { useState } from 'react';
 
 export default function GNB({ isOpen }: { isOpen: boolean }) {
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  
   if (!isOpen) return null;
+
+  const handleClick = (index: number) => {
+    if (activeIndex === index) {
+      setActiveIndex(null);
+    } else {
+      setActiveIndex(index);
+    }
+  };
 
   return (
     <nav className={styles.gnb_wrap}>
       <ul className={styles.depth1}>
-        <li className={styles.open}>
-          <span>FOOD</span>
+        <li className={activeIndex === 0 ? styles.active : ''}>
+          <span onClick={() => handleClick(0)}>FOOD</span>
           <ul className={styles.depth2}>
             <li>
               <Link href="/category/food">전체</Link>
@@ -22,10 +33,9 @@ export default function GNB({ isOpen }: { isOpen: boolean }) {
               <Link href="/category/food/restaurant">식당</Link>
             </li>
           </ul>
-
         </li>
-        <li>
-          <span>CULTURE</span>
+        <li className={activeIndex === 1 ? styles.active : ''}>
+          <span onClick={() => handleClick(1)}>CULTURE</span>
           <ul className={styles.depth2}>
             <li>
               <Link href="/category/culture">전체</Link>
@@ -37,10 +47,9 @@ export default function GNB({ isOpen }: { isOpen: boolean }) {
               <Link href="/category/culture/movie">영화/드라마</Link>
             </li>
           </ul>
-
         </li>
-        <li>
-          <span>TECH</span>
+        <li className={activeIndex === 2 ? styles.active : ''}>
+          <span onClick={() => handleClick(2)}>TECH</span>
           <ul className={styles.depth2}>
             <li>
               <Link href="/category/tech">전체</Link>
@@ -52,10 +61,9 @@ export default function GNB({ isOpen }: { isOpen: boolean }) {
               <Link href="/category/tech/tech-etc">기타</Link>
             </li>
           </ul>
-
         </li>
-        <li>
-          <span>LIVING</span>
+        <li className={activeIndex === 3 ? styles.active : ''}>
+          <span onClick={() => handleClick(3)}>LIVING</span>
           <ul className={styles.depth2}>
             <li>
               <Link href="/category/living">전체</Link>
@@ -67,10 +75,9 @@ export default function GNB({ isOpen }: { isOpen: boolean }) {
               <Link href="/category/living/honey-tip">꿀팁</Link>
             </li>
           </ul>
-
         </li>
-        <li>
-          <span>PEOPLE</span>
+        <li className={activeIndex === 4 ? styles.active : ''}>
+          <span onClick={() => handleClick(4)}>PEOPLE</span>
           <ul className={styles.depth2}>
             <li>
               <Link href="/category/people">전체</Link>

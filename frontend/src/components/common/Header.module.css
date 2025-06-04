@@ -13,6 +13,7 @@
     justify-content: space-between;
     align-items: center;
     color: var(--main-white);
+    z-index: 10;
 }
 
 .header_wrap h1 {
