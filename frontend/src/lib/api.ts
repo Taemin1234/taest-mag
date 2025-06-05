@@ -25,3 +25,17 @@ export async function fetchPosts(): Promise<Post[]> {
   const data: Post[] = await response.json()
   return data
 }
+
+// slug를 이용해 단일 포스트 가져오기
+export async function fetchPostBySlug(slug: string): Promise<Post> {
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
+  const res = await fetch(`${baseUrl}/api/posts/${encodeURIComponent(slug)}`, {
+    method: 'GET',
+    credentials: 'include',
+  })
+  if (!res.ok) {
+    throw new Error(`게시글(슬러그: ${slug})을 불러오지 못했습니다. (${res.status})`)
+  }
+  const post: Post = await res.json()
+  return post
+}
