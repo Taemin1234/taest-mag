@@ -9,12 +9,12 @@
     /* 빈 칸을 가능한 아이템으로 채움 */
 }
 
-.postlist_wrap>*:nth-child(5n+1) {
+.postlist_wrap.variant_main>*:nth-child(5n+1) {
     grid-column: 1/span 2;
     grid-row: 1/span 2;
 }
 
-.postlist_wrap>*:nth-child(5n) {
+.postlist_wrap.variant_main>*:nth-child(5n) {
     grid-column: 3 / span 2;
     grid-row: 1 / span 2;
 }

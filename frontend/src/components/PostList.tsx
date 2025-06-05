@@ -1,31 +1,24 @@
-'use client';
-
 import styles from './PostList.module.css';
 import Link from 'next/link';
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Post } from "@/types"
-import { fetchPosts } from '@/lib/api'
 
-export default function PostList() {
-    const [posts, setPosts] = useState<Post[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
+interface PostBasicListProps {
+    posts: Post[];
+    variant?: 'main' | 'sub';
+  }
 
-    useEffect(() => {
-        setIsLoading(true)
-        fetchPosts()
-            .then((data: Post[]) => {
-                setPosts(data)
-            })
-            .catch((err) => {
-                console.error('게시물 로딩 실패:', err)
-            })
-            .finally(() => {
-                setIsLoading(false)
-            })
-    }, []);
+export default function PostList({posts, variant='sub',}: PostBasicListProps) {
+    if (!posts || posts.length === 0) {
+        return <p className={styles.noPosts}>게시물이 없습니다.</p>;
+    }
 
+    const containerClassName = `
+        ${styles.postlist_wrap}
+        ${styles[`variant_${variant}`] || ''}`.trim();
+   
     return (
-        <ul className={styles.postlist_wrap}>
+        <ul className={containerClassName}>
             {posts.map((post) => (
                 <li key={post.slug}>
                     <Link href={`/post/${post.id}`} >

@@ -1,7 +1,7 @@
 'use client'
 
 import React, {useEffect, useState, use} from 'react'
-import PostBasicList from '@/components/PostBasicList'
+import PostList from '@/components/PostList'
 import Link from 'next/link'
 import styles from './CategoryPage.module.css'
 import { CATEGORIES } from '@/constants/categories'
@@ -54,7 +54,7 @@ export default function CategoryPage(props: CategoryPageProps) {
         ))}
       </ul>
       <div>
-        <PostBasicList posts={filteredPosts} />
+        <PostList posts={filteredPosts} variant="sub" />
       </div>
     </main>
   )
