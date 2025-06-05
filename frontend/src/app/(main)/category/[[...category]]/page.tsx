@@ -1,27 +1,61 @@
-import { ReactNode } from 'react'
-import PostList from '@/components/PostList'
-// import { getPostsByCategory } from '@/lib/api'  // 직접 만든 API 호출 유틸
+'use client'
+
+import React, {useEffect, useState, use} from 'react'
+import PostBasicList from '@/components/PostBasicList'
+import Link from 'next/link'
+import styles from './CategoryPage.module.css'
+import { CATEGORIES } from '@/constants/categories'
+import { fetchPosts } from '@/lib/api'
+import { Post } from "@/types"
 
 interface CategoryPageProps {
-  params: { category: string }
+  params: Promise<{ category: string[] }>
 }
 
-export default async function CategoryPage({ params }: CategoryPageProps) {
-  const { category } = await params
+export default function CategoryPage(props: CategoryPageProps) {
+  const { category } = use(props.params);
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  
+  const currentCategory = CATEGORIES.find(c => c.value === category[0]);
+  const headingClassName = styles[`title_${category[0]}`] 
+    ? styles[`title_${category[0]}`] 
+    : styles['title_default'];
 
-  console.log(category)
+  useEffect(() => {
+    setIsLoading(true)
+    fetchPosts()
+      .then((data: Post[]) => {
+        setPosts(data)
+      })
+      .catch((err) => {
+        console.error('게시물 로딩 실패:', err)
+      })
+      .finally(() => {
+        setIsLoading(false)
+      })
+  }, []);
 
-  // 서버 컴포넌트이므로 fetch 또는 DB 호출도 직접!
-  //   const posts = await getPostsByCategory(category)
+  const filteredPosts = category[1] ? posts.filter(post => post.subCategory === category[1]) : posts.filter(post => post.category === category[0]);
 
   return (
-    <main>
-      <h1>‘{category[0]} / {category[1]}’ 카테고리 게시물</h1>
-      {/* {posts.length
-        ? <PostList posts={posts} />
-        : <p>게시물이 없습니다.</p>
-      } */}
-
+    <main className={styles.category_page}>
+      <h1 className={headingClassName}>{currentCategory?.label}</h1>
+      <ul className={styles.sub_categories}>
+          <li>
+            <Link href={`/category/${category[0]}`}>전체</Link>
+          </li>
+        {currentCategory?.subCategories?.map((subCategory) => (
+          <li key={subCategory.value}>
+            <Link href={`/category/${category[0]}/${subCategory.value}`}>
+              {subCategory.label}
+            </Link>
+          </li>
+        ))}
+      </ul>
+      <div>
+        <PostBasicList posts={filteredPosts} />
+      </div>
     </main>
   )
 }

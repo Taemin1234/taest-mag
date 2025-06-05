@@ -2,7 +2,7 @@ import { Option } from '@/types/index'
   
 export const CATEGORIES: Option[] = [
     {
-      label: 'Food & Beverage ',
+      label: 'Food & Beverage',
       value: 'fnb',
       subCategories: [
         { label: 'Food', value: 'food' },

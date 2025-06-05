@@ -1,0 +1,26 @@
+.category_page {
+    margin-top: 80px;
+}
+
+
+.title_living {
+    color: var(--living-theme);
+}
+
+.title_people {
+    color: var(--people-theme); 
+}
+
+.title_food {
+    color: var(--food-theme);
+}
+.title_tech {
+    color: var(--tech-theme);
+}
+.title_culture {
+    color: var(--culture-theme);
+}
+
+.title_default {
+    color: #444;
+}
