@@ -11,6 +11,8 @@
   --living-theme: #B500F9;
   --tech-theme: #008FFF;
   --culture-theme: #C4FF00;
+
+  --gnb-el: calc((100vh - 70px) / 4);
 }
 
 /* reset.css */

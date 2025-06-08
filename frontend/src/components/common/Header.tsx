@@ -61,7 +61,7 @@ export default function Header() {
         <span></span>
         <span></span>
       </button>
-      <GNB isOpen={isOpen} />
+      <GNB isOpen={isOpen} setIsOpen={setIsOpen} />
     </header>
   );
 }
