@@ -23,8 +23,8 @@ export default function GNB({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpen:
     <nav className={styles.gnb_wrap}>
       <ul className={styles.depth1}>
         {CATEGORIES.map((category, index) => (
-          <li key={category.value} className={activeIndex === index ? styles.active : ''}>
-            <span onClick={() => handleClick(index)}>{category.label}</span>
+          <li key={category.value} onClick={() => handleClick(index)} className={activeIndex === index ? styles.active : ''}>
+            <span>{category.label}</span>
             <ul className={styles.depth2}>
               <li>
                 <Link href={`/category/${category.value}`} onClick={handleLinkClick}>전체</Link>

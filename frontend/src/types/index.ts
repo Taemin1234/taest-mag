@@ -27,6 +27,7 @@ export interface Post {
     editor: string;         // 작성자(에디터) 참조
     category: string;
     subCategory: string;
+    thumbnailUrl: string;
     content: string;                // React-Quill에서 생성된 HTML 문자열
     slug: string;                  // URL 슬러그 (선택)
     postNum: number;
