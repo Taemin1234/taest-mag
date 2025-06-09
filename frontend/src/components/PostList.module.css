@@ -1,8 +1,8 @@
 .postlist_wrap {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    grid-auto-rows: 200px;
-    /* grid-auto-rows: 400px; */
+    /* grid-auto-rows: 200px; */
+    grid-auto-rows: 400px;
     /* 각 행 높이 */
     gap: 16px;
     /* 그리드 간격 */
@@ -49,4 +49,78 @@
     bottom: 0;
     left: 0;
     right: 0;
+    padding: 10px;
+
+    /* background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.6) 100%); */
+    background-color: rgba(0, 0, 0, 0.6);
+    color: #fff;
 }
+
+.postlist_wrap .post_list .list_top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.postlist_wrap .post_list .list_top .list_category {
+    font-size: 20px;
+}
+
+.postlist_wrap .post_list .list_title {
+    margin-top: 10px;
+    font-size: 24px;
+    width: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+.postlist_wrap .post_list .list_subtitle {
+    margin-top: 5px;
+    font-size: 16px;
+    width: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+/*
+1. 들어간느 말
+    - 위로
+2. 호퍼의 삶
+    - 별명은 메뚜기 ( 키가 크고 말라서)
+    - 유럽으로 유학을 감
+    - 옛 모습을 간직한 파리에 빠짐
+    - 마네, 드가, 모네 등 인상파 화가의 영향도 받아 빛에 심취
+    - 그의 작품의 대부분은의 여성들은 아내 조세핀이 모델
+    - 컬렉터들의 발굴
+    - 후원자를 만남(거트루드 벤터빌트 휘트니)
+    - 비주류 예술가를 후원하는 사람이었음
+   
+3. 화풍
+    - 빛과 그림자의 대비
+    - 삭막한 풍경
+    - 사실주의
+    - 사실주의의 사진과 같은 구도와 인상주의의 빛이 결합(검증필요)
+    - 다채로운 색을 사용하나 채도가 낮다.
+4. 그림의 뜻, 의도
+    - 미국의 급격한 성장으로 미국은 발전했지만 본인은 삽화나 포스로 생계를 이어감
+    - 자신이 보는 미국은 현실과 달랐다.
+    - 빛은 밝고 그림자는 더 어둡고, 적막이 스며듦
+    - 그림 속 인물들의 사이가 어색해보인다.
+    - 그림 속 인물들이 멍을 때리는 모습
+    - 호퍼는 사람들이 고독을 표현했다고 생각하는 것을 좋아하지 않았다.
+    - 과장된 표현이라고 생각
+    - 하지만 나중에 스스로 인정 '무의식적으로 대도시의 외로움을 표현'
+    - "대부분의 그림은 내 자신을 표현한 것이다. (Most of my paintings are self-portraits.)"
+    -"나는 그것이 외롭다고 느끼지 않았다. 그러나 아마 무의식적으로 그런 것이 담겼을지도 모른다. (I didn’t see them as particularly lonely. They may reflect some unconscious mood of mine, though.)"
+5. 기타
+    - 휘트니 미술관이 대부분 소장 (부인이 기부)
+6. 매체에서의 호퍼
+    - ssg 광고
+    - 알프레드 히치콕 사이코의 집
+    - 심슨 패러디
+    - 셜리에 관한 모든 것(영화)
+*/
