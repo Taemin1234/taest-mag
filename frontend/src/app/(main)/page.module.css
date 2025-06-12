@@ -6,3 +6,9 @@
 .postlist_wrap {
   /* min-height: 150vh; */
 }
+
+@media (max-width: 768px) {
+  .main {
+    padding: 6rem 2rem;
+  }
+}
