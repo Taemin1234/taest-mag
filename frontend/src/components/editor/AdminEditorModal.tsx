@@ -147,6 +147,7 @@ export default function AdminEditorModal({ editor, onClose, onSave }: EditorModa
                     />
                     <div>
                         <label>이름</label>
+                        <p>이름 겹치지 않게 만들어주세요!</p>
                         <input
                             type="text"
                             name='name'

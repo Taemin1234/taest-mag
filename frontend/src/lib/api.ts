@@ -2,7 +2,13 @@ import { Editor, Post } from "@/types"
 
 // 에디터
 export async function fetchEditors(): Promise<Editor[]> {
-  const response = await fetch('/api/editors', {
+  const isServer = typeof window === 'undefined';
+
+  const baseUrl = isServer
+    ? process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
+    : '';
+
+  const response = await fetch(`${baseUrl}/api/editors`, {
     method: 'GET',
     credentials: 'include', // 쿠키 전송이 필요하다면 포함
   })
