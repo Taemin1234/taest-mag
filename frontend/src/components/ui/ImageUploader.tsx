@@ -84,7 +84,7 @@ export default function ImageUploader({
         )}
         
       </div>
-      <p className={styles.noti}>미리보기 이미지는 실제 비율과 다를 수 있음</p>
+      <p className={styles.noti}>프로필 이미지는 1mb 이하 파일로 제한됩니다.</p>
     </>
   )
 }

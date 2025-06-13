@@ -19,6 +19,49 @@ router.get('/', (async (req: Request, res: Response) => {
 }) as RequestHandler);
 
 /**
+ * GET /api/post/recommend
+ * 같은 카테고리의 추천 게시물 4개 조회
+ */
+router.get('/recommend', (async (req: Request, res: Response) => {
+  try {
+    const { subCategory, exclude } = req.query;
+
+    if (!subCategory) {
+      return res.status(400).json({ message: 'subCategory 쿼리 파라미터가 필요합니다.' });
+    }
+
+    const posts = await Post.find({
+      subCategory,
+      slug: { $ne: exclude }, // 현재 게시물 제외
+    })
+      .sort({ createdAt: -1 }) // 최신순
+      .limit(4);
+
+    res.json(posts);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: '추천 게시물 조회 중 서버 오류' });
+  }
+}) as RequestHandler);
+
+/**
+ * GET /api/post/editor/:editorName
+ * 특정 에디터가 작성한 게시물 조회
+ */
+router.get('/editor/:editorName', (async (req: Request, res: Response) => {
+  try {
+    const editorName = decodeURIComponent(req.params.editorName); // 한글 처리
+
+    const posts = await Post.find({ editor: editorName }).sort({ createdAt: -1 });
+
+    res.json(posts);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: '에디터 게시물 조회 중 서버 오류' });
+  }
+}) as RequestHandler);
+
+/**
  * GET /api/post/:slug
  * 단일 게시물 조회
  */

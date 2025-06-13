@@ -1,7 +1,7 @@
 // src/app/post/[slug]/page.tsx
 import { notFound } from 'next/navigation'
 import { Post, Editor } from '@/types'
-import { fetchPostBySlug, fetchEditors } from '@/lib/api'
+import { fetchPostBySlug, fetchEditors, fetchRecommendedPosts } from '@/lib/api'
 import { EditorInfo } from '@/components/editor/EditorInfo'
 // import styles from './page.module.css'
 
@@ -24,6 +24,7 @@ export default async function PostPage({ params }: PostPageProps) {
     notFound() // 404 페이지로 이동
   }
 
+  // 해당 에디터 불러오기
   let editors: Editor[] | null = null
   try {
     editors = await fetchEditors()
@@ -33,6 +34,18 @@ export default async function PostPage({ params }: PostPageProps) {
   }
 
   const editor = editors?.find(editor => editor.name === post.editor) 
+
+   // 추천 게시물 가져오기
+  let recommendedPosts: Post[] = []
+  try {
+    if (post) {
+      recommendedPosts = await fetchRecommendedPosts(post.subCategory, post.slug);
+    }
+  } catch (err) {
+    console.error('추천 게시물 조회 중 오류:', err);
+  }
+
+  console.log(recommendedPosts)
 
   return (
     <main>
