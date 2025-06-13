@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import { Post, Editor } from '@/types'
 import { fetchPostBySlug, fetchEditors, fetchRecommendedPosts } from '@/lib/api'
 import { EditorInfo } from '@/components/editor/EditorInfo'
+import PostList from '@/components/PostList'
 // import styles from './page.module.css'
 
 interface PostPageProps {
@@ -45,8 +46,6 @@ export default async function PostPage({ params }: PostPageProps) {
     console.error('추천 게시물 조회 중 오류:', err);
   }
 
-  console.log(recommendedPosts)
-
   return (
     <main>
       <article>
@@ -68,7 +67,8 @@ export default async function PostPage({ params }: PostPageProps) {
       </article>
       {editor && <EditorInfo editor={editor} />}
       <div>
-        추천 게시물
+        <p>추천 게시물</p>
+        <PostList posts={recommendedPosts} />
       </div>
     </main>
   )

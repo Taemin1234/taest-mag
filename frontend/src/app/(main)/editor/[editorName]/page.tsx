@@ -1,5 +1,5 @@
 import { fetchPostsByEditor } from '@/lib/api'
-
+import PostList from '@/components/PostList'
 
 interface PostPageProps {
   params: { editorName: string }
@@ -15,9 +15,15 @@ export default async function EditorPage(props : PostPageProps) {
 
   const editorPosts = await fetchPostsByEditor(editorName)
 
-  console.log(editorPosts)
-
-  return <div>
-    {editor}
-  </div>;
+  return (
+    <main>
+      <div>
+        {editor}
+      </div>
+      <div>
+        <p>게시물 보기</p>
+        <PostList posts={editorPosts} />
+      </div>
+    </main>
+  );
 }
