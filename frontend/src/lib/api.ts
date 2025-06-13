@@ -51,6 +51,32 @@ export async function fetchRecommendedPosts(subCategory: string, excludeSlug: st
   return await res.json();
 }
 
+// 특정에디터가 작성한 게시물
+export async function fetchPostsByEditor(editorName: string): Promise<Post[]> {
+  // 서버(Next.js 서버 컴포넌트) vs 클라이언트 구분
+  const baseUrl =
+    typeof window === 'undefined'
+      ? process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
+      : ''
+
+  // URL에 한글이나 특수문자가 있을 수 있으니 인코딩
+  const encodedName = encodeURIComponent(editorName)
+
+  const res = await fetch(
+    `${baseUrl}/api/posts/editor/${encodedName}`,
+    {
+      method: 'GET',
+      credentials: 'include',
+    }
+  )
+
+  if (!res.ok) {
+    throw new Error(`에디터 게시물을 불러오는 데 실패했습니다: ${res.status}`)
+  }
+
+  return await res.json()
+}
+
 // slug를 이용해 단일 포스트 가져오기
 export async function fetchPostBySlug(slug: string): Promise<Post> {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL

@@ -1,3 +1,5 @@
+import { fetchPostsByEditor } from '@/lib/api'
+
 
 interface PostPageProps {
   params: { editorName: string }
@@ -11,7 +13,9 @@ export default async function EditorPage(props : PostPageProps) {
   // url 파라미터 디코딩
   const editor = decodeURIComponent(editorName);
 
-  console.log(editor);
+  const editorPosts = await fetchPostsByEditor(editorName)
+
+  console.log(editorPosts)
 
   return <div>
     {editor}
