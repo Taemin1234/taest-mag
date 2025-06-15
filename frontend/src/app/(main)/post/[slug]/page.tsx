@@ -4,10 +4,10 @@ import { Post, Editor } from '@/types'
 import { fetchPostBySlug, fetchEditors, fetchRecommendedPosts } from '@/lib/api'
 import { EditorInfo } from '@/components/editor/EditorInfo'
 import PostList from '@/components/PostList'
-// import styles from './page.module.css'
+import styles from './postPage.module.css'
 
 interface PostPageProps {
-    params: { slug: string }
+  params: { slug: string }
 }
 
 export default async function PostPage({ params }: PostPageProps) {
@@ -34,9 +34,9 @@ export default async function PostPage({ params }: PostPageProps) {
     editors = null
   }
 
-  const editor = editors?.find(editor => editor.name === post.editor) 
+  const editor = editors?.find(editor => editor.name === post.editor)
 
-   // 추천 게시물 가져오기
+  // 추천 게시물 가져오기
   let recommendedPosts: Post[] = []
   try {
     if (post) {
@@ -47,29 +47,34 @@ export default async function PostPage({ params }: PostPageProps) {
   }
 
   return (
-    <main>
-      <article>
-        <header>
-          <h1>{post.title}</h1>
-          <div>
-            <span>{post.category}</span>
-            <span>
-              {new Date(post.createdAt).toLocaleDateString('ko-KR')}
-            </span>
-          </div>
-        </header>
+    <main className={styles.post_page}>
+      <article className={styles.post_article}>
+        <section>
+          <header className={styles.post_header}>
+            <span className={styles.post_category}>{post.category}</span>
+            <h1 className={styles.post_title}>{post.title}</h1>
+            <div>
+              {/* <span>
+                {new Date(post.createdAt).toLocaleDateString('ko-KR')}
+              </span> */}
+            </div>
+          </header>
 
-        {post.subtitle && <p>{post.subtitle}</p>}
+          {/* {post.subtitle && <p>{post.subtitle}</p>} */}
 
-        <div
-          dangerouslySetInnerHTML={{ __html: post.content }}
-        />
+          <div className={styles.post_content}
+            dangerouslySetInnerHTML={{ __html: post.content }}
+          />
+        </section>
+        <section className={styles.post_editor}>
+          {editor && <EditorInfo editor={editor} />}
+        </section>
+        <section>
+          <p>추천 게시물</p>
+          <PostList posts={recommendedPosts} />
+        </section>
       </article>
-      {editor && <EditorInfo editor={editor} />}
-      <div>
-        <p>추천 게시물</p>
-        <PostList posts={recommendedPosts} />
-      </div>
+
     </main>
   )
 }
