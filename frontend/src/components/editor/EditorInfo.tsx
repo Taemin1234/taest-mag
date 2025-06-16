@@ -7,7 +7,7 @@ export const EditorInfo = ({editor}: {editor: Editor}) => {
     return (
         <div className={styles.editorInfo}>
             <p className={styles.editorInfo_editor}>
-                Edit by <Link href={`/editor/${editor.name}`}>{editor.name}</Link>
+                Edit by <Link href={`/editor/${editor.name}`} className={styles.editor_name}>{editor.name}</Link>
             </p>
             <div className={styles.editorInfo_info}>
                 <Image src={editor.imageUrl} alt="에디터" width={100} height={100} priority/>

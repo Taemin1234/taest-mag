@@ -4,6 +4,7 @@ import { Post, Editor } from '@/types'
 import { fetchPostBySlug, fetchEditors, fetchRecommendedPosts } from '@/lib/api'
 import { EditorInfo } from '@/components/editor/EditorInfo'
 import PostList from '@/components/PostList'
+import { getCategoryLabel } from '@/utils/getCategoryLabel'
 import styles from './postPage.module.css'
 
 interface PostPageProps {
@@ -51,7 +52,7 @@ export default async function PostPage({ params }: PostPageProps) {
       <article className={styles.post_article}>
         <section>
           <header className={styles.post_header}>
-            <span className={styles.post_category}>{post.category}</span>
+            <span className={styles.post_category}>{getCategoryLabel(post.category)}</span>
             <h1 className={styles.post_title}>{post.title}</h1>
             <div>
               {/* <span>
@@ -69,12 +70,11 @@ export default async function PostPage({ params }: PostPageProps) {
         <section className={styles.post_editor}>
           {editor && <EditorInfo editor={editor} />}
         </section>
-        <section>
-          <p>추천 게시물</p>
-          <PostList posts={recommendedPosts} />
+        <section  className={styles.post_recommend}>
+          <p className={styles.subtitle}>추천 게시물</p>
+          <PostList posts={recommendedPosts} enableSwiper={true} />
         </section>
       </article>
-
     </main>
   )
 }

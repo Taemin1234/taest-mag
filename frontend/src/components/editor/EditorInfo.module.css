@@ -1,0 +1,16 @@
+.editorInfo_editor {
+    font-size: 2rem;
+}
+
+.editorInfo_editor .editor_name {
+    font-weight: 700;
+    text-decoration: underline;
+}
+
+.editorInfo_info {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 20px;
+    margin-top: 10px;
+}
