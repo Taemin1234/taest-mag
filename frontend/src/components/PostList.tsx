@@ -58,7 +58,7 @@ export default function PostList({ posts, variant = 'sub', enableSwiper = false,
                         <p className={styles.list_category}>
                         {getCategoryLabel(post.category)}
                         </p>
-                        <p className="text-sm text-gray-500">
+                        <p>
                         {new Date(post.createdAt).toLocaleDateString('ko-KR')}
                         </p>
                     </div>

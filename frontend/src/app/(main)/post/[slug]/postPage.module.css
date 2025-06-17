@@ -23,14 +23,15 @@
 }
 
 .post_article {
-    width: 90rem;
+    max-width: 90rem;
+    width: 100%;
     margin: 0 auto;
 }
 
 .post_article section:not(:first-child) {
     position: relative;
     margin-top: 4rem;
-    padding-top: 2rem;
+    padding-top: 3rem;
 }
 
 .post_article section:not(:first-child)::before {
@@ -95,4 +96,26 @@
 .subtitle {
     font-size: 2rem;
     font-weight: 700;
+}
+
+@media (max-width: 1024px) {
+    .post_page::before,
+    .post_page::after {
+        width: 2rem;
+    }
+
+    .post_article {
+        padding: 0 2rem ;
+    }
+}
+
+@media (max-width: 600px) {
+    .post_page::before,
+    .post_page::after {
+        content: none;
+    }
+
+    .post_article {
+        padding: 0rem ;
+    }
 }

@@ -261,7 +261,7 @@ export default function PostForm({
                         내용
                     </label>
                     <QuillEditor
-                        value={formData.content}          // 현재 폼의 content
+                        defaultValue={formData.content}          // 현재 폼의 content
                         onChange={val => handleChange('content', val)}// 내용이 바뀌면 이 함수가 실행
                     />
                 </div>

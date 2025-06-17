@@ -1,6 +1,6 @@
 'use client';
 
-import { forwardRef, useRef } from 'react';
+import { forwardRef, useRef, useMemo, useCallback, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 // import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
@@ -14,15 +14,19 @@ const ReactQuill = forwardRef<any, React.ComponentProps<typeof RawReactQuill>>(
   (props, ref) => <RawReactQuill {...props} ref={ref} />
 );
 
+// DevTools에 보일 이름 지정
+ReactQuill.displayName = 'ReactQuill';
+
 export default function QuillEditor({
-  value,
+  defaultValue,
   onChange,
 }: {
-  value: string;
+  defaultValue: string;
   onChange: (val: string) => void;
 }) {
 
 const quillRef = useRef<any>(null);
+const isMounted = useRef(false);
 
 // ① 이미지 업로드 핸들러
 const handleImageUpload = () => {
@@ -60,8 +64,20 @@ const handleImageUpload = () => {
   };
 };
 
+useEffect(() => {
+  if (!isMounted.current && typeof window !== 'undefined') {
+    isMounted.current = true;
+    Promise.all([
+      import('quill'),
+      import('quill-image-resize-module-react')
+    ]).then(([{ default: Quill }, { default: ImageResize }]) => {
+      Quill.register('modules/imageResize', ImageResize);
+    }).catch(err => console.error('Failed to load Quill plugins', err));
+  }
+}, []);
+
 // ① 툴바 옵션 정의
-  const modules = {
+  const modules = useMemo(() => ({
     toolbar: {
       container: [
         // 헤더 드롭다운: h1, h2, 일반 텍스트
@@ -94,10 +110,11 @@ const handleImageUpload = () => {
         image: handleImageUpload,
       },
     },
-  };
+    imageResize: { modules: [ 'Resize', 'DisplaySize', 'Toolbar' ] },
+  }), [])
 
   // 지원 포맷 정의
-  const formats = [
+  const formats = useMemo(() => [
     'header',
     'font',
     'size',
@@ -108,14 +125,34 @@ const handleImageUpload = () => {
     'direction', 'align',
     'link', 'image', 'video',
     'blockquote', 'code-block',
-  ];
+  ], [])
+
+  // 한글 조합이 끝나는 시점에만 부모로 전달
+  // 입력할때마다 랜더링되는 것 방지
+  const handleCompositionEnd = useCallback(() => {
+    const editor = quillRef.current?.getEditor();
+    if (!editor) return;
+    const html = editor.root.innerHTML;
+    onChange(html);
+  }, [onChange]);
+
+  useEffect(() => {
+    const editor = quillRef.current?.getEditor();
+    if (!editor) return;
+
+    const root = editor.root; // contentEditable div
+    root.addEventListener('compositionend', handleCompositionEnd);
+
+    return () => {
+      root.removeEventListener('compositionend', handleCompositionEnd);
+    };
+  }, [handleCompositionEnd]);
 
   return (
     <ReactQuill
       ref={quillRef}
       theme="snow"
-      value={value}
-      onChange={onChange}
+      defaultValue={defaultValue}
       modules={modules}
       formats={formats}
       placeholder="내용을 입력하세요…"
