@@ -2,6 +2,7 @@
 
 import styles from './Header.module.css'
 import { useState, useEffect, useRef } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import GNB from "./Gnb"
 import throttle from 'lodash/throttle';
@@ -50,7 +51,9 @@ export default function Header() {
   return (
     <header className={`${styles.header_wrap} ${show ? styles.show : styles.hide}`}>
       <h1>
-        <Link href="/">ta(e)st 매거진</Link>
+        <Link href="/">
+          <Image src="/main_logo.png" alt="logo" width={171} height={40} />
+        </Link>
       </h1>
       <button
         onClick={toggleGNB}
