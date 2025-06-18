@@ -33,13 +33,13 @@ export async function fetchPosts(): Promise<Post[]> {
 }
 
 // 카테고리별 추천 게시물
-export async function fetchRecommendedPosts(subCategory: string, excludeSlug: string): Promise<Post[]> {
+export async function fetchRecommendedPosts(category: string, excludeSlug: string): Promise<Post[]> {
   const baseUrl =
     typeof window === 'undefined'
       ? process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
       : '';
 
-  const res = await fetch(`${baseUrl}/api/posts/recommend?subCategory=${subCategory}&exclude=${excludeSlug}`, {
+  const res = await fetch(`${baseUrl}/api/posts/recommend?category=${category}&exclude=${excludeSlug}`, {
     method: 'GET',
     credentials: 'include',
   });

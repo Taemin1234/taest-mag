@@ -28,15 +28,17 @@ export default function Home() {
   return (
     <main className={styles.main}>
       <section className={styles.main_section}>
-        <div className={styles.main_section_text}>
-          <p>심도보단 <strong>감도</strong>, 트렌드보단 <strong>당신의 결</strong></p>
-          <p>취향을 수집하는 매거진,</p>
-          <Image src="/main_logo_b.png" alt="logo" width={250} height={40} />
+        <div className={styles.main_page}>
+          <div className={styles.main_page_text}>
+            <p>심도보단 <strong>감도</strong>, 트렌드보단 <strong>당신의 결</strong></p>
+            <p>취향을 수집하는 매거진,</p>
+            <Image src="/main_logo_b.png" alt="logo" width={250} height={40} />
+          </div>
+        </div>
+        <div>
+          <PostList posts={posts} variant="main" />
         </div>
       </section>
-      <div className={styles.postlist_wrap}>
-        <PostList posts={posts} variant="main" />
-      </div>
     </main>
   );
 }

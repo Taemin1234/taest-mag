@@ -24,14 +24,14 @@ router.get('/', (async (req: Request, res: Response) => {
  */
 router.get('/recommend', (async (req: Request, res: Response) => {
   try {
-    const { subCategory, exclude } = req.query;
+    const { category, exclude } = req.query;
 
-    if (!subCategory) {
-      return res.status(400).json({ message: 'subCategory 쿼리 파라미터가 필요합니다.' });
+    if (!category) {
+      return res.status(400).json({ message: 'category 쿼리 파라미터가 필요합니다.' });
     }
 
     const posts = await Post.find({
-      subCategory,
+      category,
       slug: { $ne: exclude }, // 현재 게시물 제외
     })
       .sort({ createdAt: -1 }) // 최신순

@@ -41,7 +41,7 @@ export default async function PostPage({ params }: PostPageProps) {
   let recommendedPosts: Post[] = []
   try {
     if (post) {
-      recommendedPosts = await fetchRecommendedPosts(post.subCategory, post.slug);
+      recommendedPosts = await fetchRecommendedPosts(post.category, post.slug);
     }
   } catch (err) {
     console.error('추천 게시물 조회 중 오류:', err);

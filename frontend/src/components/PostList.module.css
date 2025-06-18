@@ -24,22 +24,27 @@
     overflow: hidden;
 }
 
-.postlist_wrap li:hover a .post_thumbnail {
-    transform: scale(1.1);
-    transition: transform 0.3s ease;
-}
-
 .postlist_wrap li a {
     display: block;
     width: 100%;
     height: 100%;
 }
 
-.postlist_wrap li a .post_thumbnail {
-    position: absolute;
+.postlist_wrap li .thumbnailWrapper {
+    position: relative;
     width: 100%;
     height: 100%;
+    overflow: hidden;
+}
+
+.postlist_wrap li a .post_thumbnail {
     object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+
+.postlist_wrap li:hover a .post_thumbnail {
+    transform: scale(1.1);
     transition: transform 0.3s ease;
 }
 
@@ -89,6 +94,10 @@
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
+}
+
+.swiperContainer {
+    margin-top: 20px;
 }
 
 .noPosts {
