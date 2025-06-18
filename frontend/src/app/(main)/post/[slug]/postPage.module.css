@@ -1,6 +1,6 @@
 .post_page {
     position: relative;
-    padding: 6rem 2rem 0;
+    padding: 6rem 2rem;
 }
 
 .post_page::before,
@@ -99,23 +99,25 @@
 }
 
 @media (max-width: 1024px) {
+
     .post_page::before,
     .post_page::after {
         width: 2rem;
     }
 
     .post_article {
-        padding: 0 2rem ;
+        padding: 0 2rem;
     }
 }
 
 @media (max-width: 600px) {
+
     .post_page::before,
     .post_page::after {
         content: none;
     }
 
     .post_article {
-        padding: 0rem ;
+        padding: 0rem;
     }
 }

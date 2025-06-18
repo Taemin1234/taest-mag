@@ -18,7 +18,7 @@ interface PostBasicListProps {
 }
 
 
-export default function PostList({ posts, variant = 'sub', enableSwiper = false,}: PostBasicListProps) {
+export default function PostList({ posts, variant = 'sub', enableSwiper = false, }: PostBasicListProps) {
     // const [isSwiperMode, setIsSwiperMode] = useState(false)
 
     // 클라이언트에서만 window 감지
@@ -42,51 +42,55 @@ export default function PostList({ posts, variant = 'sub', enableSwiper = false,
     // Swiper 모드
     if (enableSwiper) {
         return (
-        <Swiper
-            spaceBetween={20}
-            slidesPerView={1}
-            breakpoints={{
-                600: {
-                  slidesPerView: 3,
-                },
-                768: {
-                  slidesPerView: 4,
+            <Swiper
+                spaceBetween={20}
+                slidesPerView={1}
+                breakpoints={{
+                    600: {
+                        slidesPerView: 3,
+                    },
+                    768: {
+                        slidesPerView: 4,
 
-                },
-              }}
-            className={styles.swiperContainer} // 필요시 추가 스타일
-        >
-            {posts.map(post => (
-            <SwiperSlide key={post.slug}>
-                <Link href={`/post/${post.slug}`}>
-                <img
-                    src={post.thumbnailUrl}
-                    alt={post.title}
-                    className={styles.post_thumbnail}
-                />
-                <div className={styles.post_list}>
-                    <div className={styles.list_top}>
-                        <p className={styles.list_category}>
-                        {getCategoryLabel(post.category)}
-                        </p>
-                        <p>
-                        {new Date(post.createdAt).toLocaleDateString('ko-KR')}
-                        </p>
-                    </div>
-                    <p className={styles.list_title}>{post.title}</p>
-                    <p className={styles.list_subtitle}>{post.subtitle}</p>
-                </div>
-                </Link>
-            </SwiperSlide>
-            ))}
-        </Swiper>
+                    },
+                }}
+                className={styles.swiperContainer} // 필요시 추가 스타일
+            >
+                {posts.map(post => (
+                    <SwiperSlide key={post.slug} className={styles.postlist_wrap}>
+                        <Link href={`/post/${post.slug}`}>
+                            <div className={styles.thumbnailWrapper}>
+                                <Image
+                                    src={post.thumbnailUrl || '/default-thumb.png'}
+                                    alt={post.title}
+                                    fill
+                                    className={styles.post_thumbnail}
+                                    sizes="(max-width: 640px) 100vw, 33vw"
+                                />
+                            </div>
+                            <div className={styles.post_list}>
+                                <div className={styles.list_top}>
+                                    <p className={styles.list_category}>
+                                        {getCategoryLabel(post.category)}
+                                    </p>
+                                    <p>
+                                        {new Date(post.createdAt).toLocaleDateString('ko-KR')}
+                                    </p>
+                                </div>
+                                <p className={styles.list_title}>{post.title}</p>
+                                <p className={styles.list_subtitle}>{post.subtitle}</p>
+                            </div>
+                        </Link>
+                    </SwiperSlide>
+                ))}
+            </Swiper>
         )
     }
 
     const containerClassName = [
         styles.postlist_wrap,
         styles[`variant_${variant}`] || '',
-      ]
+    ]
         .filter(Boolean)
         .join(' ')
 
@@ -95,14 +99,13 @@ export default function PostList({ posts, variant = 'sub', enableSwiper = false,
             {posts.map((post) => (
                 <li key={post.slug}>
                     <Link href={`/post/${post.slug}`} >
-                        {/* <img src={post.thumbnailUrl} alt={post.title} className={styles.post_thumbnail} /> */}
                         <div className={styles.thumbnailWrapper}>
-                            <Image 
-                                src={post.thumbnailUrl || '/default-thumb.jpg'} 
+                            <Image
+                                src={post.thumbnailUrl || '/default-thumb.png'}
                                 alt={post.title}
                                 fill
                                 className={styles.post_thumbnail}
-                                sizes="(max-width: 640px) 100vw, 33vw" 
+                                sizes="(max-width: 640px) 100vw, 33vw"
                             />
                         </div>
                         <div className={styles.post_list}>
