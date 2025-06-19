@@ -5,6 +5,8 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
+import 'swiper/css/navigation';
+import { Navigation } from 'swiper/modules';
 
 import styles from './PostList.module.css'
 import { Post } from '@/types'
@@ -43,6 +45,8 @@ export default function PostList({ posts, variant = 'sub', enableSwiper = false,
     if (enableSwiper) {
         return (
             <Swiper
+                navigation={true}
+                modules={[Navigation]} 
                 spaceBetween={20}
                 slidesPerView={1}
                 breakpoints={{

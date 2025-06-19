@@ -67,9 +67,11 @@ export default async function PostPage({ params }: PostPageProps) {
             dangerouslySetInnerHTML={{ __html: post.content }}
           />
         </section>
-        <section className={styles.post_editor}>
-          {editor && <EditorInfo editor={editor} />}
-        </section>
+        {editor && 
+          <section className={styles.post_editor}>
+            <EditorInfo editor={editor} />
+          </section>}
+        
         <section  className={styles.post_recommend}>
           <p className={styles.subtitle}>추천 게시물</p>
           <PostList posts={recommendedPosts} enableSwiper={true} />

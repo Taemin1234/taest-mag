@@ -10,7 +10,7 @@
     background-color: var(--main-black);
 
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     color: var(--main-white);
     z-index: 10;
