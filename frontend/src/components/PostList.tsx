@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Swiper, SwiperSlide } from 'swiper/react'
@@ -19,27 +19,11 @@ interface PostBasicListProps {
     swiperBreakpoint?: number
 }
 
-
 export default function PostList({ posts, variant = 'sub', enableSwiper = false, }: PostBasicListProps) {
-    // const [isSwiperMode, setIsSwiperMode] = useState(false)
-
-    // 클라이언트에서만 window 감지
-    // useEffect(() => {
-    //     if (!enableSwiper) return
-
-    //     const updateMode = () => {
-    //         setIsSwiperMode(window.innerWidth < swiperBreakpoint)
-    //     }
-    //     updateMode()
-    //     window.addEventListener('resize', updateMode)
-    //     return () => window.removeEventListener('resize', updateMode)
-    // }, [enableSwiper, swiperBreakpoint])
 
     if (!posts || posts.length === 0) {
         return <p className={styles.noPosts}>게시물이 없습니다.</p>;
     }
-
-    console.log(enableSwiper)
 
     // Swiper 모드
     if (enableSwiper) {

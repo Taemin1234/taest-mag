@@ -1,42 +1,45 @@
-'use client'
-
-import React, {useEffect, useState, use} from 'react'
+import React, {use, Suspense} from 'react'
 import PostList from '@/components/PostList'
+import PostSkeleton from "@/components/skeleton/PostSkeleton";
 import Link from 'next/link'
 import styles from './CategoryPage.module.css'
 import { CATEGORIES } from '@/constants/categories'
 import { fetchPosts } from '@/lib/api'
 import { Post } from "@/types"
 
+export const dynamic = 'force-dynamic'
+
 interface CategoryPageProps {
   params: Promise<{ category: string[] }>
 }
 
+interface PostListProps {
+  variant?: 'main' | 'sub';
+  enableSwiper?: boolean;
+  category:string[]
+}
+
+const GetPost = ({
+  variant = 'sub',
+  enableSwiper = false,
+  category,
+}: PostListProps) => {
+  const posts = use(fetchPosts()) as Post[]
+
+  const filteredPosts = category[1] ? posts.filter(post => post.subCategory === category[1]) : posts.filter(post => post.category === category[0]);
+
+  return (
+    <PostList posts={filteredPosts}  variant={variant} enableSwiper={enableSwiper} />
+  )
+}
+
 export default function CategoryPage(props: CategoryPageProps) {
   const { category } = use(props.params);
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
   
   const currentCategory = CATEGORIES.find(c => c.value === category[0]);
   const headingClassName = styles[`title_${category[0]}`] 
     ? styles[`title_${category[0]}`] 
     : styles['title_default'];
-
-  useEffect(() => {
-    setIsLoading(true)
-    fetchPosts()
-      .then((data: Post[]) => {
-        setPosts(data)
-      })
-      .catch((err) => {
-        console.error('게시물 로딩 실패:', err)
-      })
-      .finally(() => {
-        setIsLoading(false)
-      })
-  }, []);
-
-  const filteredPosts = category[1] ? posts.filter(post => post.subCategory === category[1]) : posts.filter(post => post.category === category[0]);
 
   return (
     <main className={styles.category_page}>
@@ -54,7 +57,9 @@ export default function CategoryPage(props: CategoryPageProps) {
         ))}
       </ul>
       <div>
-        <PostList posts={filteredPosts} variant="sub" />
+        <Suspense fallback={<PostSkeleton variant="sub" enableSwiper={true}/>}>
+          <GetPost variant="sub" enableSwiper={false} category={category}/>
+        </Suspense>
       </div>
     </main>
   )

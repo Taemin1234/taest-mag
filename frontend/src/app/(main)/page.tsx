@@ -1,29 +1,29 @@
-'use client'
-
 import styles from "./page.module.css"
-import PostList from '../../components/PostList'
-import React, { useState, useEffect } from 'react';
+import PostList from '@/components/PostList'
+import PostSkeleton from "@/components/skeleton/PostSkeleton";
+import React, { use, Suspense } from 'react';
 import Image from 'next/image';
 import { fetchPosts } from '@/lib/api'
 import { Post } from "@/types"
 
-export default function Home() {
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+export const dynamic = 'force-dynamic';
 
-  useEffect(() => {
-    setIsLoading(true)
-    fetchPosts()
-      .then((data: Post[]) => {
-        setPosts(data)
-      })
-      .catch((err) => {
-        console.error('게시물 로딩 실패:', err)
-      })
-      .finally(() => {
-        setIsLoading(false)
-      })
-  }, []);
+interface PostListProps {
+  variant?: 'main' | 'sub';
+  enableSwiper?: boolean;
+}
+
+const GetPost = (
+  props: PostListProps
+) => {
+  const posts = use(fetchPosts()) as Post[]
+
+  return (
+    <PostList posts={posts} {...props} />
+  )
+}
+
+export default function Home() {
 
   return (
     <main className={styles.main}>
@@ -36,7 +36,9 @@ export default function Home() {
           </div>
         </div>
         <div>
-          <PostList posts={posts} variant="main" />
+          <Suspense fallback={<PostSkeleton variant="main" />}>
+            <GetPost variant="main" enableSwiper={false}/>
+          </Suspense>
         </div>
       </section>
     </main>

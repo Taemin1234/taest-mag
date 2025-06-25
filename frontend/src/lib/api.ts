@@ -21,7 +21,14 @@ export async function fetchEditors(): Promise<Editor[]> {
 
 // 게시물 post
 export async function fetchPosts(): Promise<Post[]> {
-  const response = await fetch('/api/posts', {
+  // 서버(Next.js 서버 컴포넌트) vs 클라이언트 구분
+  const isServer = typeof window === 'undefined';
+
+  const baseUrl = isServer
+    ? process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
+    : '';
+
+  const response = await fetch(`${baseUrl}/api/posts`, {
     method: 'GET',
     credentials: 'include', // 필요 시 쿠키 전송
   })
@@ -34,10 +41,11 @@ export async function fetchPosts(): Promise<Post[]> {
 
 // 카테고리별 추천 게시물
 export async function fetchRecommendedPosts(category: string, excludeSlug: string): Promise<Post[]> {
-  const baseUrl =
-    typeof window === 'undefined'
-      ? process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
-      : '';
+  const isServer = typeof window === 'undefined';
+
+  const baseUrl = isServer
+    ? process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
+    : '';
 
   const res = await fetch(`${baseUrl}/api/posts/recommend?category=${category}&exclude=${excludeSlug}`, {
     method: 'GET',
@@ -54,10 +62,11 @@ export async function fetchRecommendedPosts(category: string, excludeSlug: strin
 // 특정에디터가 작성한 게시물
 export async function fetchPostsByEditor(editorName: string): Promise<Post[]> {
   // 서버(Next.js 서버 컴포넌트) vs 클라이언트 구분
-  const baseUrl =
-    typeof window === 'undefined'
-      ? process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
-      : ''
+  const isServer = typeof window === 'undefined';
+
+  const baseUrl = isServer
+    ? process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
+    : '';
 
   // URL에 한글이나 특수문자가 있을 수 있으니 인코딩
   const encodedName = encodeURIComponent(editorName)
