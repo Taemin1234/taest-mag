@@ -1,6 +1,6 @@
 .header_wrap {
     position: fixed;
-    height: 6rem;
+    height: var(--header-height);
     top: 0;
     left: 0;
     right: 0;

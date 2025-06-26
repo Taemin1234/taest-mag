@@ -9,7 +9,11 @@ export default function MainLayout({
   return (
     <>
       <Header />
-      {children}
+      <main className='content_wrapper'>
+        <div className='content'>
+          {children}
+        </div>
+      </main>
       <Footer />
     </>
   );

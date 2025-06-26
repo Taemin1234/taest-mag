@@ -2,7 +2,7 @@ import React, {use, Suspense} from 'react'
 import PostList from '@/components/PostList'
 import PostSkeleton from "@/components/skeleton/PostSkeleton";
 import Link from 'next/link'
-import styles from './CategoryPage.module.css'
+import styles from './categoryPage.module.css'
 import { CATEGORIES } from '@/constants/categories'
 import { fetchPosts } from '@/lib/api'
 import { Post } from "@/types"

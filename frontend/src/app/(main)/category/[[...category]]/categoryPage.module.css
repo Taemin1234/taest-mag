@@ -2,6 +2,13 @@
     margin-top: 80px;
 }
 
+.sub_categories {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 20px;
+    margin-top: 20px;
+}
 
 .title_living {
     color: var(--living-theme);

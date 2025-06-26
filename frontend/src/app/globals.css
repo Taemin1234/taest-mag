@@ -13,6 +13,7 @@
   --culture-theme: #C4FF00;
 
   --gnb-el: calc((100vh - 70px) / 4);
+  --header-height: 6em;
 }
 
 /* reset.css */
@@ -111,4 +112,13 @@ pre {
 :focus-visible {
   outline: 0.2rem solid #4A90E2;
   outline-offset: 0.2rem;
+}
+
+.content_wrapper {
+  padding-top: var(--header-height);
+}
+
+.content_wrapper .content {
+  max-width: 1200px;
+	margin: 0 auto;
 }
