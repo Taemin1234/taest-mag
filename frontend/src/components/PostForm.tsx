@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { Option, Editor } from "@/types"
 import QuillEditor from '@/components/ui/QuillEditor';
 import Dropdown from '@/components/ui/DropDown';
+import { SingleCheckbox } from '@/components/ui/Checkbox'
 import { CATEGORIES } from '@/constants/categories';
 import ImageUploader from '@/components/ui/ImageUploader';
 import axios from 'axios';
@@ -16,6 +17,7 @@ export interface FormData {
     category: string;
     subCategory: string;
     thumbnailUrl: string;
+    isFeatured: boolean;
     editor: string;
     content: string;
 }
@@ -38,6 +40,7 @@ export default function PostForm({
             category: '',
             subCategory: '',
             thumbnailUrl: '',
+            isFeatured: false,
             editor: '',
             content: '',
         }
@@ -48,7 +51,9 @@ export default function PostForm({
     const [uploading, setUploading] = useState(false);
     const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
     const [error, setError] = useState<string | null>(null)
-    const [category, setCategory] = useState<string | undefined>(undefined);
+    const [category, setCategory] = useState<string | undefined>
+    (undefined);
+    const [isFeatured, setIsFeatured] = useState(false)
     
     const router = useRouter()
 
@@ -67,6 +72,7 @@ export default function PostForm({
             setFormData(initialData);
             setPreviewUrl(initialData.thumbnailUrl);
             setCategory(initialData.category);
+            setIsFeatured(initialData.isFeatured);
         }
     }, [initialData])
 
@@ -92,8 +98,8 @@ export default function PostForm({
         fetchPosts();
     }, []);
 
-    // 에디터 내용 변경 핸들러
-    const handleChange = (name: keyof FormData, value: string) => {
+    // 내용 변경 핸들러
+    const handleChange = (name: keyof FormData, value: string | boolean) => {
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
@@ -247,6 +253,17 @@ export default function PostForm({
                         required
                     />
                 )}
+
+                <SingleCheckbox
+                    label="표지 게시물로 등록"
+                    name="isFeatured"
+                    checked={isFeatured}
+                    onChange={val => {
+                        setIsFeatured(val);
+                        handleChange('isFeatured', val)
+                    }}
+                />
+
                 <ImageUploader
                     label="썸네일 이미지"
                     name="thumbnailUrl"

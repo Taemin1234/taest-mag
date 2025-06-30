@@ -9,6 +9,13 @@ interface CheckboxGroupProps {
     name?: string;                   // 체크박스 그룹 name 속성 (optional)
 }
 
+interface SingleCheckboxProps {
+    label: string;                   // 체크박스 라벨
+    name: string;                    // 체크박스 name 속성
+    checked: boolean;                // 체크 상태
+    onChange: (checked: boolean) => void; // 체크 상태 변경 시 호출
+}
+
 const CheckboxGroup: React.FC<CheckboxGroupProps> = ({
     options,
     selectedValues,
@@ -60,4 +67,26 @@ const CheckboxGroup: React.FC<CheckboxGroupProps> = ({
     );
 };
 
+const SingleCheckbox: React.FC<SingleCheckboxProps> = ({
+    label,
+    name,
+    checked,
+    onChange,
+}) => {
+    return (
+        <div className={styles.checkbox_wrap}>
+            <label className={styles.terms_label}>
+                <input
+                    type="checkbox"
+                    name={name}
+                    checked={checked}
+                    onChange={(e) => onChange(e.target.checked)}
+                />
+                {label}
+            </label>
+        </div>
+    );
+};
+
+export { CheckboxGroup, SingleCheckbox };
 export default CheckboxGroup;

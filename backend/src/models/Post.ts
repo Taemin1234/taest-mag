@@ -12,6 +12,8 @@ export interface IPost extends Document {
   content: string;                // React-Quill에서 생성된 HTML 문자열
   slug: string;                  // URL 슬러그 (선택)
   postNum:number;
+  isFeatured:Boolean;
+  views: number;
   createdAt: Date;                // 자동 생성
   updatedAt: Date;                // 자동 갱신
 } 
@@ -61,6 +63,14 @@ const PostSchema = new Schema<IPost>(
     postNum: {
         type:Number,
         unique:true,
+    },
+    isFeatured: {
+      type:Boolean,
+      default: false
+    },
+    views: { 
+      type: Number, 
+      default: 0 
     },
   },
   {

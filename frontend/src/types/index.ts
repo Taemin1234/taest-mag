@@ -31,6 +31,8 @@ export interface Post {
     content: string;                // React-Quill에서 생성된 HTML 문자열
     slug: string;                  // URL 슬러그 (선택)
     postNum: number;
+    isFeatured?: boolean;
+    views: number;
     createdAt: Date;                // 자동 생성
     updatedAt: Date;                // 자동 갱신
 };

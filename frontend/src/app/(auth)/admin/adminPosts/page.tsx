@@ -194,6 +194,7 @@ const AdminPosts = () => {
                             <th>내용</th>
                             <th>작성일</th>
                             <th>수정일</th>
+                            <th>조회수</th>
                             <th>관리</th>
                         </tr>
                     </thead>
@@ -205,6 +206,7 @@ const AdminPosts = () => {
                                 <td><p>{post.content}</p></td>
                                 <td>{new Date(post.createdAt).toLocaleDateString('ko-KR')}</td>
                                 <td>{new Date(post.updatedAt).toLocaleDateString('ko-KR')}</td>
+                                <td>{post.views}</td>
                                 <td>
                                     <div className={styles.btn_wrap}>
                                         <Link href={`/admin/posts/${post.slug}/edit`}>
