@@ -111,8 +111,7 @@ router.post('/:slug/views', (async (req: Request, res: Response): Promise<void> 
       // 2) 조회수 +1 (원자적 증가)
       await Post.findOneAndUpdate(
         { slug },
-        { $inc: { views: 1 } },
-        { new: true }
+        { $inc: { views: 1 } }
       )
 
       // 3) 다시 12시간 동안 중복 방지용 쿠키 설정
