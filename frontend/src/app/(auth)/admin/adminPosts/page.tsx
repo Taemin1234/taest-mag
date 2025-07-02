@@ -185,6 +185,8 @@ const AdminPosts = () => {
                         <col style={{ width: 'auto' }} />
                         <col style={{ width: '110px' }} />
                         <col style={{ width: '110px' }} />
+                        <col style={{ width: '60px' }} />
+                        <col style={{ width: '50px' }} />
                         <col style={{ width: '110px' }} />
                     </colgroup>
                     <thead>
@@ -195,6 +197,7 @@ const AdminPosts = () => {
                             <th>작성일</th>
                             <th>수정일</th>
                             <th>조회수</th>
+                            <th>특별호</th>
                             <th>관리</th>
                         </tr>
                     </thead>
@@ -207,6 +210,7 @@ const AdminPosts = () => {
                                 <td>{new Date(post.createdAt).toLocaleDateString('ko-KR')}</td>
                                 <td>{new Date(post.updatedAt).toLocaleDateString('ko-KR')}</td>
                                 <td>{post.views}</td>
+                                <td>{post.isFeatured ? 'O' : 'X'}</td>
                                 <td>
                                     <div className={styles.btn_wrap}>
                                         <Link href={`/admin/posts/${post.slug}/edit`}>
