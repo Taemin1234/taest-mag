@@ -7,6 +7,7 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 import 'swiper/css/navigation';
 import { Navigation } from 'swiper/modules';
+import { useInView } from 'react-intersection-observer'
 
 import styles from './PostList.module.css'
 import { Post } from '@/types'
@@ -85,28 +86,39 @@ export default function PostList({ posts, variant = 'sub', enableSwiper = false,
     return (
         <ul className={containerClassName}>
             {posts.map((post) => (
-                <li key={post.slug}>
-                    <Link href={`/post/${post.slug}`} >
-                        <div className={styles.thumbnailWrapper}>
-                            <Image
-                                src={post.thumbnailUrl || '/default-thumb.png'}
-                                alt={post.title}
-                                fill
-                                className={styles.post_thumbnail}
-                                sizes="(max-width: 640px) 100vw, 33vw"
-                            />
-                        </div>
-                        <div className={styles.post_list}>
-                            <div className={styles.list_top}>
-                                <p className={styles.list_category}>{getCategoryLabel(post.category)}</p>
-                                <p className="text-sm text-gray-500">{new Date(post.createdAt).toLocaleDateString('ko-KR')}</p>
-                            </div>
-                            <p className={styles.list_title}>{post.title}</p>
-                            <p className={styles.list_subtitle}>{post.subtitle}</p>
-                        </div>
-                    </Link>
-                </li>
+                <CardList key={post.slug} post={post} />
             ))}
         </ul>
+    )
+}
+
+function CardList ({post}: {post:Post}) {
+    const { ref, inView } = useInView({
+        threshold: 0.2,
+        triggerOnce: true,
+    })
+
+    return (
+        <li key={post.slug} ref={ref} className={`${styles.content_box} ${inView ? styles.active : ''}`}>
+            <Link href={`/post/${post.slug}`} >
+                <div className={styles.thumbnailWrapper}>
+                    <Image
+                        src={post.thumbnailUrl || '/default-thumb.png'}
+                        alt={post.title}
+                        fill
+                        className={styles.post_thumbnail}
+                        sizes="(max-width: 640px) 100vw, 33vw"
+                    />
+                </div>
+                <div className={styles.post_list}>
+                    <div className={styles.list_top}>
+                        <p className={styles.list_category}>{getCategoryLabel(post.category)}</p>
+                        <p className="text-sm text-gray-500">{new Date(post.createdAt).toLocaleDateString('ko-KR')}</p>
+                    </div>
+                    <p className={styles.list_title}>{post.title}</p>
+                    <p className={styles.list_subtitle}>{post.subtitle}</p>
+                </div>
+            </Link>
+        </li>
     )
 }

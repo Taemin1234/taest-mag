@@ -19,9 +19,19 @@
     grid-row: span 2;
 }
 
-.postlist_wrap li {
+.postlist_wrap li.content_box {
     position: relative;
+    opacity: 0;
+    transform: translateY(30px);
     overflow: hidden;
+    transition: all 0.3s;
+    
+}
+
+.postlist_wrap li.active {
+    opacity: 1;
+    transform: translateY(0);
+    transition: all 0.3s;
 }
 
 .postlist_wrap li a {
