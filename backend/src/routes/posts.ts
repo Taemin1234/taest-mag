@@ -138,8 +138,8 @@ router.post('/:slug/views', (async (req: Request, res: Response): Promise<void> 
  */
 router.post('/', authenticate, (async (req: Request, res: Response) => {
   try {
-    const { title, subtitle, editor, category, subCategory, thumbnailUrl, content } = req.body;
-    const post = new Post({ title, subtitle, editor, category, subCategory, thumbnailUrl, content } as IPost);
+    const { title, subtitle, editor, category, subCategory, thumbnailUrl, content, postNum } = req.body;
+    const post = new Post({ title, subtitle, editor, category, subCategory, thumbnailUrl, content, postNum } as IPost);
     await post.save();
     res.status(201).json(post);
   } catch (err) {

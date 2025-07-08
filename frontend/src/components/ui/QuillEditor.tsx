@@ -3,19 +3,39 @@
 import { forwardRef, useRef, useMemo, useCallback, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 // import ReactQuill from 'react-quill-new';
-import 'react-quill-new/dist/quill.snow.css';
 
-const RawReactQuill  = dynamic(
-  () => import('react-quill-new').then(mod => mod.default),
-  { ssr: false }    // 서버 렌더링 완전 비활성화
+// type OriginalProps = React.ComponentProps<typeof RawReactQuill>;
+
+// type ExtendedProps = OriginalProps & {
+//   forwardedRef?: React.ForwardedRef<any>;
+// };
+
+// const RawReactQuill  = dynamic(
+//   () => import('react-quill-new').then(mod => mod.default),
+//   { ssr: false }    // 서버 렌더링 완전 비활성화
+// );
+
+// const ReactQuill = forwardRef<any, ExtendedProps>(
+//   (props, ref) => <RawReactQuill {...props} forwardedRef={ref} />
+// );
+
+const RawReactQuill = dynamic(
+  () =>
+    import('react-quill-new').then((mod) => {
+      const Forwarded = forwardRef<any, React.ComponentProps<typeof mod.default>>(
+        (props, ref) => <mod.default {...props} ref={ref} />
+      );
+      // 개발자 도구에 보일 이름 지정
+      Forwarded.displayName = 'RawReactQuill';
+      return Forwarded;
+    }),
+  { ssr: false }
 );
 
-const ReactQuill = forwardRef<any, React.ComponentProps<typeof RawReactQuill>>(
-  (props, ref) => <RawReactQuill {...props} ref={ref} />
-);
+const ReactQuill = RawReactQuill;
 
-// DevTools에 보일 이름 지정
-ReactQuill.displayName = 'ReactQuill';
+// 개발자 도구에 보일 이름 지정
+// ReactQuill.displayName = 'ReactQuill';
 
 export default function QuillEditor({
   defaultValue,
@@ -26,7 +46,6 @@ export default function QuillEditor({
 }) {
 
 const quillRef = useRef<any>(null);
-const isMounted = useRef(false);
 
 // ① 이미지 업로드 핸들러
 const handleImageUpload = () => {
@@ -64,17 +83,6 @@ const handleImageUpload = () => {
   };
 };
 
-useEffect(() => {
-  if (!isMounted.current && typeof window !== 'undefined') {
-    isMounted.current = true;
-    Promise.all([
-      import('quill'),
-      import('quill-image-resize-module-react')
-    ]).then(([{ default: Quill }, { default: ImageResize }]) => {
-      Quill.register('modules/imageResize', ImageResize);
-    }).catch(err => console.error('Failed to load Quill plugins', err));
-  }
-}, []);
 
 // ① 툴바 옵션 정의
   const modules = useMemo(() => ({
@@ -110,7 +118,7 @@ useEffect(() => {
         image: handleImageUpload,
       },
     },
-    imageResize: { modules: [ 'Resize', 'DisplaySize', 'Toolbar' ] },
+    // imageResize: { modules: [ 'Resize', 'DisplaySize', 'Toolbar' ] },
   }), [])
 
   // 지원 포맷 정의

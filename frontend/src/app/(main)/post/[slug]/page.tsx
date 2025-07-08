@@ -2,15 +2,17 @@
 import { notFound } from 'next/navigation'
 import { Post, Editor } from '@/types'
 import { fetchPostBySlug, fetchEditors, fetchRecommendedPosts } from '@/lib/api'
-import ViewTracker from '@/components/common/ViewTracker'
+// import ViewTracker from '@/components/common/ViewTracker'
 import { EditorInfo } from '@/components/editor/EditorInfo'
 import PostList from '@/components/PostList'
 import { getCategoryLabel } from '@/utils/getCategoryLabel'
 import styles from './postPage.module.css'
+import DOMPurify, { Config } from 'isomorphic-dompurify';
 
 interface PostPageProps {
   params: { slug: string }
 }
+
 
 export default async function PostPage({ params }: PostPageProps) {
   const { slug } = await params
@@ -48,9 +50,25 @@ export default async function PostPage({ params }: PostPageProps) {
     console.error('추천 게시물 조회 중 오류:', err);
   }
 
+
+// Config 타입으로 옵션 객체 선언
+const sanitizeOptions: Config = {
+  ADD_TAGS: [
+    'h1', 'h2', 'h3', 'p', 'span', 'strong', 'b', 'i', 'u', 's', 'em', 'blockquote',
+    'ul', 'ol', 'li', 'a', 'img', 'pre', 'code', 'br', 'hr', 'div',
+    'table', 'thead', 'tbody', 'tr', 'th', 'td', 'sup', 'sub'
+  ],
+  ADD_ATTR: [
+    'href', 'src', 'alt', 'title', 'style', 'class', 'target', 'rel', 'width', 'height', 'align'
+  ],
+};
+
+// 허용할 태그·속성·스타일을 명시적으로 추가
+const cleanHtml = DOMPurify.sanitize(post.content, sanitizeOptions)
+
   return (
     <main className={styles.post_page}>
-       <ViewTracker slug={slug} />
+       {/* <ViewTracker slug={slug} /> */}
       <article className={styles.post_article}>
         <section>
           <header className={styles.post_header}>
@@ -65,8 +83,8 @@ export default async function PostPage({ params }: PostPageProps) {
 
           {/* {post.subtitle && <p>{post.subtitle}</p>} */}
 
-          <div className={styles.post_content}
-            dangerouslySetInnerHTML={{ __html: post.content }}
+          <div className={`${styles.post_content} ql-editor`}
+            dangerouslySetInnerHTML={{ __html: cleanHtml }}
           />
         </section>
         {editor && 
