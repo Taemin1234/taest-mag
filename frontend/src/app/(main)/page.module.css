@@ -16,3 +16,17 @@
 		padding: 6rem 2rem;
 	}
 }
+@media (max-width: 600px) {
+	.main {
+		padding: 0rem 2rem;
+	}
+
+	.main_page {
+		padding: 1rem 0;
+	}
+
+	.main_page_text {
+		width: 100%;
+		font-size: 2rem;
+	}
+}
