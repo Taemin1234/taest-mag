@@ -94,7 +94,7 @@ export default function PostList({ posts, variant = 'sub', enableSwiper = false,
 
 function CardList ({post}: {post:Post}) {
     const { ref, inView } = useInView({
-        threshold: 0.2,
+        threshold: 0.15,
         triggerOnce: true,
     })
 
@@ -113,7 +113,7 @@ function CardList ({post}: {post:Post}) {
                 <div className={styles.post_list}>
                     <div className={styles.list_top}>
                         <p className={styles.list_category}>{getCategoryLabel(post.category)}</p>
-                        <p className="text-sm text-gray-500">{new Date(post.createdAt).toLocaleDateString('ko-KR')}</p>
+                        <p>{new Date(post.createdAt).toLocaleDateString('ko-KR')}</p>
                     </div>
                     <p className={styles.list_title}>{post.title}</p>
                     <p className={styles.list_subtitle}>{post.subtitle}</p>
