@@ -2,7 +2,7 @@
 import { notFound } from 'next/navigation'
 import { Post, Editor } from '@/types'
 import { fetchPostBySlug, fetchEditors, fetchRecommendedPosts } from '@/lib/api'
-// import ViewTracker from '@/components/common/ViewTracker'
+import ViewTracker from '@/components/common/ViewTracker'
 import { EditorInfo } from '@/components/editor/EditorInfo'
 import PostList from '@/components/PostList'
 import { getCategoryLabel } from '@/utils/getCategoryLabel'
@@ -68,7 +68,7 @@ const cleanHtml = DOMPurify.sanitize(post.content, sanitizeOptions)
 
   return (
     <main className={styles.post_page}>
-       {/* <ViewTracker slug={slug} /> */}
+       <ViewTracker slug={slug} />
       <article className={styles.post_article}>
         <section>
           <header className={styles.post_header}>

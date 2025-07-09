@@ -74,7 +74,7 @@ export default function PostForm({
             setCategory(initialData.category);
             setIsFeatured(initialData.isFeatured);
         }
-    }, [initialData])
+    }, [initialData]);
 
     // 에디터 목록 불러오기
     useEffect(() => {
