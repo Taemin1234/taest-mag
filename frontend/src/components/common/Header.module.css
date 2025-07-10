@@ -34,7 +34,7 @@
     transform: translateY(-50%);
     right: 3rem;
     width: 4rem;
-    height: 3rem;
+    height: 4rem;
     transition: .5s ease-in-out;
     cursor: pointer;
 
@@ -61,12 +61,13 @@
 }
 
 .button span:nth-child(2) {
-    top: 1.5rem;
+    top: 50%;
+    transform: translateY(-50%);
     transform-origin: left center;
 }
 
 .button span:nth-child(3) {
-    top: 3rem;
+    bottom: 0rem;
     transform-origin: left center;
 }
 
@@ -88,4 +89,44 @@
     top: 27px;
     left: 0px;
     background-color: var(--main-black);
+}
+
+@media (max-width: 768px) {
+    .header_wrap {
+        height: var(--header-mheight);
+        padding: 0 3rem;
+    }
+
+    .logo {
+        width: 150px;
+        height: auto;
+    }
+
+    .button {
+        width: 3rem;
+        height: 3rem;
+    }
+
+    .button.close span:nth-child(3) {
+        top: 20px;
+    }
+}
+@media (max-width: 580px) {
+    .logo {
+        width: 120px;
+    }
+
+    .button {
+        right: 2rem;
+        width: 2.5rem;
+        height: 2.5rem;
+    }
+
+    .button span {
+        height: 0.3rem;
+    }
+
+    .button.close span:nth-child(3) {
+        top: 16px;
+    }
 }

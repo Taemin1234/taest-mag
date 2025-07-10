@@ -7,13 +7,25 @@
 }
 
 .main_page_text {
-	width: 50%;
 	font-size: 4rem;
+}
+
+.logo {
+	width: 256px;
+	height: auto;
+}
+
+.mo {
+	display: none;
 }
 
 @media (max-width: 768px) {
 	.main {
 		padding: 6rem 2rem;
+	}
+	
+	.logo {
+		width: 150px;
 	}
 }
 @media (max-width: 600px) {
@@ -22,11 +34,18 @@
 	}
 
 	.main_page {
-		padding: 1rem 0;
+		padding: 2rem 0;
 	}
 
 	.main_page_text {
-		width: 100%;
 		font-size: 2rem;
+	}
+	
+	.logo {
+		width: 100px;
+	}
+
+	.mo {
+		display: block;
 	}
 }

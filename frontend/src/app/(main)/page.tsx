@@ -5,7 +5,7 @@ import React, { use, Suspense } from 'react';
 import Image from 'next/image';
 import { fetchPosts } from '@/lib/api'
 import { Post } from "@/types"
-import logo from '@/public/main_logo_b.png';
+import logo from '@/assets/main_logo_b.png';
 
 export const dynamic = 'force-dynamic';
 
@@ -31,9 +31,9 @@ export default function Home() {
       <section className={styles.main_section}>
         <div className={styles.main_page}>
           <div className={styles.main_page_text}>
-            <p>심도보단 <strong>감도</strong>, 트렌드보단 <strong>당신의 결</strong></p>
+            <p>심도보단 <strong>감도</strong>, <br className={styles.mo}/>트렌드보단 <strong>당신의 결</strong></p>
             <p>취향을 수집하는 매거진,</p>
-            <Image src="/main_logo_b.png" alt="logo" width={250} height={40}  sizes="(max-width: 600px) 100px, (max-width: 768px) 150px, 250px"/>
+            <Image src={logo} alt="logo" width={256} height={61} className={styles.logo}/>
           </div>
         </div>
         <div>

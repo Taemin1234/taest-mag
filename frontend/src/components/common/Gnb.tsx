@@ -21,7 +21,7 @@ export default function GNB({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpen:
 
   return (
     <nav className={styles.gnb_wrap}>
-      <ul className={styles.depth1}>
+      {/* <ul className={styles.depth1}>
         {CATEGORIES.map((category, index) => (
           <li key={category.value} onClick={() => handleClick(index)} className={activeIndex === index ? styles.active : ''}>
             <span>{category.label}</span>
@@ -42,7 +42,7 @@ export default function GNB({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpen:
             About Us
           </Link>
         </li>
-      </ul>
+      </ul> */}
     </nav>
   );
 }

@@ -6,11 +6,11 @@ const router: Router = express.Router();
 
 /**
  * GET /api/post
- * 전체 게시물 리스트 조회 (최신 순)
+ * 전체 게시물 리스트 조회 (최신 순 / 특별호 제외)
  */
 router.get('/', (async (req: Request, res: Response) => {
   try {
-    const post = await Post.find().sort({ createdAt: -1 });
+    const post = await Post.find({ isFeatured: false }).sort({ createdAt: -1 });
     res.json(post);
   } catch (err) {
     console.error(err);
