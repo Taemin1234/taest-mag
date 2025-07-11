@@ -1,0 +1,243 @@
+.swiperContainer {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 0;
+}
+
+.postlist_wrap {
+    width: 380px;
+    height: 480px;
+    border-radius: 20px;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+.postlist_wrap:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+}
+
+.post_bg_thumbnail {
+   object-fit: cover;
+   filter: blur(8px) brightness(0.7);
+   opacity: 0.8;
+   transition: all 0.3s ease;
+}
+
+.postlist_wrap:hover .post_bg_thumbnail {
+    filter: blur(12px) brightness(0.6);
+}
+
+.background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+/* 콘텐츠 레이어 */
+.content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+    padding: 30px 25px;
+    color: var(--main-white);
+    text-decoration: none;
+    background: linear-gradient(
+        180deg,
+        rgba(0, 0, 0, 0.1) 0%,
+        rgba(0, 0, 0, 0.3) 50%,
+        rgba(0, 0, 0, 0.7) 100%
+    );
+    transition: all 0.3s ease;
+}
+
+.content:hover {
+    background: linear-gradient(
+        180deg,
+        rgba(0, 0, 0, 0.2) 0%,
+        rgba(0, 0, 0, 0.4) 50%,
+        rgba(0, 0, 0, 0.8) 100%
+    );
+}
+
+.content .thumbnail_inner {
+    position: relative;
+    width: 180px;
+    height: 180px;
+    margin: 0 auto 20px;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+.content:hover .thumbnail_inner {
+    transform: scale(1.05);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+}
+
+.content .thumbnail_inner .post_thumbnail {
+    object-fit: cover;
+    transition: all 0.3s ease;
+}
+
+.content:hover .post_thumbnail {
+    transform: scale(1.1);
+}
+
+.content .date {
+    text-align: right;
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 15px;
+    letter-spacing: 0.5px;
+}
+
+.content .list_title {
+    margin: 0 0 12px 0;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.3;
+    text-align: center;
+    color: white;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+.content:hover .list_title {
+    color: #f8f9fa;
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+.content .list_subtitle {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.4;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    opacity: 0.9;
+    transition: all 0.3s ease;
+}
+
+.content:hover .list_subtitle {
+    color: rgba(255, 255, 255, 1);
+    opacity: 1;
+}
+
+/* Swiper 커스텀 스타일 */
+.swiperContainer :global(.swiper-pagination) {
+    bottom: -40px;
+}
+
+.swiperContainer :global(.swiper-pagination-bullet) {
+    width: 12px;
+    height: 12px;
+    background: rgba(255, 255, 255, 0.3);
+    opacity: 1;
+    transition: all 0.3s ease;
+}
+
+.swiperContainer :global(.swiper-pagination-bullet-active) {
+    background: #007bff;
+    transform: scale(1.2);
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .swiperContainer {
+        padding: 10px 0;
+    }
+    
+    .postlist_wrap {
+        width: 320px;
+        height: 420px;
+    }
+    
+    .content {
+        padding: 25px 20px;
+    }
+    
+    .content .thumbnail_inner {
+        width: 150px;
+        height: 150px;
+        margin-bottom: 15px;
+    }
+    
+    .content .list_title {
+        font-size: 20px;
+    }
+    
+    .content .list_subtitle {
+        font-size: 14px;
+    }
+}
+
+/* 추가 스타일 */
+.featurePostWrapper {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.loadingContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    text-align: center;
+}
+
+.loadingSpinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #007bff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 20px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.errorContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    text-align: center;
+    color: #dc3545;
+}
+
+.noPostsContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    text-align: center;
+    color: #6c757d;
+}
+
+.textContent {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    width: 100%;
+}

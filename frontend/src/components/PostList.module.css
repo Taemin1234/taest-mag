@@ -4,7 +4,7 @@
     /* grid-auto-rows: 200px; */
     /* 각 행 높이 */
     grid-auto-rows: 400px;
-    gap: 20px;
+    gap: 28px;
     /* 빈 칸을 가능한 아이템으로 채움 */
     grid-auto-flow: row dense;
 }
@@ -22,16 +22,16 @@
 .postlist_wrap li.content_box {
     position: relative;
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(30px) scale(0.98);
     overflow: hidden;
-    transition: all 0.3s;
+    border-radius: 10px;
+    transition: all 0.35s cubic-bezier(.4,0,.2,1);
     
 }
 
 .postlist_wrap li.active {
     opacity: 1;
-    transform: translateY(0);
-    transition: all 0.3s;
+    transform: translateY(0) scale(1);
 }
 
 .postlist_wrap li a {
@@ -49,13 +49,13 @@
 
 .postlist_wrap li a .post_thumbnail {
     object-fit: cover;
-    transition: transform 0.3s ease;
+    transition: all 0.35s cubic-bezier(.4,0,.2,1);
 }
 
 
 .postlist_wrap li:hover a .post_thumbnail {
-    transform: scale(1.1);
-    transition: transform 0.3s ease;
+    transform: scale(1.07);
+    filter: brightness(0.85);
 }
 
 .postlist_wrap .post_list {
@@ -63,7 +63,7 @@
     bottom: 0;
     left: 0;
     right: 0;
-    padding: 10px;
+    padding: 20px 18px 16px 18px;
     transition: transform 0.3s ease;
 
     /* background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.6) 100%); */
@@ -73,7 +73,6 @@
 
 .postlist_wrap li:hover .post_list {
     background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.6) 100%);
-    transition: transform 0.3s ease;
 }
 
 .postlist_wrap .post_list .list_top {
@@ -83,13 +82,19 @@
 }
 
 .postlist_wrap .post_list .list_top .list_category {
-    font-size: 20px;
+    /* font-size: 20px; */
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
 }
 
 .postlist_wrap .post_list .list_title {
-    margin-top: 10px;
-    font-size: 24px;
+    margin-top: 6px;
+    font-size: 22px;
+    font-weight: 700;
     width: 100%;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.12);
     text-overflow: ellipsis;
     overflow: hidden;
     display: -webkit-box;
@@ -98,8 +103,8 @@
 }
 
 .postlist_wrap .post_list .list_subtitle {
-    margin-top: 5px;
-    font-size: 16px;
+    margin-top: 4px;
+    font-size: 15px;
     width: 100%;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -113,7 +118,7 @@
 
 .postlist_wrap .thumbnailWrapper .post_thumbnail {
     object-fit: cover;
-    transition: transform 0.3s ease;
+    transition: transform 0.3s cubic-bezier(.4,0,.2,1);
 }
 
 .swiperContainer .postlist_wrap {
@@ -121,7 +126,7 @@
 }
 
 .swiperContainer .post_list .list_title {
-    font-size: 20px;
+    font-size: 18px;
     -webkit-line-clamp: 1;
 }
 
@@ -130,7 +135,7 @@
 .swiperContainer :global(.swiper-button-prev) {
   width: 3rem;
   height: 3rem;
-  background-color: rgba(0,0,0,0.5);
+  background: rgba(30,32,38,0.7);
   border-radius: 50%;
   color: #fff;               /* 화살표 색 */
   display: flex;
@@ -161,6 +166,7 @@
 @media (max-width: 1024px) {
     .postlist_wrap {
         grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
     }
 
     .postlist_wrap.variant_main>*:nth-child(5n+1) {
@@ -171,11 +177,22 @@
 @media (max-width: 768px) {
     .postlist_wrap {
         grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
     }
 
     .postlist_wrap.variant_main>* {
         grid-column: span 1;
         grid-row: span 1;
+    }
+    .postlist_wrap .post_list .list_top .list_category {
+        font-size: 13px;
+    }
+    .postlist_wrap .post_list .list_title {
+        font-size: 16px;
+        -webkit-line-clamp: 1;
+    }
+    .postlist_wrap .post_list .list_subtitle {
+        font-size: 12px;
     }
 }
 
@@ -197,19 +214,19 @@
     }
 
     .content_box + .content_box {
-        margin-top: 30px;
+        margin-top: 24px;
     }
 
     .postlist_wrap .post_list .list_top .list_category {
-        font-size: 16px;
+        font-size: 12px;
     }
 
     .postlist_wrap .post_list .list_title {
-        font-size: 20px;
+        font-size: 14px;
         -webkit-line-clamp: 1;
     }
 
     .postlist_wrap .post_list .list_subtitle {
-        font-size: 14px;
+        font-size: 11px;
     }
 }

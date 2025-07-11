@@ -54,7 +54,6 @@ export default function PostList({ posts, variant = 'sub', enableSwiper = false,
                                     alt={post.title}
                                     fill
                                     className={styles.post_thumbnail}
-                                    sizes="(max-width: 640px) 100vw, 33vw"
                                 />
                             </div>
                             <div className={styles.post_list}>

@@ -39,6 +39,27 @@ export async function fetchPosts(): Promise<Post[]> {
   return data
 }
 
+// 특별 게시물 가져오기
+export async function fetchFeaturePost(): Promise<Post[]> {
+   // 서버(Next.js 서버 컴포넌트) vs 클라이언트 구분
+   const isServer = typeof window === 'undefined';
+
+   const baseUrl = isServer
+     ? process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
+     : '';
+
+     const response = await fetch(`${baseUrl}/api/posts/featured`, {
+      method: 'GET',
+      credentials: 'include', // 필요 시 쿠키 전송
+    })
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch posts: ${response.status} ${response.statusText}`)
+    }
+    const data: Post[] = await response.json()
+    return data
+}
+
 // 카테고리별 추천 게시물
 export async function fetchRecommendedPosts(category: string, excludeSlug: string): Promise<Post[]> {
   const isServer = typeof window === 'undefined';
@@ -99,4 +120,3 @@ export async function fetchPostBySlug(slug: string): Promise<Post> {
   const post: Post = await res.json()
   return post
 }
-

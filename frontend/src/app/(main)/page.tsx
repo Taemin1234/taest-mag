@@ -1,9 +1,10 @@
 import styles from "./page.module.css"
 import PostList from '@/components/PostList'
+import FeaturePost from "@/components/FeaturePost";
 import PostSkeleton from "@/components/skeleton/PostSkeleton";
 import React, { use, Suspense } from 'react';
 import Image from 'next/image';
-import { fetchPosts } from '@/lib/api'
+import { fetchPosts, fetchFeaturePost } from '@/lib/api'
 import { Post } from "@/types"
 import logo from '@/assets/main_logo_b.png';
 
@@ -24,6 +25,14 @@ const GetPost = (
   )
 }
 
+// const GetFeaturePost = () => {
+//   const posts = use(fetchFeaturePost()) as Post[]
+
+//   return (
+//     <FeaturePost posts={posts} />
+//   )
+// }
+
 export default function Home() {
 
   return (
@@ -34,6 +43,12 @@ export default function Home() {
             <p>심도보단 <strong>감도</strong>, <br className={styles.mo}/>트렌드보단 <strong>당신의 결</strong></p>
             <p>취향을 수집하는 매거진,</p>
             <Image src={logo} alt="logo" width={256} height={61} className={styles.logo}/>
+          </div>
+          <div>
+            {/* <Suspense fallback={<PostSkeleton variant="main" />}>
+              <GetFeaturePost />
+            </Suspense> */}
+            <FeaturePost />
           </div>
         </div>
         <div>
