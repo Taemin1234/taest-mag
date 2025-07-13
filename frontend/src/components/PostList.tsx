@@ -31,7 +31,7 @@ export default function PostList({ posts, variant = 'sub', enableSwiper = false,
         return (
             <Swiper
                 navigation={true}
-                modules={[Navigation]} 
+                modules={[Navigation]}
                 spaceBetween={20}
                 slidesPerView={1}
                 breakpoints={{
@@ -42,6 +42,7 @@ export default function PostList({ posts, variant = 'sub', enableSwiper = false,
                         slidesPerView: 4,
 
                     },
+
                 }}
                 className={styles.swiperContainer} // 필요시 추가 스타일
             >
@@ -91,7 +92,7 @@ export default function PostList({ posts, variant = 'sub', enableSwiper = false,
     )
 }
 
-function CardList ({post}: {post:Post}) {
+function CardList({ post }: { post: Post }) {
     const { ref, inView } = useInView({
         threshold: 0.15,
         triggerOnce: true,

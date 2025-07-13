@@ -25,8 +25,8 @@
     transform: translateY(30px) scale(0.98);
     overflow: hidden;
     border-radius: 10px;
-    transition: all 0.35s cubic-bezier(.4,0,.2,1);
-    
+    transition: all 0.35s cubic-bezier(.4, 0, .2, 1);
+
 }
 
 .postlist_wrap li.active {
@@ -34,12 +34,14 @@
     transform: translateY(0) scale(1);
 }
 
+.swiperContainer .postlist_wrap a,
 .postlist_wrap li a {
     display: block;
     width: 100%;
     height: 100%;
 }
 
+.swiperContainer .postlist_wrap a .thumbnailWrapper,
 .postlist_wrap li .thumbnailWrapper {
     position: relative;
     width: 100%;
@@ -47,17 +49,19 @@
     overflow: hidden;
 }
 
+.swiperContainer .postlist_wrap a .post_thumbnail,
 .postlist_wrap li a .post_thumbnail {
     object-fit: cover;
-    transition: all 0.35s cubic-bezier(.4,0,.2,1);
+    transition: all 0.35s cubic-bezier(.4, 0, .2, 1);
 }
 
-
+.swiperContainer .postlist_wrap a:hover .post_thumbnail,
 .postlist_wrap li:hover a .post_thumbnail {
     transform: scale(1.07);
     filter: brightness(0.85);
 }
 
+.swiperContainer .postlist_wrap .post_list,
 .postlist_wrap .post_list {
     position: absolute;
     bottom: 0;
@@ -71,6 +75,7 @@
     color: #fff;
 }
 
+.swiperContainer .postlist_wrap a:hover .post_list,
 .postlist_wrap li:hover .post_list {
     background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.6) 100%);
 }
@@ -94,7 +99,7 @@
     font-size: 22px;
     font-weight: 700;
     width: 100%;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
     text-overflow: ellipsis;
     overflow: hidden;
     display: -webkit-box;
@@ -116,13 +121,24 @@
     margin-top: 20px;
 }
 
+
 .postlist_wrap .thumbnailWrapper .post_thumbnail {
     object-fit: cover;
-    transition: transform 0.3s cubic-bezier(.4,0,.2,1);
+    transition: transform 0.3s cubic-bezier(.4, 0, .2, 1);
 }
 
 .swiperContainer .postlist_wrap {
+    display: block;
     height: 300px;
+}
+
+.swiperContainer .postlist_wrap a {
+    display: block;
+    width: 100%;
+}
+
+.swiperContainer .postlist_wrap .post_list {
+    padding: 10px;
 }
 
 .swiperContainer .post_list .list_title {
@@ -133,26 +149,27 @@
 /* 좌우 버튼 공통 */
 .swiperContainer :global(.swiper-button-next),
 .swiperContainer :global(.swiper-button-prev) {
-  width: 3rem;
-  height: 3rem;
-  background: rgba(30,32,38,0.7);
-  border-radius: 50%;
-  color: #fff;               /* 화살표 색 */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color .2s;
+    width: 3rem;
+    height: 3rem;
+    background: rgba(30, 32, 38, 0.7);
+    border-radius: 50%;
+    color: #fff;
+    /* 화살표 색 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color .2s;
 }
 
 .swiperContainer :global(.swiper-button-next:after),
 .swiperContainer :global(.swiper-button-prev:after) {
- font-size: 1.5rem;
+    font-size: 1.5rem;
 }
 
 /* 호버 시 */
 .swiperContainer :global(.swiper-button-next:hover),
 .swiperContainer :global(.swiper-button-prev:hover) {
-  background-color: rgba(0,0,0);
+    background-color: rgba(0, 0, 0);
 }
 
 
@@ -184,13 +201,16 @@
         grid-column: span 1;
         grid-row: span 1;
     }
+
     .postlist_wrap .post_list .list_top .list_category {
         font-size: 13px;
     }
+
     .postlist_wrap .post_list .list_title {
         font-size: 16px;
         -webkit-line-clamp: 1;
     }
+
     .postlist_wrap .post_list .list_subtitle {
         font-size: 12px;
     }
@@ -213,7 +233,7 @@
         grid-row: span 1;
     }
 
-    .content_box + .content_box {
+    .content_box+.content_box {
         margin-top: 24px;
     }
 
