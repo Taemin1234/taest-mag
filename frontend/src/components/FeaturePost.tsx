@@ -67,13 +67,13 @@ export default function FeaturePost() {
             grabCursor={true}
             centeredSlides={true}
             slidesPerView={'auto'}
-            spaceBetween={30}
+            spaceBetween={10}
             coverflowEffect={{
                 rotate: 50,
-                stretch: 0,
+                stretch:50,
                 depth: 100,
                 modifier: 1,
-                slideShadows: true,
+                // slideShadows: true,
                 scale: 0.5,
             }}
             pagination={{

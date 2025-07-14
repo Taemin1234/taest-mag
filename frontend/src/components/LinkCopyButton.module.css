@@ -1,0 +1,28 @@
+.copy_button_wrap {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.copy_button {
+    width: 70px;
+    height: 70px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    background-color: rgb(255, 247, 237);
+    border-radius: 50%;
+    padding: 10px;
+    box-sizing:border-box;
+  }
+  
+  .copy_button:hover {
+    transform: scale(1.25);
+  }
+  
+  .copy_button:active {
+    transform: scale(1);
+  }
+  
+  .icon {
+    stroke: #93c5fd;
+    fill: none;
+  }

@@ -6,8 +6,8 @@
 }
 
 .postlist_wrap {
-    width: 380px;
-    height: 480px;
+    width: 300px;
+    height: 400px;
     border-radius: 20px;
     overflow: hidden;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -16,7 +16,6 @@
 
 .postlist_wrap:hover {
     transform: translateY(-8px);
-    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
 }
 
 .post_bg_thumbnail {

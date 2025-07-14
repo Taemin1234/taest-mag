@@ -44,11 +44,13 @@ export default function Home() {
             <p>취향을 수집하는 매거진,</p>
             <Image src={logo} alt="logo" width={256} height={61} className={styles.logo}/>
           </div>
-          <div>
-            {/* <Suspense fallback={<PostSkeleton variant="main" />}>
-              <GetFeaturePost />
-            </Suspense> */}
-            <FeaturePost />
+          <div className={styles.feature_wrap}>
+            <div className={styles.feature}>
+              {/* <Suspense fallback={<PostSkeleton variant="main" />}>
+                <GetFeaturePost />
+              </Suspense> */}
+              <FeaturePost />
+            </div>
           </div>
         </div>
         <div>

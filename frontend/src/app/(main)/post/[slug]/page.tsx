@@ -8,6 +8,7 @@ import PostList from '@/components/PostList'
 import { getCategoryLabel } from '@/utils/getCategoryLabel'
 import styles from './postPage.module.css'
 import DOMPurify, { Config } from 'isomorphic-dompurify';
+import LinkCopyButton from '@/components/LinkCopyButton';
 
 interface PostPageProps {
   params: { slug: string }
@@ -87,6 +88,9 @@ const cleanHtml = DOMPurify.sanitize(post.content, sanitizeOptions)
             dangerouslySetInnerHTML={{ __html: cleanHtml }}
           />
         </section>
+        <div>
+          <LinkCopyButton />
+        </div>
         {editor && 
           <section className={styles.post_editor}>
             <EditorInfo editor={editor} />
