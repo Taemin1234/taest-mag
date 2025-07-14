@@ -52,9 +52,9 @@ export default function PostForm({
     const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
     const [error, setError] = useState<string | null>(null)
     const [category, setCategory] = useState<string | undefined>
-    (undefined);
+        (undefined);
     const [isFeatured, setIsFeatured] = useState(false)
-    
+
     const router = useRouter()
 
     // 썸네일 필수 검증
@@ -146,10 +146,10 @@ export default function PostForm({
                     method: 'POST',
                     body: thumbForm,
                     credentials: 'include'
-                  });
-                  if (!thumbRes.ok) throw new Error("썸네일 업로드 실패");
-                  const thumbData = (await thumbRes.json()) as { url: string };
-                  finalThumbnailUrl = thumbData.url;
+                });
+                if (!thumbRes.ok) throw new Error("썸네일 업로드 실패");
+                const thumbData = (await thumbRes.json()) as { url: string };
+                finalThumbnailUrl = thumbData.url;
             }
 
             // 최종 게시물 데이터 준비

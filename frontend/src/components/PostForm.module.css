@@ -1,55 +1,154 @@
-.form_wrap > div{
-    margin-top: 20px;
+/* 제목, 소제목, 라벨, 설명, 입력, 버튼 폰트 크기 구분 */
+
+.form_title {
+    font-size: 2.4rem;
+    font-weight: 700;
+    margin-bottom: 18px;
+    color: var(--main-black);
+    letter-spacing: -0.5px;
 }
 
-.form_wrap > div > label {
-    margin-right: 20px;
-    font-size: 18px;
+.form_subtitle {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.form_wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    margin-top: 18px;
+}
+
+.form_wrap>div:not(.button_wrap) {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.form_wrap>div>label {
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: #222;
+    margin-bottom: 2px;
+    letter-spacing: -0.2px;
+    background: none;
     width: 100%;
-    background-color: antiquewhite;
 }
 
-.form_wrap > div > label ~ input{
+.form_wrap>div>.desc {
+    font-size: 1.4rem;
+    color: #888;
+    margin-bottom: 2px;
+}
+
+.form_wrap>div>input,
+.form_wrap>div>select {
     width: 100%;
-    margin-top: 5px;
-    height: 35px;
-    padding: 5px;
+    height: 40px;
+    padding: 8px 12px;
+    font-size: 1.6rem;
+    border: 1.5px solid #e0e0e0;
+    border-radius: 7px;
+    background: #fafbfc;
+    transition: border-color 0.2s;
 }
 
-.form_wrap > div > label ~ select {
-    height: 35px;
+.form_wrap>div>input:focus,
+.form_wrap>div>select:focus {
+    border-color: var(--main-theme, #3b82f6);
+    outline: none;
+    background: #fff;
 }
+
+.editorContainer {
+    margin-top: 10px;
+}
+
 .editorContainer :global(.quill) {
-    margin-top: 15px
+    margin-top: 15px;
 }
+
 .editorContainer :global(.ql-container) {
     min-height: 450px;
+    font-size: 1.6rem;
 }
+
 .editorContainer :global(.ql-editor) {
     min-height: 450px;
+    font-size: 1.6rem;
 }
 
 .button_wrap {
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
     align-items: center;
-    gap: 15px;
+    gap: 18px;
+    margin-top: 18px;
 }
 
 .button_wrap button {
-    border-radius: 5px;
-    padding: 10px 20px;
+    border-radius: 7px;
+    padding: 12px 28px;
     background-color: var(--main-white);
     color: var(--main-black);
-    border: solid 1px var(--main-black);
+    border: solid 1.5px var(--main-black);
+    font-size: 1.6rem;
+    font-weight: 600;
+    transition: background 0.18s, color 0.18s, opacity 0.18s;
+    cursor: pointer;
 }
 
 .button_wrap button:hover {
-    opacity: 0.5;
+    opacity: 0.85;
+    background: var(--main-theme, #eaf3ff);
+    color: var(--main-theme, #2563eb);
 }
 
 .button_wrap button.red {
     background-color: var(--main-red);
     color: var(--main-white);
     border: none;
+}
+
+@media (max-width: 600px) {
+    .form_title {
+        font-size: 1.8rem;
+    }
+
+    .form_subtitle {
+        font-size: 1.4rem;
+    }
+
+    .form_wrap {
+        gap: 14px;
+        margin-top: 8px;
+    }
+
+    .form_wrap>div>label {
+        font-size: 1.3rem;
+    }
+
+    .form_wrap>div>.desc {
+        font-size: 1.1rem;
+    }
+
+    .form_wrap>div>input,
+    .form_wrap>div>select {
+        font-size: 1.3rem;
+        height: 36px;
+        padding: 7px 8px;
+    }
+
+    .button_wrap {
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    .button_wrap button {
+        font-size: 1.3rem;
+        padding: 10px 14px;
+    }
 }

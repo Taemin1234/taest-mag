@@ -5,7 +5,7 @@ import styles from './AdminEditorModal.module.css';
 import { Editor, SNSLink } from '@/types';
 import AdminSNSInput from '@/components/editor/AdminSNSInput';
 import ImageUploader from '@/components/ui/ImageUploader'
-  
+
 interface EditorModalProps {
     editor: Editor | null;
     onClose: () => void;
@@ -29,9 +29,9 @@ export default function AdminEditorModal({ editor, onClose, onSave }: EditorModa
     useEffect(() => {
         if (editor) {
             setEditorData(editor);
-            setPreviewUrl(editor.imageUrl);   
+            setPreviewUrl(editor.imageUrl);
         } else {
-            setEditorData({ 
+            setEditorData({
                 name: '',
                 imageUrl: '',
                 tagline: '',
@@ -68,7 +68,7 @@ export default function AdminEditorModal({ editor, onClose, onSave }: EditorModa
 
     // SNS 링크 변경
     const handleSocialLinksChange = (newLinks: SNSLink[]) => {
-        setEditorData(prev => ({ ...prev, socialLinks: newLinks.length ? newLinks : [],}));
+        setEditorData(prev => ({ ...prev, socialLinks: newLinks.length ? newLinks : [], }));
     };
 
     // 입력한 에디터 저장
@@ -78,39 +78,39 @@ export default function AdminEditorModal({ editor, onClose, onSave }: EditorModa
 
         let finalUrl = editorData.imageUrl;
 
-         // 새 이미지가 선택되었다면 업로드
+        // 새 이미지가 선택되었다면 업로드
         if (imageFile) {
             setUploading(true);
             try {
                 // 1) FormData 에 파일 붙이기
                 const form = new FormData();
                 form.append('profile', imageFile);
-            
+
                 // 2) fetch로 POST 요청 보내기
                 const response = await fetch('/api/upload/profile', {
-                method: 'POST',
-                body: form,
-                // 쿠키 전송을 위해 include
-                credentials: 'include',
+                    method: 'POST',
+                    body: form,
+                    // 쿠키 전송을 위해 include
+                    credentials: 'include',
                 });
-            
+
                 // 3) HTTP 에러 체크
                 if (!response.ok) {
-                // 서버가 에러 메시지를 JSON으로 내려준다면 파싱
-                let errMsg = '이미지 업로드 중 오류가 발생했습니다.';
-                try {
-                    const errData = await response.json();
-                    if (errData.message) errMsg = errData.message;
-                } catch {
-                    /* ignore parse errors */
+                    // 서버가 에러 메시지를 JSON으로 내려준다면 파싱
+                    let errMsg = '이미지 업로드 중 오류가 발생했습니다.';
+                    try {
+                        const errData = await response.json();
+                        if (errData.message) errMsg = errData.message;
+                    } catch {
+                        /* ignore parse errors */
+                    }
+                    throw new Error(errMsg);
                 }
-                throw new Error(errMsg);
-                }
-            
+
                 // 4) 성공 시 JSON 파싱하여 URL 꺼내기
                 const data = (await response.json()) as { url: string };
                 finalUrl = data.url;
-            
+
             } catch (err: any) {
                 console.error('이미지 업로드 실패:', err);
                 setError(err.message || '이미지 업로드 중 오류가 발생했습니다.');
@@ -119,7 +119,7 @@ export default function AdminEditorModal({ editor, onClose, onSave }: EditorModa
             }
             setUploading(false);
         }
-  
+
 
         const payload: Editor = {
             ...editorData,
@@ -128,7 +128,7 @@ export default function AdminEditorModal({ editor, onClose, onSave }: EditorModa
         onSave(payload);
         onClose();
     };
-    
+
     return (
         <div className={styles.editorModal}>
             <div className={styles.input_info}>
@@ -177,9 +177,9 @@ export default function AdminEditorModal({ editor, onClose, onSave }: EditorModa
                     <AdminSNSInput
                         links={
                             editorData.socialLinks && editorData.socialLinks.length > 0
-                              ? editorData.socialLinks
-                              : []
-                          }
+                                ? editorData.socialLinks
+                                : []
+                        }
                         onChange={handleSocialLinksChange}
                     />
                     <div className={styles.btn_wrap}>

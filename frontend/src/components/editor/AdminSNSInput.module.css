@@ -1,41 +1,75 @@
 .sns_wrap {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.sns_wrap .input_wrap {
-    display: flex;
-    justify-content: flex-start;
-    gap: 10px;
-}
-
-.sns_wrap .input_wrap {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    flex-direction: column;
+    gap: 18px;
+    width: 100%;
+    margin-top: 10px;
 }
 
 .sns_list_wrap {
     display: flex;
     flex-direction: column;
+    gap: 16px;
+    width: 100%;
 }
 
-.sns_list,
+.sns_list {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ececec;
+}
+
+.sns_list:last-child {
+    border-bottom: none;
+}
+
 .sns_input {
     display: flex;
-    justify-content: flex-start;
     align-items: center;
-    gap: 10px;
+    gap: 14px;
 }
 
 .sns_input .select_wrap {
     display: flex;
     flex-direction: column;
+    min-width: 120px;
 }
 
-.sns_list {
-    align-items: end;
+.sns_input select,
+.sns_input input {
+    font-size: 1.6rem;
+    padding: 10px 14px;
+    border: 1.5px solid #e0e0e0;
+    border-radius: 7px;
+    background: #fafbfc;
+    transition: border-color 0.2s;
+}
+
+.sns_input select:focus,
+.sns_input input:focus {
+    border-color: var(--main-theme, #3b82f6);
+    outline: none;
+    background: #fff;
+}
+
+.sns_wrap button {
+    font-size: 1.5rem;
+    padding: 9px 20px;
+    border-radius: 7px;
+    font-weight: 600;
+    border: none;
+    margin-left: 6px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    transition: background 0.18s, color 0.18s, box-shadow 0.18s, opacity 0.18s;
+    cursor: pointer;
+}
+
+.sns_wrap button:hover {
+    opacity: 0.85;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.10);
 }
 
 .sns_wrap button.red {
@@ -46,5 +80,36 @@
 .sns_wrap button.white {
     background-color: var(--main-white);
     color: var(--main-black);
-    border: solid 1px var(--main-black);
+    border: solid 1.5px var(--main-black);
+}
+
+@media (max-width: 600px) {
+    .sns_wrap {
+        gap: 10px;
+        margin-top: 4px;
+    }
+
+    .sns_list_wrap {
+        gap: 8px;
+    }
+
+    .sns_list {
+        gap: 8px;
+        padding-bottom: 6px;
+    }
+
+    .sns_input {
+        gap: 8px;
+    }
+
+    .sns_input select,
+    .sns_input input {
+        font-size: 1.3rem;
+        padding: 7px 8px;
+    }
+
+    .sns_wrap button {
+        font-size: 1.3rem;
+        padding: 7px 10px;
+    }
 }

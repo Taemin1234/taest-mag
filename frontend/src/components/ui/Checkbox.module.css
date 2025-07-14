@@ -1,44 +1,84 @@
 .checkbox_wrap {
     display: flex;
-    gap: 10px;
+    gap: 16px;
+    flex-wrap: wrap;
 }
 
 .terms_label {
-    font-size: 15px;
+    font-size: 1.6rem;
     color: var(--main-black);
     cursor: pointer;
     user-select: none;
     display: flex;
     align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    letter-spacing: -0.2px;
+    transition: color 0.18s;
 }
 
 .terms_label input {
     appearance: none;
-    width: 18px;
-    height: 18px;
-    border: 2px solid var(--admin-theme);
-    border-radius: 5px;
-    background-color: transparent;
+    width: 24px;
+    height: 24px;
+    border: 2.5px solid var(--admin-theme, #3b82f6);
+    border-radius: 6px;
+    background-color: #fff;
     display: inline-block;
     position: relative;
-    margin-right: 3px;
+    margin-right: 6px;
     cursor: pointer;
+    transition: border-color 0.18s, box-shadow 0.18s;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.terms_label input:focus {
+    outline: none;
+    border-color: var(--main-theme, #2563eb);
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
 }
 
 .terms_label input:before {
     content: "";
-    background-color: var(--admin-theme);
+    background-color: var(--admin-theme, #3b82f6);
     display: block;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%) scale(0);
-    width: 10px;
-    height: 10px;
+    width: 14px;
+    height: 14px;
     border-radius: 3px;
-    transition: all 0.3s ease-in-out;
+    transition: all 0.22s cubic-bezier(.4, 0, .2, 1);
 }
 
 .terms_label input:checked:before {
     transform: translate(-50%, -50%) scale(1);
+}
+
+.terms_label input:checked {
+    border-color: var(--admin-theme, #3b82f6);
+    background-color: #eaf3ff;
+}
+
+.terms_label:hover {
+    color: var(--main-theme, #2563eb);
+}
+
+@media (max-width: 600px) {
+    .terms_label {
+        font-size: 1rem;
+        gap: 6px;
+    }
+
+    .terms_label input {
+        width: 20px;
+        height: 20px;
+        margin-right: 4px;
+    }
+
+    .terms_label input:before {
+        width: 10px;
+        height: 10px;
+    }
 }
