@@ -1,7 +1,9 @@
 .copy_button_wrap {
   display: flex;
   flex-direction: column;
+  align-items: center;
   justify-content: center;
+  gap: 0.5rem;
 }
 
 .copy_button {
@@ -9,14 +11,21 @@
   height: 70px;
   cursor: pointer;
   transition: transform 0.2s ease;
-  background-color: rgb(255, 247, 237);
+  border: none;
   border-radius: 50%;
   padding: 10px;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.2rem;
+  background-color: #eaf4fe;
 }
 
 .copy_button:hover {
-  transform: scale(1.25);
+  transform: scale(1.1);
+  background-color: #f3e8ff;
 }
 
 .copy_button:active {
@@ -26,4 +35,19 @@
 .icon {
   stroke: #93c5fd;
   fill: none;
+}
+
+.copied_message {
+  color: #1e90ff;
+  font-weight: 500;
+  font-size: 1rem;
+  margin-top: 0.5rem;
+  animation: fadeInOut 1.5s;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { opacity: 0; }
 }

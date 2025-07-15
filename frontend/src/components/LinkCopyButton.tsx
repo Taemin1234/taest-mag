@@ -17,12 +17,12 @@ const LinkCopyButton = () => {
 
   return (
     <div className={styles.copy_button_wrap}>
-      <button onClick={handleCopy} className={styles.copy_button} title="Attach">
+      <button onClick={handleCopy} className={styles.copy_button} title="링크 복사">
         <svg
           className={styles.icon}
           xmlns="http://www.w3.org/2000/svg"
-          width="50px"
-          height="50px"
+          width="32px"
+          height="32px"
           viewBox="0 -0.5 25 25"
         >
           <path
@@ -34,8 +34,8 @@ const LinkCopyButton = () => {
         </svg>
       </button>
       {copied && (
-        <span style={{ marginLeft: "1rem", color: "#1e90ff", fontWeight: 500 }}>
-          복사되었습니다!
+        <span className={styles.copied_message}>
+          복사 완료!
         </span>
       )}
     </div>

@@ -88,7 +88,7 @@ const cleanHtml = DOMPurify.sanitize(post.content, sanitizeOptions)
             dangerouslySetInnerHTML={{ __html: cleanHtml }}
           />
         </section>
-        <div>
+        <div className={styles.link_copy_btn}>
           <LinkCopyButton />
         </div>
         {editor && 
@@ -96,7 +96,7 @@ const cleanHtml = DOMPurify.sanitize(post.content, sanitizeOptions)
             <EditorInfo editor={editor} />
           </section>}
         
-        <section  className={styles.post_recommend}>
+        <section className={styles.post_recommend}>
           <p className={styles.subtitle}>추천 게시물</p>
           <PostList posts={recommendedPosts} enableSwiper={true} />
         </section>

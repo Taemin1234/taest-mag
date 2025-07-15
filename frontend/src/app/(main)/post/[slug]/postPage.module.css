@@ -97,6 +97,10 @@
     font-weight: 700;
 }
 
+.link_copy_btn {
+    margin-top: 80px;
+}
+
 @media (max-width: 1024px) {
 
     .post_page::before,
