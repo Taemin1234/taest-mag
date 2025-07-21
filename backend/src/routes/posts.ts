@@ -10,6 +10,20 @@ const router: Router = express.Router();
  */
 router.get('/', (async (req: Request, res: Response) => {
   try {
+    const post = await Post.find().sort({ createdAt: -1 });
+    res.json(post);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: '게시물 조회 중 서버 오류' });
+  }
+}) as RequestHandler);
+
+/**
+ * GET /api/post/notFeatured
+ * 게시물 리스트 조회 (최신 순 / 특별호 제외)
+ */
+router.get('/notFeatured', (async (req: Request, res: Response) => {
+  try {
     const post = await Post.find({ isFeatured: false }).sort({ createdAt: -1 });
     res.json(post);
   } catch (err) {
@@ -17,6 +31,7 @@ router.get('/', (async (req: Request, res: Response) => {
     res.status(500).json({ message: '게시물 조회 중 서버 오류' });
   }
 }) as RequestHandler);
+
 
 /**
  * GET /api/post/recommend

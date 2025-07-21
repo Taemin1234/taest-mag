@@ -4,7 +4,7 @@ import FeaturePost from "@/components/FeaturePost";
 import PostSkeleton from "@/components/skeleton/PostSkeleton";
 import React, { use, Suspense } from 'react';
 import Image from 'next/image';
-import { fetchPosts, fetchFeaturePost } from '@/lib/api'
+import { fetchNotFeaturePosts, fetchFeaturePost } from '@/lib/api'
 import { Post } from "@/types"
 import logo from '@/assets/main_logo_b.png';
 
@@ -18,7 +18,7 @@ interface PostListProps {
 const GetPost = (
   props: PostListProps
 ) => {
-  const posts = use(fetchPosts()) as Post[]
+  const posts = use(fetchNotFeaturePosts()) as Post[]
 
   return (
     <PostList posts={posts} {...props} />

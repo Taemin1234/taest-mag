@@ -2,22 +2,6 @@
 
 import { forwardRef, useRef, useMemo, useCallback, useEffect } from 'react';
 import dynamic from 'next/dynamic';
-// import ReactQuill from 'react-quill-new';
-
-// type OriginalProps = React.ComponentProps<typeof RawReactQuill>;
-
-// type ExtendedProps = OriginalProps & {
-//   forwardedRef?: React.ForwardedRef<any>;
-// };
-
-// const RawReactQuill  = dynamic(
-//   () => import('react-quill-new').then(mod => mod.default),
-//   { ssr: false }    // 서버 렌더링 완전 비활성화
-// );
-
-// const ReactQuill = forwardRef<any, ExtendedProps>(
-//   (props, ref) => <RawReactQuill {...props} forwardedRef={ref} />
-// );
 
 const RawReactQuill = dynamic(
   () =>
@@ -34,9 +18,6 @@ const RawReactQuill = dynamic(
 
 const ReactQuill = RawReactQuill;
 
-// 개발자 도구에 보일 이름 지정
-// ReactQuill.displayName = 'ReactQuill';
-
 export default function QuillEditor({
   defaultValue,
   onChange,
@@ -45,46 +26,60 @@ export default function QuillEditor({
   onChange: (val: string) => void;
 }) {
 
-const quillRef = useRef<any>(null);
+  const quillRef = useRef<any>(null);
 
-// ① 이미지 업로드 핸들러
-const handleImageUpload = () => {
-  const input = document.createElement('input');
-  input.setAttribute('type', 'file');
-  input.setAttribute('accept', 'image/*');
-  input.click();
+  // react quill resize 플러그인 등록
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+  
+    // ★ 여기서 default를 꺼내 줘야 QuillClass가 됩니다
+    const QuillModule = require('quill') as any;
+    const Quill = QuillModule.default || QuillModule;
+  
+    const ImageResizeModule = require('quill-image-resize-module-ts') as any;
+    const ImageResize = ImageResizeModule.default || ImageResizeModule;
+  
+    Quill.register('modules/imageResize', ImageResize, true);
+  }, []);
 
-  input.onchange = async () => {
-    const file = input.files?.[0];
-    if (!file) return;
+  // ① 이미지 업로드 핸들러
+  const handleImageUpload = () => {
+    const input = document.createElement('input');
+    input.setAttribute('type', 'file');
+    input.setAttribute('accept', 'image/*');
+    input.click();
 
-    const form = new FormData();
-    form.append('quill', file);
+    input.onchange = async () => {
+      const file = input.files?.[0];
+      if (!file) return;
 
-    try {
-      const res = await fetch('/api/upload/quill', {
-        method: 'POST',
-        body: form,
-        credentials: 'include'
-      });
-      const data = await res.json();
-      const url = data.url as string;
-      // 에디터에 이미지 삽입
-      if (!quillRef.current) return;
-      const editor = quillRef.current.getEditor();
-      const range = editor.getSelection(true);
-      editor.insertEmbed(range.index, 'image', url);
-      // 커서를 이미지 뒤로 이동
-      editor.setSelection(range.index + 1);
-    } catch (err) {
-      console.error('Image upload failed', err);
-      alert('이미지 업로드 중 오류가 발생했습니다.');
-    }
+      const form = new FormData();
+      form.append('quill', file);
+
+      try {
+        const res = await fetch('/api/upload/quill', {
+          method: 'POST',
+          body: form,
+          credentials: 'include'
+        });
+        const data = await res.json();
+        const url = data.url as string;
+        // 에디터에 이미지 삽입
+        if (!quillRef.current) return;
+        const editor = quillRef.current.getEditor();
+        const range = editor.getSelection(true);
+        editor.insertEmbed(range.index, 'image', url);
+        // 커서를 이미지 뒤로 이동
+        editor.setSelection(range.index + 1);
+      } catch (err) {
+        console.error('Image upload failed', err);
+        alert('이미지 업로드 중 오류가 발생했습니다.');
+      }
+    };
   };
-};
 
 
-// ① 툴바 옵션 정의
+  // ① 툴바 옵션 정의
   const modules = useMemo(() => ({
     toolbar: {
       container: [
@@ -117,6 +112,10 @@ const handleImageUpload = () => {
         // image 버튼 클릭 시 handleImageUpload 실행
         image: handleImageUpload,
       },
+      imageResize: {
+        // resize 핸들러 종류: ['Resize','DisplaySize','Toolbar']
+        modules: ['Resize','DisplaySize','Toolbar']
+      }
     },
     // imageResize: { modules: [ 'Resize', 'DisplaySize', 'Toolbar' ] },
   }), [])
