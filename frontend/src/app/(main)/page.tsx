@@ -25,13 +25,13 @@ const GetPost = (
   )
 }
 
-// const GetFeaturePost = () => {
-//   const posts = use(fetchFeaturePost()) as Post[]
+const GetFeaturePost = () => {
+  const posts = use(fetchFeaturePost()) as Post[]
 
-//   return (
-//     <FeaturePost posts={posts} />
-//   )
-// }
+  return (
+    <FeaturePost posts={posts}/>
+  )
+}
 
 export default function Home() {
 
@@ -46,10 +46,10 @@ export default function Home() {
           </div>
           <div className={styles.feature_wrap}>
             <div className={styles.feature}>
-              {/* <Suspense fallback={<PostSkeleton variant="main" />}>
+              <Suspense fallback={<PostSkeleton variant="main" />}>
                 <GetFeaturePost />
-              </Suspense> */}
-              <FeaturePost />
+              </Suspense>
+              {/* <FeaturePost /> */}
             </div>
           </div>
         </div>

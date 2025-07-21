@@ -28,20 +28,6 @@ export default function QuillEditor({
 
   const quillRef = useRef<any>(null);
 
-  // react quill resize 플러그인 등록
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-  
-    // ★ 여기서 default를 꺼내 줘야 QuillClass가 됩니다
-    const QuillModule = require('quill') as any;
-    const Quill = QuillModule.default || QuillModule;
-  
-    const ImageResizeModule = require('quill-image-resize-module-ts') as any;
-    const ImageResize = ImageResizeModule.default || ImageResizeModule;
-  
-    Quill.register('modules/imageResize', ImageResize, true);
-  }, []);
-
   // ① 이미지 업로드 핸들러
   const handleImageUpload = () => {
     const input = document.createElement('input');
@@ -112,12 +98,7 @@ export default function QuillEditor({
         // image 버튼 클릭 시 handleImageUpload 실행
         image: handleImageUpload,
       },
-      imageResize: {
-        // resize 핸들러 종류: ['Resize','DisplaySize','Toolbar']
-        modules: ['Resize','DisplaySize','Toolbar']
-      }
-    },
-    // imageResize: { modules: [ 'Resize', 'DisplaySize', 'Toolbar' ] },
+    }
   }), [])
 
   // 지원 포맷 정의

@@ -12,56 +12,14 @@ import styles from './FeaturePost.module.css'
 import { Post } from '@/types'
 import { getCategoryLabel } from '@/utils/getCategoryLabel'
 
-export default function FeaturePost() {
-    const posts = [
-        {
-            slug: '123',
-            thumbnailUrl: 'https://placehold.co/600x400',
-            title: 'titlezz',
-            category: 'food',
-            createdAt: '2024',
-            subtitle: '니가 뭘알어'
-        },
-        {
-            slug: '456',
-            thumbnailUrl: 'https://placehold.co/600x400',
-            title: 'title222222',
-            category: 'food2222222',
-            createdAt: '2024',
-            subtitle: '뱅배애뱅뱅'
-        },
-        {
-            slug: '789',
-            thumbnailUrl: 'https://placehold.co/600x400',
-            title: 'title333333',
-            category: 'food3333332',
-            createdAt: '2024',
-            subtitle: '뱅배애뱅뱅'
-        },
-        {
-            slug: '177',
-            thumbnailUrl: 'https://placehold.co/600x400',
-            title: 'title444444',
-            category: 'food4444442',
-            createdAt: '2024',
-            subtitle: '뱅배애뱅뱅'
-        },
-        {
-            slug: '2258',
-            thumbnailUrl: 'https://placehold.co/600x400',
-            title: 'title55555555',
-            category: 'food555555552',
-            createdAt: '2024',
-            subtitle: '뱅배애뱅뱅'
-        }
-    ]
+export default function FeaturePost({posts}:{posts:Post[]}) {
+
 
     if (!posts || posts.length === 0) {
         return <p className={styles.noPosts}>게시물이 없습니다.</p>;
     }
 
     return (
-
         <Swiper
             effect={'coverflow'}
             grabCursor={true}
