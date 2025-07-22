@@ -28,7 +28,7 @@ const profileUpload = createUploader(1 * MB);
 const thumbnailUpload = createUploader(5 * MB);
 
 // quill 업로드 전용 Multer
-const quillUpload  = createUploader(5 * MB);
+const webEditorUpload  = createUploader(5 * MB);
 
 const streamUpload = (buffer: Buffer, options: UploadApiOptions = {}) =>
   new Promise<UploadApiResponse>((resolve, reject) => {
@@ -85,15 +85,15 @@ router.post(
 );
 
 router.post(
-  '/quill',
-  quillUpload.single('quill'),
+  '/webEditor',
+  webEditorUpload.single('webEditor'),
   (async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       if (!req.file) {
         res.status(400).json({ message: '파일 없음' });
         return;
       }
-      const result = await streamUpload(req.file.buffer, { folder: 'quill' });
+      const result = await streamUpload(req.file.buffer, { folder: 'webEditor' });
       res.json({ url: result.secure_url });
     } catch (err) {
       next(err);

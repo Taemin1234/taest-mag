@@ -4,7 +4,7 @@ import styles from './PostForm.module.css'
 import React, { useState, useEffect } from "react";
 import { useRouter } from 'next/navigation'
 import { Option, Editor } from "@/types"
-import QuillEditor from '@/components/ui/QuillEditor';
+import WebEditor from '@/components/ui/WebEditor';
 import Dropdown from '@/components/ui/DropDown';
 import { SingleCheckbox } from '@/components/ui/Checkbox'
 import { CATEGORIES } from '@/constants/categories';
@@ -277,7 +277,7 @@ export default function PostForm({
                     <label htmlFor="content">
                         내용
                     </label>
-                    <QuillEditor
+                    <WebEditor
                         defaultValue={formData.content}          // 현재 폼의 content
                         onChange={val => handleChange('content', val)}// 내용이 바뀌면 이 함수가 실행
                     />
