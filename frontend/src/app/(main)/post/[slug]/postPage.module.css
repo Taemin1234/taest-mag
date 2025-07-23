@@ -5,7 +5,7 @@
 
 .post_page::before,
 .post_page::after {
-    position: absolute;
+    position: fixed;
     content: '';
     width: 5rem;
     height: 100%;
@@ -85,11 +85,6 @@
 
 .post_content {
     margin-top: 4rem;
-}
-
-.post_content img {
-    width: 100%;
-    height: auto;
 }
 
 .subtitle {

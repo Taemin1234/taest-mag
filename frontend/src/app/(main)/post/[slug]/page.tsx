@@ -84,7 +84,7 @@ const cleanHtml = DOMPurify.sanitize(post.content, sanitizeOptions)
 
           {/* {post.subtitle && <p>{post.subtitle}</p>} */}
 
-          <div className={`${styles.post_content} ql-editor`}
+          <div className={styles.post_content}
             dangerouslySetInnerHTML={{ __html: cleanHtml }}
           />
         </section>
