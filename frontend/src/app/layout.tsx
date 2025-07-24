@@ -1,6 +1,5 @@
 import "./globals.css";
 import localFont from 'next/font/local'
-import BackToTopButton from "@/components/common/BacktoTopBtn";
 
 const myFont = localFont({
   src: [
@@ -26,7 +25,6 @@ export default function RootLayout({
     <html lang="ko" className={myFont.variable}>
       <body>
         {children}
-        <BackToTopButton />
       </body>
     </html>
   );

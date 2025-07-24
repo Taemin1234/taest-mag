@@ -2,15 +2,22 @@
     position: fixed;
     width: 5rem;
     height: 5rem;
-    right: 10rem;
+    right: 5rem;
     bottom: 20rem;
     padding: 0.5rem 1rem;
     border: solid 1px var(--main-black);
     border-radius: 4px;
     color: var(--main-black);
+    background-color: var(--main-white);
     font-size: 25px;
     font-weight: bold;
     cursor: pointer;
     z-Index: 1000;
     transition: all 0.3s;
+}
+
+@media (max-width: 990px) {
+	.btn_top {
+		display: none;
+	}
 }

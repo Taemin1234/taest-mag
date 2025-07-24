@@ -9,12 +9,12 @@
     grid-auto-flow: row dense;
 }
 
-.postlist_wrap.variant_main>*:nth-child(10n+1) {
+.postlist_wrap.variant_main>*:nth-child(7n+1) {
     grid-column: 1 / span 2;
     grid-row: span 2;
 }
 
-.postlist_wrap.variant_main>*:nth-child(10n) {
+.postlist_wrap.variant_main>*:nth-child(7n) {
     grid-column: 3 / span 2;
     grid-row: span 2;
 }
