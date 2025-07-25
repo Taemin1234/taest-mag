@@ -49,7 +49,6 @@ export default function Home() {
               <Suspense fallback={<PostSkeleton variant="main" />}>
                 <GetFeaturePost />
               </Suspense>
-              {/* <FeaturePost /> */}
             </div>
           </div>
         </div>

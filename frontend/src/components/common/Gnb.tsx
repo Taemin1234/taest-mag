@@ -11,7 +11,6 @@ export default function GNB({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpen:
   const itemRef = useRef<HTMLLIElement>(null)
   const listRef = useRef<HTMLUListElement>(null)
 
-  // Measure one item to compute step and container height
   useEffect(() => {
     if (itemRef.current && listRef.current) {
       const h = itemRef.current.offsetHeight
