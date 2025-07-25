@@ -2,6 +2,7 @@ import styles from "./page.module.css"
 import PostList from '@/components/PostList'
 import FeaturePost from "@/components/FeaturePost";
 import PostSkeleton from "@/components/skeleton/PostSkeleton";
+import FeaturePostSkeleton from "@/components/skeleton/FeaturePostSkeleton";
 import React, { use, Suspense } from 'react';
 import Image from 'next/image';
 import { fetchNotFeaturePosts, fetchFeaturePost } from '@/lib/api'
@@ -46,7 +47,7 @@ export default function Home() {
           </div>
           <div className={styles.feature_wrap}>
             <div className={styles.feature}>
-              <Suspense fallback={<PostSkeleton variant="main" />}>
+              <Suspense fallback={<FeaturePostSkeleton/>}>
                 <GetFeaturePost />
               </Suspense>
             </div>
