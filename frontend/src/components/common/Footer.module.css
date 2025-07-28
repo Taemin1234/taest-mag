@@ -1,5 +1,102 @@
 .footer {
-    padding: 2rem;
     background-color: var(--main-black);
     color: var(--main-white);
+}
+  
+.content {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 64px 24px;
+}
+
+.group > * + * {
+    margin-top: 24px;
+}
+
+.titleGroup > * + * {
+    margin-top: 8px;
+}
+
+.title {
+    font-size: 32px;
+    line-height: 32px;
+}
+
+.divider {
+    padding-top: 32px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.bottom {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+}
+
+@media (min-width: 768px) {
+    .bottom {
+        flex-direction: row;
+        align-items: center;
+        gap: 0;
+    }
+}
+
+.copy {
+    font-size: 14px;   
+    line-height: 20px;
+    opacity: 0.7;
+}
+
+.socialNav {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-start;
+}
+
+@media (min-width: 768px) {
+    .socialNav {
+        flex-direction: row;
+        align-items: center;
+        gap: 32px;
+    }
+}
+
+.emailLink {
+    color: var(--main-white);
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.3s ease;
+    }
+
+.emailLink:hover {
+    color: #d1d5db;
+}
+
+.instagramButton {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: var(--main-white);
+    padding: 8px 16px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.instagramButton:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateY(-1px);
+}
+
+.instagramIcon {
+    width: 16px;
+    height: 16px;
 }
