@@ -128,11 +128,18 @@ export async function fetchPostsByEditor(editorName: string): Promise<Post[]> {
 }
 
 // slug를 이용해 단일 포스트 가져오기
-export async function fetchPostBySlug(slug: string): Promise<Post> {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
+export async function fetchPostBySlug(slug: string, signal?: AbortSignal): Promise<Post> {
+
+  const isServer = typeof window === 'undefined';
+
+  const baseUrl = isServer
+    ? process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
+    : '';
+
   const res = await fetch(`${baseUrl}/api/posts/${encodeURIComponent(slug)}`, {
     method: 'GET',
     credentials: 'include',
+    signal,
   })
   if (!res.ok) {
     throw new Error(`게시글(슬러그: ${slug})을 불러오지 못했습니다. (${res.status})`)

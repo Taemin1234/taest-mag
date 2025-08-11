@@ -24,7 +24,8 @@ router.get('/user', authenticate, async (req: Request, res: Response) => {
   const user = await User.findById(currentUser.id)
       .select('-password -resetPasswordToken -resetPasswordExpires');
     if (!user) {
-      return res.status(404).json({ message: '사용자를 찾을 수 없습니다.' });
+      res.status(404).json({ message: '사용자를 찾을 수 없습니다.' });
+      return;
   }
   res.json(user);
 });
@@ -35,7 +36,10 @@ router.get('/user', authenticate, async (req: Request, res: Response) => {
 router.get('/:id', async (req: Request, res: Response) => {
   const user = await User.findById(req.params.id)
     .select('-password -resetPasswordToken -resetPasswordExpires');
-  if (!user) return res.status(404).json({ message: '사용자를 찾을 수 없습니다.' });
+  if (!user) {
+    res.status(404).json({ message: '사용자를 찾을 수 없습니다.' });
+    return;
+  }
   res.json(user);
 });
 
@@ -52,11 +56,14 @@ router.patch('/role', authenticate, authorize(['superman']),
         { role },
         { new: true }
       )
-      if (!user) return res.status(404).json({ message: '사용자를 찾을 수 없습니다.' })
-      return res.json({ message: '티어 변경 완료', user })
+      if (!user) {
+        res.status(404).json({ message: '사용자를 찾을 수 없습니다.' });
+        return;
+      }
+      res.json({ message: '티어 변경 완료', user });
     } catch (err) {
       console.error(err)
-      return res.status(500).json({ message: '서버 오류' })
+      res.status(500).json({ message: '서버 오류' })
     }
 });
 
@@ -68,7 +75,10 @@ router.delete(
   authorize(['superman']),   // superman만 덮어쓰기
   async (req: Request, res: Response) => {
     const user = await User.findByIdAndDelete(req.params.id);
-    if (!user) return res.status(404).json({ message: '사용자를 찾을 수 없습니다.' });
+    if (!user) {
+      res.status(404).json({ message: '사용자를 찾을 수 없습니다.' });
+      return;
+    }
     res.sendStatus(204);
   }
 );

@@ -3,27 +3,35 @@
 import styles from './adminTier.module.css'
 import { useState, useEffect } from 'react'
 import { Users, Role } from '@/types'
-import axios from 'axios'
 
 export default function AdminTier() {
   const [users, setUsers] = useState<Users[]>([]);
   const [selectedRoles, setSelectedRoles] = useState<Record<string, Role>>({});
   const [loading, setLoading] = useState(false);
 
+
   useEffect(() => {
+    const ac = new AbortController();
+
     const fetchUsers = async () => {
       try {
         // API가 Users[] 형태로 반환한다고 가정
-        const res = await axios.get<Users[]>('/api/user', {
-          withCredentials: true,
+        const res = await fetch('/api/user', {
+          method: 'GET',
+          credentials: 'include',
+          signal: ac.signal,
         })
-        setUsers(res.data)  // 배열 전체를 상태에 저장
+
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data:Users[] = await res.json();
+        setUsers(data)  // 배열 전체를 상태에 저장
 
         const init: Record<string, Role> = {};
-        res.data.forEach(u => { init[u.email] = u.role as Role });
+        data.forEach(u => { init[u.email] = u.role as Role });
         setSelectedRoles(init);
-      } catch (error) {
-        console.error('유저 로딩 실패:', error)
+      } catch (error: any) {
+        if (error?.name === 'AbortError') return; 
+        console.error('유저 로딩 실패:', error);
       }
     }
     fetchUsers()
@@ -39,11 +47,19 @@ export default function AdminTier() {
     const newRole = selectedRoles[email];
     setLoading(true);
     try {
-      await axios.patch(
-        '/api/user/role',
-        { email, role: newRole },
-        { withCredentials: true }
-      );
+      const res = await fetch('/api/user/role', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ email, role: newRole }),
+      });
+
+      if (!res.ok) {
+        const { message } =
+          (await res.json().catch(() => ({ message: `HTTP ${res.status}` })));
+        throw new Error(message);
+      }
+
       // 로컬 users 상태도 업데이트
       setUsers(prev =>
         prev.map(u =>

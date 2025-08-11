@@ -5,8 +5,6 @@ import { useState, useEffect } from 'react';
 import { Editor } from "@/types"
 import AdminEditorList from '@/components/editor/AdminEditorList';
 import AdminEditorModal from '@/components/editor/AdminEditorModal';
-import type { AxiosResponse } from 'axios';
-import axios from 'axios';
 
 export default function AdminEditor() {
   const [editors, setEditors] = useState<Editor[]>([]);
@@ -16,18 +14,33 @@ export default function AdminEditor() {
 
   // 에디터 목록 불러오기
   useEffect(() => {
-    const fetchPosts = async () => {
+    const ac = new AbortController();
+
+    const fetchEditors = async () => {
       try {
-          const res = await axios.get("/api/editors");
-          setEditors(res.data);
-      } catch (error) {
-          console.log("에디터 로딩 실패: ", error);
+          const res = await fetch("/api/editors", {
+            method: 'GET',
+            credentials: 'include',
+            headers: { Accept: "application/json" },
+            signal: ac.signal,
+          });
+
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+          const text = await res.text();
+          const data = text ? JSON.parse(text) : [];
+          setEditors(data);
+      } catch (err) {
+        if ((err as any)?.name === "AbortError") return; // 언마운트 중단
+        const msg = err instanceof Error ? err.message : String(err);
+        console.log("에디터 로딩 실패:", msg);
       } finally {
         setIsLoading(false);
       }
     };
 
-    fetchPosts();
+    fetchEditors();
+    return () => ac.abort();
   }, []);
 
   // 모달 오픈 시 스크롤 제어
@@ -52,16 +65,21 @@ export default function AdminEditor() {
     try {
       // 1) 이미지 업로드 (file이 있으면 Cloudinary로)
       let imageUrl = data.imageUrl;
+
       if (file) {
         const form = new FormData();
         form.append('image', file);
+
         // 백엔드 /api/upload 엔드포인트로 전송
-        const uploadRes = await axios.post(
-          '/api/upload',
-          form,
-          { headers: { 'Content-Type': 'multipart/form-data' } }
+        const uploadRes = await fetch('/api/upload', {
+            method: 'POST',
+            body: form,
+            credentials: 'include',
+          }
         );
-        imageUrl = uploadRes.data.url;
+        if (!uploadRes.ok) throw new Error(`Upload failed: HTTP ${uploadRes.status}`);
+        const { url } = (await uploadRes.json()) as { url: string };
+        imageUrl = url;
       }
   
       // 2) payload 준비 / 에디터 데이터에 최종 imageUrl 반영
@@ -72,16 +90,26 @@ export default function AdminEditor() {
       };
   
       // 3) 추가/수정 API 호출
-      let res: AxiosResponse<Editor>;
-      if (payload.id) { // 수정일때 (id 유무로 판단)
-        res = await axios.put(`/api/editors/${payload.id}`, payload);
-        setEditors(prev =>
-          prev.map(e => e.id === payload.id ? res.data : e)
-        );
-      } else {
-        res = await axios.post('/api/editors', payload);
-        setEditors(prev => [...prev, res.data]);
-      }
+      const isUpdate = Boolean(payload.id);
+      const endpoint = isUpdate ? `/api/editors/${payload.id}` : '/api/editors';
+      const method = isUpdate ? 'PUT' : 'POST';
+
+      const res = await fetch(endpoint, {
+        method,
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) throw new Error(`Save failed: HTTP ${res.status}`);
+      const saved = (await res.json()) as Editor;
+
+      setEditors(prev =>
+        isUpdate ? prev.map(e => (e.id === payload.id ? saved : e)) : [...prev, saved]
+      );
     } catch (err) {
       console.error('저장 실패:', err);
       alert('저장 중 오류가 발생했습니다.');
@@ -92,9 +120,15 @@ export default function AdminEditor() {
   const handleDelete = async (id: string) => {
     if (!window.confirm('삭제하시겠어요?')) return;
     try {
-        await axios.delete(`http://localhost:3001/api/editors/${id}`, {
-            withCredentials: true
+        const res = await fetch(`http://localhost:3001/api/editors/${id}`, {
+          method: 'DELETE',
+          credentials: 'include',
         });
+
+        if (!res.ok) {
+          throw new Error(`삭제 실패 (status: ${res.status})`);
+        }
+
         setEditors(prev =>
           prev.filter(editor => editor.id !== id)
         );
