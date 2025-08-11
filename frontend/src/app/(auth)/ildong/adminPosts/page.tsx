@@ -213,7 +213,7 @@ const AdminPosts = () => {
                                 <td>{post.isFeatured ? 'O' : 'X'}</td>
                                 <td>
                                     <div className={styles.btn_wrap}>
-                                        <Link href={`/admin/posts/${post.slug}/edit`}>
+                                        <Link href={`/ildong/posts/${post.slug}/edit`}>
                                             <button className={styles.btn_blue}>수정</button>
                                         </Link>
                                         <button className={styles.btn_red} onClick={() => handleDelete(post.slug)}>삭제</button>

@@ -175,7 +175,7 @@ export default function PostForm({
                 }
             }
             // 성공 시 리스트 페이지로 이동
-            router.push('/admin/adminPosts')
+            router.push('/ildong/adminPosts')
         } catch (err: any) {
             console.error('게시물 저장 실패:', err)
             setError(err.response?.data?.message || '게시물 저장 중 오류가 발생했습니다.')

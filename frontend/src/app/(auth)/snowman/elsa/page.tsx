@@ -40,7 +40,7 @@ export default function LoginPage() {
       // }
 
       // 4) 로그인 성공 시 로그인 페이지로 이동
-      router.push('/admin');
+      router.push('/ildong');
 
     } catch (err: any) {
       const errMsg = err.response?.data;

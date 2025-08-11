@@ -76,7 +76,7 @@ export default function SignUpPage() {
       >
         
         {error && (
-          <p className="text-red-500 text-sm text-center">{error}</p>
+          <p>{error}</p>
         )}
 
         <InputField
