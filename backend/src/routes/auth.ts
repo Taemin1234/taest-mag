@@ -1,18 +1,25 @@
 //관리·회원가입·로그인·비밀번호 찾기·재설정·로그아웃 엔드포인트를 모두 포함
 
-import express, { Request, Response } from 'express';
+import express, { Request, Response, RequestHandler } from 'express';
 import jwt from 'jsonwebtoken'; // 사용자 검증
 import User, { IUser } from '../models/User';
 import { authenticate } from '../middleware/authenticate'; //쿠키에 있는 토큰이 유효한지 검사
 import crypto from 'crypto';
-import axios from 'axios';
+
 // 이메일 전송 유틸 - 실제 구현 필요
 import sendEmail from '../utils/sendEmail';
+
+interface AuthRequest extends Request {
+  user?: {
+    id: string;
+    role: string;
+  };
+}
 
 const router = express.Router();
 
 // 회원가입
-router.post('/signup', async (req: Request, res: Response) => {
+router.post('/signup', (async (req: Request, res: Response) => {
   try {
     const { email, username, password } = req.body;
 
@@ -51,10 +58,10 @@ router.post('/signup', async (req: Request, res: Response) => {
     }
     res.status(500).json({ message: '서버 오류' });
   }
-});
+}) as RequestHandler);
 
 // 로그인
-router.post('/login', async (req: Request, res: Response) => {
+router.post('/login', (async (req: Request, res: Response) => {
   try {
     const { username, password } = req.body;
     const user = await User.findOne({ username }).select('+password');
@@ -111,11 +118,16 @@ router.post('/login', async (req: Request, res: Response) => {
 
     // 로그인을 시도하는 ip 주소의 계정 저장
     try {
-        // axios 패키지 사용
         // 아래 주소는 json 형식으로 공인 ip 추출
-        const response = await axios.get("https://api.ipify.org?format=json");
-        const ipAddress = response.data.ip;
-
+        const res = await fetch("https://api.ipify.org?format=json");
+        if (!res.ok) {
+          throw new Error(`IP API 요청 실패 (status: ${res.status})`);
+        }
+      
+        // JSON 파싱
+        const data: { ip: string } = await res.json();
+        const ipAddress = data.ip;
+      
         // ip 업데이트
         user.ipAddress = ipAddress;
     } catch (ipError: any) {
@@ -161,10 +173,10 @@ router.post('/login', async (req: Request, res: Response) => {
     console.error(err);
     res.status(500).json({ message: '서버 오류' });
   }
-});
+}) as RequestHandler);
 
 // 로그아웃
-router.post('/logout', authenticate, async (req: AuthRequest, res: Response) => {
+router.post('/logout', authenticate, (async (req: AuthRequest, res: Response) => {
   try {
     // 1) 쿠키삭제
     res.clearCookie('token');
@@ -180,10 +192,10 @@ router.post('/logout', authenticate, async (req: AuthRequest, res: Response) => 
     console.error('로그아웃 오류:', err);
     res.status(500).json({ message: '로그아웃 중 서버 오류가 발생했습니다.' });
   }
-});
+}) as RequestHandler);
 
 // 비밀번호 찾기 요청
-router.post('/forgot-password', async (req: Request, res: Response) => {
+router.post('/forgot-password', (async (req: Request, res: Response) => {
   try {
     const { email } = req.body;
     const user = await User.findOne({ email });
@@ -205,10 +217,10 @@ router.post('/forgot-password', async (req: Request, res: Response) => {
     console.error(err);
     res.status(500).json({ message: '서버 오류' });
   }
-});
+}) as RequestHandler);
 
 // 비밀번호 재설정
-router.post('/reset-password/:token', async (req: Request, res: Response) => {
+router.post('/reset-password/:token', (async (req: Request, res: Response) => {
   try {
     const hashedToken = crypto.createHash('sha256').update(req.params.token).digest('hex');
     const user = await User.findOne({
@@ -228,6 +240,6 @@ router.post('/reset-password/:token', async (req: Request, res: Response) => {
     console.error(err);
     res.status(500).json({ message: '서버 오류' });
   }
-});
+}) as RequestHandler);
 
 export default router;

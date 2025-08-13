@@ -5,7 +5,6 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import InputField from "@/components/InputField"
-import axios from 'axios';
 
 interface LoginError {
   message: string;
@@ -26,20 +25,30 @@ export default function LoginPage() {
     e.preventDefault();
     
     try {
-      // 2) 백엔드 로그인 API 호출
-      const res = await axios.post('/api/auth/login', form,
+      const res = await fetch('/api/auth/login',
         {
+          method:'POST',
           headers: { 'Content-Type': 'application/json' },
-          withCredentials: true,
+          credentials: 'include',
+          body: JSON.stringify(form),
         }
       );
 
-      // 3) 응답 처리
-      // if (res.status !== 200) {
-      //   throw new Error(res.data.message || '로그인에 실패했습니다.');
-      // }
+      let data: any = null;
+      const ct = res.headers.get('content-type') || '';
+      if (ct.includes('application/json')) {
+        data = await res.json();
+      }
 
-      // 4) 로그인 성공 시 로그인 페이지로 이동
+      if (!res.ok) {
+        const message = data?.message || `로그인 실패 (status: ${res.status})`;
+        const remainingAttempts = data?.remainingAttempts;
+        const error = new Error(message) as Error & { remainingAttempts?: number };
+        if (remainingAttempts !== undefined) error.remainingAttempts = remainingAttempts;
+        throw error;
+      }
+  
+
       router.push('/ildong');
 
     } catch (err: any) {

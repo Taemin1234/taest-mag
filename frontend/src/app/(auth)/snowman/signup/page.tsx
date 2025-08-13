@@ -5,7 +5,6 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import InputField from "@/components/InputField"
-import axios from 'axios';
 
 interface SignUpForm {
   username: string;
@@ -44,19 +43,33 @@ export default function SignUpPage() {
     setError('');
 
     try {
-      // 2) 백엔드 회원가입 API 호출
-      const res = await axios.post('http://localhost:3001/api/auth/signup', {
+      const payload = {
         username: form.username,
         email: form.email,
         password: form.password,
-      },
-      {
+      };
+  
+
+      // 2) 백엔드 회원가입 API 호출
+      const res = await fetch(`${process.env.API_BASE_URL}/api/auth/signup`, {
+        method:'POST',
         headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
       });
 
       // 3) 응답 처리
-      if (res.status !== 201) {
-        throw new Error(res.data.message || '회원가입에 실패했습니다.');
+      let data: any = null;
+      const ct = res.headers.get('content-type') || '';
+      if (ct.includes('application/json')) {
+        data = await res.json();
+      }
+
+      if (!res.ok) {
+        const message = data?.message || `회원가입 실패 (status: ${res.status})`;
+        const remainingAttempts = data?.remainingAttempts;
+        const error = new Error(message) as Error & { remainingAttempts?: number };
+        if (remainingAttempts !== undefined) error.remainingAttempts = remainingAttempts;
+        throw error;
       }
 
       // 4) 회원가입 성공 시 로그인 페이지로 이동

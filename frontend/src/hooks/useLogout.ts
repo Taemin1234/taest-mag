@@ -1,7 +1,6 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import axios from 'axios'
 import { useCallback } from 'react'
 
 export default function useLogout () {
@@ -9,16 +8,28 @@ export default function useLogout () {
 
   const logout = useCallback(async () => {
     try {
-      const res = await axios.post(
-        '/api/auth/logout',
-        {},
-        { withCredentials: true } // httpOnly 쿠키 전송
+      const res = await fetch('/api/auth/logout',{ 
+          method:"POST",
+          credentials: "include",
+          cache: 'no-store',
+          keepalive: true,
+         }
       )
 
-      if (res.status === 200) {
-        // 로그아웃 후 기본 경로로 리다이렉트
-        router.replace('/snowman/elsa')
+      if (!res.ok) {
+        // 서버가 JSON 에러 메시지를 줄 수도 있으니 안전 파싱
+        let message = `로그아웃 실패 (status: ${res.status})`;
+        try {
+          const ct = res.headers.get('content-type') || '';
+          if (ct.includes('application/json')) {
+            const data = await res.json();
+            if (data?.message) message = data.message;
+          }
+        } catch {}
+        throw new Error(message);
       }
+  
+      router.replace('/snowman/elsa');
     } catch (error) {
       console.error('로그아웃 실패:', error)
     }

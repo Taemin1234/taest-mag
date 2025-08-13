@@ -6,7 +6,7 @@ export function middleware(req: NextRequest) {
   const token = req.cookies.get('token')?.value
 
    // /admin 이하 모든 경로에 대해
-  if (pathname.startsWith('/admin')) {
+  if (pathname.startsWith('/ildong')) {
     // 1) 로그인되지 않았으면 로그인 페이지로 리다이렉트
     if (!token) {
       const loginUrl = req.nextUrl.clone()
@@ -25,7 +25,7 @@ export function middleware(req: NextRequest) {
   // 이미 로그인 되었을 때 관리자페이지로 리다이렉트
    if (pathname.startsWith('/snowman') && token) {
     const toAdmin = req.nextUrl.clone()
-    toAdmin.pathname = '/admin'
+    toAdmin.pathname = '/ildong'
     return NextResponse.redirect(toAdmin)
   }
 
@@ -33,5 +33,5 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/admin/:path*', '/snowman/:path*'],
+  matcher: ['/ildong/:path*', '/snowman/:path*'],
 }

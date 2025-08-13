@@ -1,6 +1,5 @@
 import { create } from 'zustand'
 import { Role } from '@/types/index'
-import axios from 'axios'
 
 interface UserRoleState {
   tier: Role | null
@@ -11,13 +10,21 @@ export const useUserStore = create<UserRoleState>((set) => ({
   tier: null,
   fetchUserRole: async () => {
     try {
-      const res = await axios.get<{ role: Role }>('/api/user/user', {
-        withCredentials: true,
-      })
-      set({ tier: res.data.role })
+      const res = await fetch('/api/user/user', {
+        method: 'GET',
+        credentials: 'include',
+      });
+
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}`);
+      }
+
+      // 응답 타입 안전하게 지정
+      const data: { role: Role } = await res.json();
+      set({ tier: data.role });
     } catch (err) {
-      console.error('fetchUserRole failed:', err)
-      set({ tier: null })
+      console.error('fetchUserRole failed:', err);
+      set({ tier: null });
     }
   },
 }))

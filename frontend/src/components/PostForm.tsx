@@ -9,7 +9,6 @@ import Dropdown from '@/components/ui/DropDown';
 import { SingleCheckbox } from '@/components/ui/Checkbox'
 import { CATEGORIES } from '@/constants/categories';
 import ImageUploader from '@/components/ui/ImageUploader';
-import axios from 'axios';
 
 export interface FormData {
     title: string;
@@ -78,24 +77,39 @@ export default function PostForm({
 
     // 에디터 목록 불러오기
     useEffect(() => {
+        const controller = new AbortController();
+
         const fetchPosts = async () => {
             try {
-                const res = await axios.get<Editor[]>("/api/editors");
-                const data = res.data;
+                setIsLoading(true);
 
-                const opts = data.map(editor => ({
+                const res = await fetch("/api/editors", {
+                    method: 'GET', 
+                    credentials: "include",
+                    signal: controller.signal,
+                });
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                
+                const data: Editor[] = await res.json();
+
+                const opts = data.map((editor: Editor) => ({
                     value: editor.name,
                     label: editor.name,
-                }));
+                  }));
+
                 setEditorName(opts);
-            } catch (error) {
-                console.log("에디터 로딩 실패: ", error);
+            } catch (error:any) {
+                if (error?.name === "AbortError") return;
             } finally {
-                setIsLoading(false);
+                // abort된 경우에도 setState 호출 방지 (선택)
+                if (!controller.signal.aborted) setIsLoading(false);
             }
         };
 
         fetchPosts();
+
+        // cleanup: 언마운트 시 요청 취소
+        return () => controller.abort();
     }, []);
 
     // 내용 변경 핸들러
