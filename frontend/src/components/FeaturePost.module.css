@@ -52,24 +52,24 @@
     color: #222;
     text-decoration: none;
     background: linear-gradient(180deg,
-            rgba(255, 255, 255, 0.7) 0%,
-            rgba(240, 240, 240, 0.8) 50%,
-            rgba(220, 220, 220, 0.9) 100%);
+        rgba(255, 255, 255, 0.4) 0%,
+        rgba(240, 240, 240, 0.5) 50%,
+        rgba(220, 220, 220, 0.6) 100%);
     transition: all 0.3s ease;
 }
 
 .content:hover {
     background: linear-gradient(180deg,
-            rgba(255, 255, 255, 0.8) 0%,
-            rgba(240, 240, 240, 0.9) 50%,
-            rgba(220, 220, 220, 1) 100%);
+            rgba(255, 255, 255, 0.5) 0%,
+            rgba(240, 240, 240, 0.6) 50%,
+            rgba(220, 220, 220, 0.7) 100%);
 }
 
 .content .thumbnail_inner {
     position: relative;
     width: 180px;
     height: 180px;
-    margin: 0 auto 20px;
+    margin: 10px auto 20px;
     border-radius: 16px;
     overflow: hidden;
     box-shadow: 0 8px 24px rgba(200, 200, 200, 0.3);
@@ -94,8 +94,7 @@
     text-align: right;
     font-size: 12px;
     font-weight: 500;
-    color: rgba(60, 60, 60, 0.8);
-    margin-bottom: 15px;
+    color: #000;
     letter-spacing: 0.5px;
 }
 
@@ -111,7 +110,6 @@
 }
 
 .content:hover .list_title {
-    color: #007bff;
     text-shadow: 0 4px 8px rgba(200, 200, 200, 0.4);
 }
 
@@ -134,7 +132,7 @@
 
 /* Swiper 커스텀 스타일 */
 .swiperContainer :global(.swiper-pagination) {
-    bottom: -40px;
+    bottom: 0px !important;
 }
 
 .swiperContainer :global(.swiper-pagination-bullet) {
@@ -146,7 +144,7 @@
 }
 
 .swiperContainer :global(.swiper-pagination-bullet-active) {
-    background: #007bff;
+    background: var(--main-black);
     transform: scale(1.2);
 }
 
