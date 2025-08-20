@@ -6,6 +6,7 @@ import EditorSkeleton from "@/components/skeleton/EditorSkeleton";
 import { EditorInfo } from '@/components/editor/EditorInfo'
 import React, { use, Suspense } from 'react';
 import { Post, Editor } from "@/types"
+import type { Metadata, ResolvingMetadata } from 'next'
 
 export const dynamic = 'force-dynamic';
 
@@ -20,6 +21,48 @@ interface PostPageProps {
 
 interface GetPostProps extends PostListProps {
   editorName: string;
+}
+
+export async function generateMetadata(
+  { params }: PostPageProps
+) :Promise<Metadata> {
+  const { editorName } = await params
+  
+  const title = `${editorName} | 테이스트 매거진`
+
+  const description = `${editorName}의 공간`
+
+  return {
+    title,
+    description,
+    keywords: ["매거진", "트렌드", "취향", "테이스트"],
+    authors: [{ name: "테이스트 팀" }],
+    openGraph: {
+      type: "website",
+      locale: "ko_KR",
+      url: `${process.env.NEXT_PUBLIC_BASE_URL}/editor/${encodeURIComponent(editorName)}`,
+      siteName: "테이스트 매거진",
+      title,
+      description,
+      images: [
+        {
+          url: '/thumbnail.png',
+          alt: "테이스트 매거진 이미지",
+        }
+      ]
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [
+        {
+          url: '/thumbnail.png',
+          alt: "테이스트 매거진 이미지",
+        }
+      ]
+    }
+  }
 }
 
 const GetPost = ({

@@ -9,9 +9,56 @@ import { getCategoryLabel } from '@/utils/getCategoryLabel'
 import styles from './postPage.module.css'
 import DOMPurify, { Config } from 'isomorphic-dompurify';
 import LinkCopyButton from '@/components/LinkCopyButton';
+import type { Metadata, ResolvingMetadata } from 'next'
 
 interface PostPageProps {
   params: { slug: string }
+}
+
+export async function generateMetadata(
+  { params }: PostPageProps,
+) :Promise<Metadata> {
+  const { slug } = await params
+
+  let postMeta: Post | null = null
+  try {
+    postMeta = await fetchPostBySlug(slug)
+  } catch (err) {
+    console.error('게시글 조회 중 오류:', err)
+    postMeta = null
+  }
+
+  return {
+    title: postMeta?.title,
+    description: postMeta?.subtitle,
+    keywords: ["매거진", "트렌드", "취향", "테이스트", `${postMeta?.category}`, `${postMeta?.subCategory}`],
+    authors: [{ name: "테이스트 팀" }],
+    openGraph: {
+      type: "website",
+      locale: "ko_KR",
+      url: `${process.env.NEXT_PUBLIC_BASE_URL}/post/${slug}`,
+      siteName: "테이스트 매거진",
+      title: postMeta?.title,
+      description: postMeta?.subtitle,
+      images: [
+        {
+          url: postMeta?.thumbnailUrl ?? '/thumbnail.png',
+          alt: "테이스트 매거진 이미지",
+        }
+      ]
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: postMeta?.title,
+      description: postMeta?.subtitle,
+      images: [
+        {
+          url: postMeta?.thumbnailUrl ?? '/thumbnail.png',
+          alt: "테이스트 매거진 이미지",
+        }
+      ]
+    }
+  }
 }
 
 

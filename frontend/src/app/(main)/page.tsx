@@ -7,9 +7,39 @@ import React, { use, Suspense } from 'react';
 import Image from 'next/image';
 import { fetchNotFeaturePosts, fetchFeaturePost } from '@/lib/api'
 import { Post } from "@/types"
+import type { Metadata } from 'next'
 import logo from '@/assets/main_logo_b.png';
 
 export const dynamic = 'force-dynamic';
+
+export const metadata: Metadata = {
+  title: "테이스트 매거진",
+  description: "심도보단 감도, 트렌드보단 당신의 결. 취향을 수집하는 매거진",
+  keywords: ["매거진", "트렌드", "취향", "테이스트"],
+  authors: [{ name: "테이스트 팀" }],
+  openGraph: {
+    type: "website",
+    locale: "ko_KR",
+    url: "https://taest-mag.kr",
+    siteName: "테이스트 매거진",
+    title: "테이스트 매거진",
+    description: "심도보단 감도, 트렌드보단 당신의 결. 취향을 수집하는 매거진",
+    images: [
+      {
+        url: "/thumbnail.png",
+        width: 1200,
+        height: 630,
+        alt: "테이스트 매거진 대표 이미지",
+      }
+    ]
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "테이스트 매거진",
+    description: "심도보단 감도, 트렌드보단 당신의 결. 취향을 수집하는 매거진",
+    images: ["/thumbnail.png"]
+  }
+}
 
 interface PostListProps {
   variant?: 'main' | 'sub';

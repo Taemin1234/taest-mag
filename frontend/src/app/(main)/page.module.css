@@ -49,7 +49,17 @@
 	.main_page_text {
 		font-size: 2rem;
 	}
+
+	.feature_wrap {
+		display: flex;
+		justify-content: center;
+		margin-top: 30px;
+	}
 	
+	.feature {
+		width: 100%;
+	}
+
 	.logo {
 		width: 100px;
 	}

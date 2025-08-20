@@ -5,10 +5,20 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import InputField from "@/components/InputField"
+import type { Metadata } from "next"
 
 interface LoginError {
   message: string;
   remainingAttempts?: number;
+}
+
+export const metadata: Metadata = {
+  title: "Login | 테이스트 매거진",
+  description: "테이스트 매거진 로그인 페이지",
+  robots: {
+    index: false,   // 검색엔진 색인 금지
+    follow: false,  // 링크 추적 금지
+  },
 }
 
 export default function LoginPage() {
