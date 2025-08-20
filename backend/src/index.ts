@@ -8,23 +8,60 @@ import authRouter from './routes/auth';
 import postRouter from './routes/posts'
 import userRouter from './routes/user'
 import adminRouter from './routes/admin'
+
 import cors from 'cors';
+//Express 앱에 보안 관련 HTTP 헤더를 자동으로 추가해줌.
+import helmet from 'helmet'
+//서버에서 응답을 gzip/deflate로 압축해서 네트워크 전송량을 줄여줌.
+import compression from 'compression'
 import cookieParser from 'cookie-parser';
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+
+// ========= [필수] 기본 환경 =========
+const NODE_ENV = process.env.NODE_ENV || 'development'
+const PORT = Number(process.env.PORT) || 3001
 
 // MongoDB 연결
 connectDB();
 
-// CORS 설정
-app.use(cors({
-  origin: 'http://localhost:3000',
-  credentials: true,
-}));
+// ========= [필수] 프록시 인지 (HTTPS/리버스 프록시 뒤에 둘 경우) =========
+app.set('trust proxy', 1)
 
-app.use(express.json());
+// ========= [필수] CORS 설정 (환경변수 기반) =========
+/**
+ * 로컬 개발을 허용하고 싶으면 CORS_ALLOW_LOCALHOST=true
+ */
+const allowList = (process.env.CORS_ORIGINS || '')
+  .split(',')
+  .map(s => s.trim())
+  .filter(Boolean)
+
+const allowLocalhost = process.env.CORS_ALLOW_LOCALHOST === 'true'
+
+const corsOrigin = (origin: string | undefined, cb: (err: Error | null, allowed?: boolean) => void) => {
+  if (!origin) return cb(null, true) // 서버-서버 호출 등 Origin 없는 경우 허용
+  if (allowList.includes(origin)) return cb(null, true)
+  if (allowLocalhost && /^http:\/\/localhost:\d+$/.test(origin)) return cb(null, true)
+  cb(new Error('Not allowed by CORS'))
+}
+
+app.use(cors({
+  origin: corsOrigin,
+  credentials: true,
+}))
+
+// ========= [필수] 보안/성능 공통 =========
+app.use(helmet({
+  crossOriginResourcePolicy: { policy: 'cross-origin' }, // 외부로 이미지 제공 시 편의
+}))
+app.use(compression())
+
 app.use(cookieParser());
+
+// ========= [필수] 미들웨어 =========
+app.use(express.json());
+
 app.use('/api/editors', editorRoutes);
 app.use('/api/upload', uploadRouter);
 app.use('/api/auth', authRouter);
@@ -33,15 +70,30 @@ app.use('/api/user', userRouter);
 
 app.use('/admin', adminRouter)
 
+// 헬스체크 (로드밸런서/모니터링용)
+// app.get('/healthz', (_req, res) => {
+//   res.status(200).send('ok')
+// })
+
+// 루트
 app.get('/', (_req, res) => {
-  res.send('🟢 Express 서버가 잘 작동 중입니다!');
-});
+  res.send('🟢 Express 서버가 잘 작동 중입니다!')
+})
 
-// 404 처리
+// ========= [필수] 404 & 에러 핸들러 =========
 app.use((_req, res) => {
-  res.status(404).json({ message: 'Not Found' });
-});
+  res.status(404).json({ message: 'Not Found' })
+})
 
-app.listen(PORT, () => {
-  console.log(`🚀 서버 실행 중: http://localhost:${PORT}`);
-});
+// ========= [필수] 기동 & 우아한 종료 =========
+const server = app.listen(PORT, '0.0.0.0', () => {
+  console.log(`🚀 서버 실행 중: http://0.0.0.0:${PORT} (env: ${NODE_ENV})`)
+})
+
+process.on('SIGTERM', () => {
+  console.log('SIGTERM received. Shutting down gracefully...')
+  server.close(() => {
+    // TODO: DB 연결 종료 등 정리
+    process.exit(0)
+  })
+})
