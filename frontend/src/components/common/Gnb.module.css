@@ -5,6 +5,7 @@
     width: 100vw;
     height: 100vh;
     background-color: var(--main-white);
+    color: var(--main-black);
     padding-top: 7rem;
     display: flex;
     flex-direction: column;
@@ -12,187 +13,106 @@
     z-index: 9;
 }
 
-.gnb_wrap > ul.depth1 {
-    position: relative;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    flex: 1;
-    min-height: 0;
+/* 2열 패널 레이아웃 */
+.panel {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    width: 80%;
+    height: 100%;
+    margin: 0 auto;
 }
 
-.gnb_wrap > ul > li {
-    position: absolute;
-    width: 100%;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    padding: 10px 20px;
-    transition: all 0.5s ease;
-    height: var(--gnb-el);
-    overflow: hidden;
+.left {
+    border-right: 1px solid rgba(0,0,0,0.08);
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
 }
 
-/* 각 메뉴 아이템의 기본 위치 설정 */
-.gnb_wrap > ul.depth1 > li:nth-child(1) {
-    background: var(--food-theme);
-    z-index: 1;
-    bottom: calc(100% - var(--gnb-el) * 1.5);
+.right {
+    overflow-y: auto;
 }
 
-.gnb_wrap > ul.depth1 > li:nth-child(2) {
-    background: var(--culture-theme);
-    z-index: 2;
-    bottom: calc(100% - var(--gnb-el) * 2);
-}
-
-.gnb_wrap > ul.depth1 > li:nth-child(3) {
-    background: var(--tech-theme);
-    z-index: 3;
-    bottom: calc(100% - var(--gnb-el) * 2.5);
-}
-
-.gnb_wrap > ul.depth1 > li:nth-child(4) {
-    background: var(--living-theme);
-    z-index: 4;
-    bottom: calc(100% - var(--gnb-el) * 3);
-}
-
-.gnb_wrap > ul.depth1 > li:nth-child(5) {
-    background: var(--people-theme);
-    z-index: 5;
-    bottom: calc(100% - var(--gnb-el) * 3.5);
-}
-
-.gnb_wrap > ul.depth1 > li:nth-child(6) {
-    background: var(--main-theme);
-    z-index: 6;
-    bottom: 0;
-}
-
-.gnb_wrap > ul.depth1 > li:nth-child(6) a {
+.placeholder {
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100%;
+    color: #888;
+    font-size: 1.4rem;
 }
 
-.gnb_wrap > ul.depth1 > li:nth-child(6) a span {
-    display: block;
+/* 왼쪽 대분류 리스트 */
+.mainList {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    font-size: 2.4rem;
+   
 }
 
-.gnb_wrap > ul.depth1 > li.active {
-    --el-active: calc(var(--gnb-el) + 80px);
-    height: var(--el-active);
-    transform: translateY(calc(var(--el-active) * -1));
+.mainList > li,
+.mainList > li > .mainButton {
+   text-align: center;
 }
 
-.gnb_wrap > ul.depth1 > li > a,
-.gnb_wrap > ul.depth1 > li > span {
-    display: block;
-    text-align: center;
-    font-size: 12.8rem;
-    font-weight: bold;
-    line-height: 12.8rem;
-    color: var(--main-black);
+.mainButton {
+    width: 100%;
+    background: transparent;
+    border: 0;
+    text-align: left;
+    padding: 14px 16px;
     cursor: pointer;
 }
 
-.gnb_wrap > ul.depth1 > li > ul.depth2 {
-    margin: 0;
-    padding: 1rem 0;
-    box-sizing: border-box;
-    background: inherit;
-    text-align: center;
-    opacity: 0;
-    transform: translateY(-10px);
-    transition: all 0.3s ease;
-}
-
-.gnb_wrap > ul.depth1 > li.active > ul.depth2 {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.gnb_wrap > ul.depth1 > li > ul.depth2 > li {
+.mainLabel {
     display: inline-block;
-    margin: 0 1.5rem;
-    font-size: 2rem;
-    color: #000;
+    max-width: 100%;
+    white-space: normal;
+    word-break: keep-all; 
+    overflow-wrap: anywhere; 
+    font-size: 2.4rem;
+    line-height: 1.4;
 }
 
-.gnb_wrap > ul.depth1 > li > ul.depth2 > li:hover {
+.mainList > li.active .mainButton {
+    background-color: rgba(0,0,0,0.04);
+}
+
+/* 각 메뉴 아이템의 기본 위치 설정 */
+/* About Us 항목 */
+.about a {
+    display: block;
+    padding: 14px 16px;
+}
+
+/* 오른쪽 소분류 리스트 */
+.subList {
+    list-style: none;
+    margin: 0;
+    padding: 24px;
+}
+
+/* 기존 대제목 스타일 제거 */
+
+/* 오른쪽 링크들 */
+.subList > li {
+    display: inline-block;
+    margin: 0 12px 12px 0;
+    font-size: 1.6rem;
+}
+
+.subList > li a:hover {
     text-decoration: underline;
 }
 
-/* ───────────────────────────────────────────────────────────
-   1) 모바일 세로 모드 (portrait, max-width 480px)
-─────────────────────────────────────────────────────────── */
-@media (max-width: 480px) and (orientation: portrait) {
-    .gnb_wrap {
-        padding-top: 5rem;
-    }
-
-    .gnb_wrap > ul.depth1 > li {
-        height: calc((100vh - 50px) / 4);
-    }
-
-    .gnb_wrap > ul.depth1 > li a,
-    .gnb_wrap > ul.depth1 > li span {
-        font-size: 10rem;
-        line-height: 10rem;
-    }
-}
-
-/* ───────────────────────────────────────────────────────────
-     2) 태블릿~소형 데스크탑 (481px ~ 768px)
-  ─────────────────────────────────────────────────────────── */
-@media (min-width: 481px) and (max-width: 768px) {
-    .gnb_wrap {
-        padding-top: 6rem;
-    }
-
-    .gnb_wrap > ul.depth1 > li {
-        height: calc((100vh - 60px) / 4);
-    }
-
-    .gnb_wrap > ul.depth1 > li a,
-    .gnb_wrap > ul.depth1 > li span {
-        font-size: 11.5rem;
-        line-height: 11.5rem;
-    }
-}
 
 /* ───────────────────────────────────────────────────────────
      3) 데스크탑 (min-width 769px)
   ─────────────────────────────────────────────────────────── */
-@media (min-width: 769px) {
-    .gnb_wrap {
-        padding-top: 7rem;
-    }
-
-    .gnb_wrap > ul.depth1 > li a,
-    .gnb_wrap > ul.depth1 > li span {
-        font-size: 12.8rem;
-        line-height: 12.8rem;
-    }
-}
-
-/* ───────────────────────────────────────────────────────────
-     4) 높이 제한 환경 (max-height 900px)
-  ─────────────────────────────────────────────────────────── */
-@media (max-height: 900px) {
-    .gnb_wrap {
-        overflow-y: auto;
-        padding-top: 4rem;
-    }
-
-    .gnb_wrap > ul.depth1 > li {
-        height: calc(var(--gnb-el) * 0.8);
-    }
-
-    .gnb_wrap > ul.depth1 > li a,
-    .gnb_wrap > ul.depth1 > li span {
-        font-size: 10rem;
-        line-height: 10rem;
+@media (max-width: 769px) {
+    .panel {
+        grid-template-columns: 280px 1fr;
     }
 }

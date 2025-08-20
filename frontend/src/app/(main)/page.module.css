@@ -39,7 +39,7 @@
 }
 @media (max-width: 600px) {
 	.main {
-		padding: 0rem 2rem;
+		padding: 0rem 2rem 4rem;
 	}
 
 	.main_page {
