@@ -41,8 +41,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #888;
-    font-size: 1.4rem;
+    color: var(--main-black);
+    font-size: 2rem;
 }
 
 /* 왼쪽 대분류 리스트 */
@@ -51,7 +51,6 @@
     justify-content: center;
     flex-direction: column;
     font-size: 2.4rem;
-   
 }
 
 .mainList > li,
@@ -63,7 +62,6 @@
     width: 100%;
     background: transparent;
     border: 0;
-    text-align: left;
     padding: 14px 16px;
     cursor: pointer;
 }
@@ -88,6 +86,9 @@
     left: 0;
     background-color: var(--main-black);
     transition: width 0.3s ease; 
+
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
 }
 
 .mainList > li.active .mainButton > .mainLabel:after {
@@ -148,10 +149,95 @@
 
 
 /* ───────────────────────────────────────────────────────────
-     3) 데스크탑 (min-width 769px)
+     3) 데스크탑 (max-width 769px)
   ─────────────────────────────────────────────────────────── */
 @media (max-width: 769px) {
     .panel {
-        grid-template-columns: 280px 1fr;
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto;
+        gap: 20px;
+        width: 100%;
+        height: auto;
+    }
+    
+    .left {
+        border-right: none;
+        display: flex;
+        justify-content: start;
+    }
+
+    .mainList {
+        display: flex;
+        /* justify-content: start; */
+        flex-direction: row;
+        flex-wrap: wrap;
+        font-size: 2.4rem;
+        gap: 5px;
+    }
+
+    .mainList > li {
+        border: solid 1px var(--main-black);
+    }
+    
+
+    .mainButton {
+        width: auto;
+        background: transparent;
+        border: 0;
+        padding: 14px 16px;
+        cursor: pointer;
+    }
+
+    .mainLabel {
+        font-size: 2.2rem;
+    }
+    
+    .mainLabel:after {
+        content: none;
+    }
+
+    .mainList > li .mainButton {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .mainList > li .mainButton:after {
+        content: "";
+        position: absolute;
+        background-color: var(--main-black);
+        z-index: -1;
+        left: 0%;
+        right: 0%;
+        top: 0;
+        bottom: 0;
+        transform: skewX(-45deg) scale(0, 1);
+        transition: all 0.5s;
+    }
+
+    .mainList > li.active .mainButton {
+        color: var(--main-white);
+    }
+
+    .mainList > li.active .mainButton:after {
+        transform: skewX(-45deg) scale(1, 1);
+        -webkit-transition: all 0.5s;
+        transition: all 0.5s;
+    }
+    
+    .right {
+        border-top: solid 1px var(--main-black);
+    }
+
+    .right .subList {
+        text-align: center;
+    }
+
+    .subList > li {
+        font-size: 2rem;
+    }
+
+    .placeholder {
+        margin-top: 20px;
     }
 }

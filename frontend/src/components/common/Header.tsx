@@ -52,7 +52,7 @@ export default function Header() {
     <header className={`${styles.header_wrap} ${show ? styles.show : styles.hide}`}>
       <h1>
         <Link href="/">
-          <Image src="/main_logo.png" alt="logo" width={171} height={40} className={styles.logo} />
+          <Image src={isOpen ? "/main_logo_b.png" : "/main_logo.png"} alt="logo" width={171} height={40} className={styles.logo} />
         </Link>
       </h1>
       <button
