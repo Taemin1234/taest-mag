@@ -30,8 +30,10 @@
     flex-direction: column;
 }
 
-.right {
-    overflow-y: auto;
+.right, .right ul {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
 }
 
 .placeholder {
@@ -67,6 +69,7 @@
 }
 
 .mainLabel {
+    position: relative;
     display: inline-block;
     max-width: 100%;
     white-space: normal;
@@ -76,8 +79,19 @@
     line-height: 1.4;
 }
 
-.mainList > li.active .mainButton {
-    background-color: rgba(0,0,0,0.04);
+.mainLabel:after {
+    content: '';
+    position: absolute;
+    width: 0%;
+    height: 1px;
+    bottom: 0;
+    left: 0;
+    background-color: var(--main-black);
+    transition: width 0.3s ease; 
+}
+
+.mainList > li.active .mainButton > .mainLabel:after {
+    width: 100%;
 }
 
 /* 각 메뉴 아이템의 기본 위치 설정 */
@@ -94,13 +108,38 @@
     padding: 24px;
 }
 
-/* 기존 대제목 스타일 제거 */
-
 /* 오른쪽 링크들 */
 .subList > li {
     display: inline-block;
     margin: 0 12px 12px 0;
     font-size: 1.6rem;
+    opacity: 0;
+    transform: translateY(-20px);
+    animation: slideInDown 0.3s ease forwards;
+}
+
+/* 각 아이템마다 애니메이션 지연 시간을 다르게 적용 */
+.subList.animate > li:nth-child(1) { animation-delay: 0.1s; }
+.subList.animate > li:nth-child(2) { animation-delay: 0.2s; }
+.subList.animate > li:nth-child(3) { animation-delay: 0.3s; }
+.subList.animate > li:nth-child(4) { animation-delay: 0.4s; }
+.subList.animate > li:nth-child(5) { animation-delay: 0.5s; }
+.subList.animate > li:nth-child(6) { animation-delay: 0.6s; }
+.subList.animate > li:nth-child(7) { animation-delay: 0.7s; }
+.subList.animate > li:nth-child(8) { animation-delay: 0.8s; }
+.subList.animate > li:nth-child(9) { animation-delay: 0.9s; }
+.subList.animate > li:nth-child(10) { animation-delay: 1.0s; }
+
+/* 슬라이드 인 애니메이션 */
+@keyframes slideInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .subList > li a:hover {

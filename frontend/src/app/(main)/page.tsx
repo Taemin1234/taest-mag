@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "ko_KR",
-    url: "https://taest-mag.kr",
+    url: `${process.env.NEXT_PUBLIC_BASE_URL}`,
     siteName: "테이스트 매거진",
     title: "테이스트 매거진",
     description: "심도보단 감도, 트렌드보단 당신의 결. 취향을 수집하는 매거진",

@@ -2,11 +2,23 @@
 
 import styles from './Gnb.module.css'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { CATEGORIES } from '@/constants/categories'
 
 export default function GNB({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpen: (open: boolean) => void }) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null)
+  const [isAnimating, setIsAnimating] = useState<Boolean>(false)
+
+  const activeCategory =
+    activeIndex !== null && activeIndex >= 0 && activeIndex < CATEGORIES.length
+      ? CATEGORIES[activeIndex]
+      : null
+
+  useEffect(() => {
+    if (activeCategory?.value) {
+      setIsAnimating(true)
+    }
+  }, [activeCategory?.value])
 
   if (!isOpen) return null
 
@@ -18,11 +30,6 @@ export default function GNB({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpen:
     setIsOpen(false)
     setActiveIndex(null)
   }
-
-  const activeCategory =
-    activeIndex !== null && activeIndex >= 0 && activeIndex < CATEGORIES.length
-      ? CATEGORIES[activeIndex]
-      : null
 
   return (
     <nav className={styles.gnb_wrap} role="dialog" aria-modal="true">
@@ -43,7 +50,7 @@ export default function GNB({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpen:
         </aside>
         <section className={styles.right} aria-live="polite">
           {activeCategory ? (
-            <ul className={styles.subList}>
+            <ul key={`${activeCategory.value}`} className={`${styles.subList} ${isAnimating ? styles.animate : ''}`} onAnimationEnd={() => setIsAnimating(false)} >
               <li>
                 <Link href={`/category/${activeCategory.value}`} onClick={handleLinkClick}>전체</Link>
               </li>
