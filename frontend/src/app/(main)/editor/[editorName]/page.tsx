@@ -36,7 +36,7 @@ export async function generateMetadata(
     title,
     description,
     keywords: ["매거진", "트렌드", "취향", "테이스트"],
-    authors: [{ name: "테이스트 팀" }],
+    authors: [{ name: "테이스트 매거진" }],
     openGraph: {
       type: "website",
       locale: "ko_KR",
