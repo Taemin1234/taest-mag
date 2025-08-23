@@ -24,13 +24,14 @@
 }
 
 .left {
-    border-right: 1px solid rgba(0,0,0,0.08);
+    border-right: 1px solid rgba(0, 0, 0, 0.08);
     display: flex;
     justify-content: center;
     flex-direction: column;
 }
 
-.right, .right ul {
+.right,
+.right ul {
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -53,9 +54,9 @@
     font-size: 2.4rem;
 }
 
-.mainList > li,
-.mainList > li > .mainButton {
-   text-align: center;
+.mainList>li,
+.mainList>li>.mainButton {
+    text-align: center;
 }
 
 .mainButton {
@@ -71,8 +72,8 @@
     display: inline-block;
     max-width: 100%;
     white-space: normal;
-    word-break: keep-all; 
-    overflow-wrap: anywhere; 
+    word-break: keep-all;
+    overflow-wrap: anywhere;
     font-size: 2.4rem;
     line-height: 1.4;
 }
@@ -85,13 +86,13 @@
     bottom: 0;
     left: 0;
     background-color: var(--main-black);
-    transition: width 0.3s ease; 
+    transition: width 0.3s ease;
 
     -webkit-box-decoration-break: clone;
     box-decoration-break: clone;
 }
 
-.mainList > li.active .mainButton > .mainLabel:after {
+.mainList>li.active .mainButton>.mainLabel:after {
     width: 100%;
 }
 
@@ -110,7 +111,7 @@
 }
 
 /* 오른쪽 링크들 */
-.subList > li {
+.subList>li {
     display: inline-block;
     margin: 0 12px 12px 0;
     font-size: 1.6rem;
@@ -120,16 +121,45 @@
 }
 
 /* 각 아이템마다 애니메이션 지연 시간을 다르게 적용 */
-.subList.animate > li:nth-child(1) { animation-delay: 0.1s; }
-.subList.animate > li:nth-child(2) { animation-delay: 0.2s; }
-.subList.animate > li:nth-child(3) { animation-delay: 0.3s; }
-.subList.animate > li:nth-child(4) { animation-delay: 0.4s; }
-.subList.animate > li:nth-child(5) { animation-delay: 0.5s; }
-.subList.animate > li:nth-child(6) { animation-delay: 0.6s; }
-.subList.animate > li:nth-child(7) { animation-delay: 0.7s; }
-.subList.animate > li:nth-child(8) { animation-delay: 0.8s; }
-.subList.animate > li:nth-child(9) { animation-delay: 0.9s; }
-.subList.animate > li:nth-child(10) { animation-delay: 1.0s; }
+.subList.animate>li:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.subList.animate>li:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.subList.animate>li:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+.subList.animate>li:nth-child(4) {
+    animation-delay: 0.4s;
+}
+
+.subList.animate>li:nth-child(5) {
+    animation-delay: 0.5s;
+}
+
+.subList.animate>li:nth-child(6) {
+    animation-delay: 0.6s;
+}
+
+.subList.animate>li:nth-child(7) {
+    animation-delay: 0.7s;
+}
+
+.subList.animate>li:nth-child(8) {
+    animation-delay: 0.8s;
+}
+
+.subList.animate>li:nth-child(9) {
+    animation-delay: 0.9s;
+}
+
+.subList.animate>li:nth-child(10) {
+    animation-delay: 1.0s;
+}
 
 /* 슬라이드 인 애니메이션 */
 @keyframes slideInDown {
@@ -137,13 +167,14 @@
         opacity: 0;
         transform: translateY(-20px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
     }
 }
 
-.subList > li a:hover {
+.subList>li a:hover {
     text-decoration: underline;
 }
 
@@ -160,26 +191,26 @@
         width: 100%;
         height: auto;
     }
-    
+
     .left {
         border-right: none;
         display: flex;
-        justify-content: start;
+        justify-content: flex-start;
     }
 
     .mainList {
         display: flex;
-        /* justify-content: start; */
+        /* justify-content: flex-start; */
         flex-direction: row;
         flex-wrap: wrap;
         font-size: 2.4rem;
         gap: 5px;
     }
 
-    .mainList > li {
+    .mainList>li {
         border: solid 1px var(--main-black);
     }
-    
+
 
     .mainButton {
         width: auto;
@@ -192,17 +223,17 @@
     .mainLabel {
         font-size: 2.2rem;
     }
-    
+
     .mainLabel:after {
         content: none;
     }
 
-    .mainList > li .mainButton {
+    .mainList>li .mainButton {
         position: relative;
         overflow: hidden;
     }
 
-    .mainList > li .mainButton:after {
+    .mainList>li .mainButton:after {
         content: "";
         position: absolute;
         background-color: var(--main-black);
@@ -215,16 +246,16 @@
         transition: all 0.5s;
     }
 
-    .mainList > li.active .mainButton {
+    .mainList>li.active .mainButton {
         color: var(--main-white);
     }
 
-    .mainList > li.active .mainButton:after {
+    .mainList>li.active .mainButton:after {
         transform: skewX(-45deg) scale(1, 1);
         -webkit-transition: all 0.5s;
         transition: all 0.5s;
     }
-    
+
     .right {
         border-top: solid 1px var(--main-black);
     }
@@ -233,7 +264,7 @@
         text-align: center;
     }
 
-    .subList > li {
+    .subList>li {
         font-size: 2rem;
     }
 
