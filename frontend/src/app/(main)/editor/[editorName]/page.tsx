@@ -16,7 +16,7 @@ interface PostListProps {
 }
 
 interface PostPageProps {
-  params: { editorName: string }
+  params: Promise<{ editorName: string }>
 }
 
 interface GetPostProps extends PostListProps {
@@ -25,9 +25,9 @@ interface GetPostProps extends PostListProps {
 
 export async function generateMetadata(
   { params }: PostPageProps
-) :Promise<Metadata> {
+): Promise<Metadata> {
   const { editorName } = await params
-  
+
   const title = `${editorName} | 테이스트 매거진`
 
   const description = `${editorName}의 공간`
@@ -91,7 +91,7 @@ const GetEditor = ({ editorName }: { editorName: string }) => {
   )
 }
 
-export default async function EditorPage(props : PostPageProps) {
+export default async function EditorPage(props: PostPageProps) {
 
   const { editorName } = await props.params;
 
@@ -102,14 +102,14 @@ export default async function EditorPage(props : PostPageProps) {
   return (
     <main className={styles.main}>
       <div>
-        <Suspense fallback={<EditorSkeleton/>}>
-          <GetEditor editorName={editor}/>
+        <Suspense fallback={<EditorSkeleton />}>
+          <GetEditor editorName={editor} />
         </Suspense>
       </div>
       <div>
         <p>게시물 보기</p>
         <Suspense fallback={<PostSkeleton variant="sub" />}>
-          <GetPost editorName={editor} variant="sub" enableSwiper={false}/>
+          <GetPost editorName={editor} variant="sub" enableSwiper={false} />
         </Suspense>
       </div>
     </main>

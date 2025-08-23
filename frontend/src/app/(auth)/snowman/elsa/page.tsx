@@ -12,14 +12,14 @@ interface LoginError {
   remainingAttempts?: number;
 }
 
-export const metadata: Metadata = {
-  title: "Login | 테이스트 매거진",
-  description: "테이스트 매거진 로그인 페이지",
-  robots: {
-    index: false,   // 검색엔진 색인 금지
-    follow: false,  // 링크 추적 금지
-  },
-}
+// export const metadata: Metadata = {
+//   title: "Login | 테이스트 매거진",
+//   description: "테이스트 매거진 로그인 페이지",
+//   robots: {
+//     index: false,   // 검색엔진 색인 금지
+//     follow: false,  // 링크 추적 금지
+//   },
+// }
 
 export default function LoginPage() {
   const [form, setForm] = useState({ username: '', password: '' });
@@ -33,11 +33,11 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     try {
       const res = await fetch('/api/auth/login',
         {
-          method:'POST',
+          method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
           body: JSON.stringify(form),
@@ -57,7 +57,7 @@ export default function LoginPage() {
         if (remainingAttempts !== undefined) error.remainingAttempts = remainingAttempts;
         throw error;
       }
-  
+
 
       router.push('/ildong');
 
@@ -99,7 +99,7 @@ export default function LoginPage() {
         {error && (
           <>
             <p className={styles.msg_error}>
-              {error.message}            
+              {error.message}
             </p>
             <p className={styles.msg_error}>
               {error.remainingAttempts != null &&
@@ -107,7 +107,7 @@ export default function LoginPage() {
             </p>
           </>
         )}
-        
+
         <button
           type="submit"
           className={styles.btn_login}

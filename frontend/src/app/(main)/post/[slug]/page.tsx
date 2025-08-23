@@ -2,7 +2,7 @@
 import { notFound } from 'next/navigation'
 import { Post, Editor } from '@/types'
 import { fetchPostBySlug, fetchEditors, fetchRecommendedPosts } from '@/lib/api'
-import ViewTracker from '@/components/common/ViewTracker'
+// import ViewTracker from '@/components/common/ViewTracker'
 import { EditorInfo } from '@/components/editor/EditorInfo'
 import PostList from '@/components/PostList'
 import { getCategoryLabel } from '@/utils/getCategoryLabel'
@@ -12,12 +12,12 @@ import LinkCopyButton from '@/components/LinkCopyButton';
 import type { Metadata, ResolvingMetadata } from 'next'
 
 interface PostPageProps {
-  params: { slug: string }
+  params: Promise<{ slug: string }>
 }
 
 export async function generateMetadata(
   { params }: PostPageProps,
-) :Promise<Metadata> {
+): Promise<Metadata> {
   const { slug } = await params
 
   let postMeta: Post | null = null
@@ -61,7 +61,6 @@ export async function generateMetadata(
   }
 }
 
-
 export default async function PostPage({ params }: PostPageProps) {
   const { slug } = await params
 
@@ -99,24 +98,24 @@ export default async function PostPage({ params }: PostPageProps) {
   }
 
 
-// Config 타입으로 옵션 객체 선언
-const sanitizeOptions: Config = {
-  ADD_TAGS: [
-    'h1', 'h2', 'h3', 'p', 'span', 'strong', 'b', 'i', 'u', 's', 'em', 'blockquote',
-    'ul', 'ol', 'li', 'a', 'img', 'pre', 'code', 'br', 'hr', 'div',
-    'table', 'thead', 'tbody', 'tr', 'th', 'td', 'sup', 'sub'
-  ],
-  ADD_ATTR: [
-    'href', 'src', 'alt', 'title', 'style', 'class', 'target', 'rel', 'width', 'height', 'align'
-  ],
-};
+  // Config 타입으로 옵션 객체 선언
+  const sanitizeOptions: Config = {
+    ADD_TAGS: [
+      'h1', 'h2', 'h3', 'p', 'span', 'strong', 'b', 'i', 'u', 's', 'em', 'blockquote',
+      'ul', 'ol', 'li', 'a', 'img', 'pre', 'code', 'br', 'hr', 'div',
+      'table', 'thead', 'tbody', 'tr', 'th', 'td', 'sup', 'sub'
+    ],
+    ADD_ATTR: [
+      'href', 'src', 'alt', 'title', 'style', 'class', 'target', 'rel', 'width', 'height', 'align'
+    ],
+  };
 
-// 허용할 태그·속성·스타일을 명시적으로 추가
-const cleanHtml = DOMPurify.sanitize(post.content, sanitizeOptions)
+  // 허용할 태그·속성·스타일을 명시적으로 추가
+  const cleanHtml = DOMPurify.sanitize(post.content, sanitizeOptions)
 
   return (
     <main className={styles.post_page}>
-       <ViewTracker slug={slug} />
+      {/* <ViewTracker slug={slug} /> */}
       <article className={styles.post_article}>
         <section>
           <header className={styles.post_header}>
@@ -138,11 +137,11 @@ const cleanHtml = DOMPurify.sanitize(post.content, sanitizeOptions)
         <div className={styles.link_copy_btn}>
           <LinkCopyButton />
         </div>
-        {editor && 
+        {editor &&
           <section className={styles.post_editor}>
             <EditorInfo editor={editor} />
           </section>}
-        
+
         <section className={styles.post_recommend}>
           <p className={styles.subtitle}>추천 게시물</p>
           <PostList posts={recommendedPosts} enableSwiper={true} />
