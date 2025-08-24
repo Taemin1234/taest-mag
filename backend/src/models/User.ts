@@ -20,6 +20,7 @@ export interface IUser extends Document {
   resetPasswordToken?: string;
   resetPasswordExpires?: Date;
   comparePassword: (plainPassword: string) => Promise<boolean>;
+  generatePasswordResetToken: () => Promise<string>;
 }
 
 const UserSchema: Schema<IUser> = new Schema(
@@ -68,9 +69,9 @@ const UserSchema: Schema<IUser> = new Schema(
     ipAddress: {
       type: String,
     },
-    loginAt: { 
-      type: Date, 
-      default: Date.now 
+    loginAt: {
+      type: Date,
+      default: Date.now
     },
     resetPasswordToken: { // 재설정 링크의 고유 인증 키
       type: String,
@@ -103,6 +104,24 @@ UserSchema.pre<IUser>('save', async function (next) {
 UserSchema.methods.comparePassword = async function (plainPassword: string): Promise<boolean> {
   // 입력한 비밀번호와 저장된 해시 비번을 비교
   return await bcrypt.compare(plainPassword, this.password);
+};
+
+// 비밀번호 재설정 토큰 생성 메서드
+UserSchema.methods.generatePasswordResetToken = async function (): Promise<string> {
+  // 랜덤 토큰 생성 (32자리)
+  const resetToken = require('crypto').randomBytes(32).toString('hex');
+
+  // 토큰을 해시하여 저장 (보안상 원본 토큰은 저장하지 않음)
+  this.resetPasswordToken = require('crypto').createHash('sha256').update(resetToken).digest('hex');
+
+  // 토큰 만료 시간 설정 (1시간 후)
+  this.resetPasswordExpires = new Date(Date.now() + 60 * 60 * 1000);
+
+  // 변경사항 저장
+  await this.save();
+
+  // 원본 토큰 반환 (이메일로 전송됨)
+  return resetToken;
 };
 
 const User: Model<IUser> = mongoose.models.User || mongoose.model<IUser>('User', UserSchema);
