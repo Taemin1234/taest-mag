@@ -71,9 +71,10 @@ app.use('/api/user', userRouter);
 app.use('/admin', adminRouter)
 
 // 헬스체크 (로드밸런서/모니터링용)
-// app.get('/healthz', (_req, res) => {
-//   res.status(200).send('ok')
-// })
+// eslint-disable-next-line spellcheck/spell-checker
+app.get('/healthz', (_req, res) => {
+  res.status(200).send('ok')
+})
 
 // 루트
 app.get('/', (_req, res) => {
