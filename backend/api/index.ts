@@ -1,13 +1,13 @@
 import express from 'express';
 import dotenv from 'dotenv';
 dotenv.config();
-import connectDB from './db';
-import editorRoutes from './routes/editors';
-import uploadRouter from './routes/upload';
-import authRouter from './routes/auth';
-import postRouter from './routes/posts'
-import userRouter from './routes/user'
-import adminRouter from './routes/admin'
+import connectDB from '../src/db';
+import editorRoutes from '../src/routes/editors';
+import uploadRouter from '../src/routes/upload';
+import authRouter from '../src/routes/auth';
+import postRouter from '../src/routes/posts'
+import userRouter from '../src/routes/user'
+import adminRouter from '../src/routes/admin'
 
 import cors from 'cors';
 //Express 앱에 보안 관련 HTTP 헤더를 자동으로 추가해줌.
@@ -15,6 +15,7 @@ import helmet from 'helmet'
 //서버에서 응답을 gzip/deflate로 압축해서 네트워크 전송량을 줄여줌.
 import compression from 'compression'
 import cookieParser from 'cookie-parser';
+import serverless from 'serverless-http';
 
 const app = express();
 
@@ -98,3 +99,6 @@ process.on('SIGTERM', () => {
     process.exit(0)
   })
 })
+
+// Vercel이 인식하는 CommonJS export 형식
+export = serverless(app);
