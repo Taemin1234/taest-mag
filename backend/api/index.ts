@@ -101,4 +101,5 @@ process.on('SIGTERM', () => {
 })
 
 // Vercel이 인식하는 CommonJS export 형식
+// 커밋 확인
 export = serverless(app);
