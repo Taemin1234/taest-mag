@@ -18,18 +18,18 @@ export default function AdminEditor() {
 
     const fetchEditors = async () => {
       try {
-          const res = await fetch("/api/editors", {
-            method: 'GET',
-            credentials: 'include',
-            headers: { Accept: "application/json" },
-            signal: ac.signal,
-          });
+        const res = await fetch("/api/editors", {
+          method: 'GET',
+          credentials: 'include',
+          headers: { Accept: "application/json" },
+          signal: ac.signal,
+        });
 
-          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
-          const text = await res.text();
-          const data = text ? JSON.parse(text) : [];
-          setEditors(data);
+        const text = await res.text();
+        const data = text ? JSON.parse(text) : [];
+        setEditors(data);
       } catch (err) {
         if ((err as any)?.name === "AbortError") return; // 언마운트 중단
         const msg = err instanceof Error ? err.message : String(err);
@@ -56,8 +56,8 @@ export default function AdminEditor() {
     };
   }, [modalOpen]);
 
-  const openAdd = () => { setCurrentEditor(null); setModalOpen(true);};
-  const openEdit = (e: Editor) => { setCurrentEditor(e); setModalOpen(true);};
+  const openAdd = () => { setCurrentEditor(null); setModalOpen(true); };
+  const openEdit = (e: Editor) => { setCurrentEditor(e); setModalOpen(true); };
   const closeModal = () => setModalOpen(false);
 
   //추가/수정 공용 저장 핸들러
@@ -72,23 +72,23 @@ export default function AdminEditor() {
 
         // 백엔드 /api/upload 엔드포인트로 전송
         const uploadRes = await fetch('/api/upload', {
-            method: 'POST',
-            body: form,
-            credentials: 'include',
-          }
+          method: 'POST',
+          body: form,
+          credentials: 'include',
+        }
         );
         if (!uploadRes.ok) throw new Error(`Upload failed: HTTP ${uploadRes.status}`);
         const { url } = (await uploadRes.json()) as { url: string };
         imageUrl = url;
       }
-  
+
       // 2) payload 준비 / 에디터 데이터에 최종 imageUrl 반영
       const payload: Editor = {
         ...data,
         socialLinks: data.socialLinks ?? [],
-        imageUrl, 
+        imageUrl,
       };
-  
+
       // 3) 추가/수정 API 호출
       const isUpdate = Boolean(payload.id);
       const endpoint = isUpdate ? `/api/editors/${payload.id}` : '/api/editors';
@@ -120,20 +120,21 @@ export default function AdminEditor() {
   const handleDelete = async (id: string) => {
     if (!window.confirm('삭제하시겠어요?')) return;
     try {
-        const res = await fetch(`http://localhost:3001/api/editors/${id}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/api/editors/${id}`,
+        {
           method: 'DELETE',
           credentials: 'include',
         });
 
-        if (!res.ok) {
-          throw new Error(`삭제 실패 (status: ${res.status})`);
-        }
+      if (!res.ok) {
+        throw new Error(`삭제 실패 (status: ${res.status})`);
+      }
 
-        setEditors(prev =>
-          prev.filter(editor => editor.id !== id)
-        );
+      setEditors(prev =>
+        prev.filter(editor => editor.id !== id)
+      );
     } catch (error) {
-        console.error('삭제 실패:', error);
+      console.error('삭제 실패:', error);
     }
   };
 
@@ -146,18 +147,18 @@ export default function AdminEditor() {
       <ul className={styles.editor_list}>
         {isLoading ? (
           <div>로딩중</div>
-          ) : editors.length === 0 ? (
-            <div>에디터가 없습니다.</div>
-          ) : (
-            editors.map((editor) => (
-              <AdminEditorList
-                key={editor.id}
-                editor={editor}
-                onEdit={openEdit} // 모든 객체를 저장
-                onDelete={() => handleDelete(editor.id!)}  
-              />
-            ))
-          )}
+        ) : editors.length === 0 ? (
+          <div>에디터가 없습니다.</div>
+        ) : (
+          editors.map((editor) => (
+            <AdminEditorList
+              key={editor.id}
+              editor={editor}
+              onEdit={openEdit} // 모든 객체를 저장
+              onDelete={() => handleDelete(editor.id!)}
+            />
+          ))
+        )}
       </ul>
 
       {modalOpen && (
