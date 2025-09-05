@@ -26,7 +26,7 @@ export default function useLogout () {
             if (data?.message) message = data.message;
           }
         } catch {}
-        throw new Error(message);
+        return { ok: false, message: message };
       }
   
       router.replace('/snowman/elsa');

@@ -88,7 +88,10 @@ export default function PostForm({
                     credentials: "include",
                     signal: controller.signal,
                 });
-                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                if (!res.ok) {
+                    setError(`에디터 목록을 불러올 수 없습니다. (코드 ${res.status})`);
+                    return;
+                }
                 
                 const data: Editor[] = await res.json();
 
@@ -161,7 +164,10 @@ export default function PostForm({
                     body: thumbForm,
                     credentials: 'include'
                 });
-                if (!thumbRes.ok) throw new Error("썸네일 업로드 실패");
+                if (!thumbRes.ok) {
+                    setError(`썸네일 업로드 실패 (코드 ${thumbRes.status})`);
+                    return
+                }
                 const thumbData = (await thumbRes.json()) as { url: string };
                 finalThumbnailUrl = thumbData.url;
             }
@@ -185,7 +191,7 @@ export default function PostForm({
                 });
                 if (!postRes.ok) {
                     const errData = await postRes.json().catch(() => ({}));
-                    throw new Error(errData.message || '게시물 저장 실패');
+                    setError(errData.message || '게시물 저장 실패');
                 }
             }
             // 성공 시 리스트 페이지로 이동

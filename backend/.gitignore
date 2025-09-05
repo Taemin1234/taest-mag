@@ -14,3 +14,4 @@ yarn-error.log*
 # 운영 시스템 파일
 *.swp
 Thumbs.db
+.vercel

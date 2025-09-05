@@ -19,7 +19,7 @@ export async function createPost(formData: PostFormData) {
     try {
         // 썸네일 필수 검증
         if (!formData.thumbnailUrl) {
-            throw new Error('썸네일 이미지를 꼭 등록해주세요.');
+            return { ok: false, message: '썸네일 이미지를 꼭 등록해주세요.' };
         }
 
         // 게시물 생성 API 호출
@@ -31,7 +31,7 @@ export async function createPost(formData: PostFormData) {
 
         if (!response.ok) {
             const errorData = await response.json().catch(() => ({}));
-            throw new Error(errorData.message || '게시물 저장 실패');
+            return { ok: false, message: errorData.message || '게시물 저장 실패' };
         }
 
         // 성공 시 캐시 무효화 및 리다이렉트
@@ -39,7 +39,7 @@ export async function createPost(formData: PostFormData) {
         redirect('/admin/adminPosts')
     } catch (error: any) {
         console.error('게시물 저장 실패:', error)
-        throw new Error(error.message || '게시물 저장 중 오류가 발생했습니다.')
+        return { ok: false, message: error.message || '게시물 저장 중 오류가 발생했습니다.' };
     }
 }
 
@@ -54,7 +54,7 @@ export async function updatePost(slug: string, formData: PostFormData) {
 
         if (!response.ok) {
             const errorData = await response.json().catch(() => ({}));
-            throw new Error(errorData.message || '게시물 수정 실패');
+            return { ok: false, message: errorData.message || '게시물 수정 실패' };
         }
 
         // 성공 시 캐시 무효화 및 리다이렉트
@@ -62,7 +62,7 @@ export async function updatePost(slug: string, formData: PostFormData) {
         redirect('/admin/adminPosts')
     } catch (error: any) {
         console.error('게시물 수정 실패:', error)
-        throw new Error(error.message || '게시물 수정 중 오류가 발생했습니다.')
+        return { ok: false, message: error.message || '게시물 수정 중 오류가 발생했습니다.' };
     }
 }
 
@@ -81,6 +81,6 @@ export async function uploadThumbnail(formData: FormData) {
         return data.url;
     } catch (error: any) {
         console.error('썸네일 업로드 실패:', error)
-        throw new Error(error.message || '썸네일 업로드 중 오류가 발생했습니다.')
+        return { ok: false, message: error.message || '썸네일 업로드 중 오류가 발생했습니다.' };
     }
 } 
