@@ -13,7 +13,8 @@ export async function fetchEditors(): Promise<Editor[]> {
     credentials: 'include', // 쿠키 전송이 필요하다면 포함
   })
   if (!response.ok) {
-    throw new Error(`Failed to fetch editors: ${response.status} ${response.statusText}`)
+    console.error('fetchEditors failed with status', response.status)
+    return []
   }
   const data: Editor[] = await response.json()
   return data
@@ -33,7 +34,8 @@ export async function fetchPosts(): Promise<Post[]> {
     credentials: 'include', // 필요 시 쿠키 전송
   })
   if (!response.ok) {
-    throw new Error(`Failed to fetch posts: ${response.status} ${response.statusText}`)
+    console.error('fetchPosts failed with status', response.status)
+    return []
   }
   const data: Post[] = await response.json()
   return data
@@ -53,7 +55,8 @@ export async function fetchNotFeaturePosts(): Promise<Post[]> {
     credentials: 'include', // 필요 시 쿠키 전송
   })
   if (!response.ok) {
-    throw new Error(`Failed to fetch posts: ${response.status} ${response.statusText}`)
+    console.error('fetchNotFeaturePosts failed with status', response.status)
+    return []
   }
   const data: Post[] = await response.json()
   return data
@@ -61,23 +64,24 @@ export async function fetchNotFeaturePosts(): Promise<Post[]> {
 
 // 특별 게시물 가져오기
 export async function fetchFeaturePost(): Promise<Post[]> {
-   // 서버(Next.js 서버 컴포넌트) vs 클라이언트 구분
-   const isServer = typeof window === 'undefined';
+  // 서버(Next.js 서버 컴포넌트) vs 클라이언트 구분
+  const isServer = typeof window === 'undefined';
 
-   const baseUrl = isServer
-     ? process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
-     : '';
+  const baseUrl = isServer
+    ? process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
+    : '';
 
-     const response = await fetch(`${baseUrl}/api/posts/featured`, {
-      method: 'GET',
-      credentials: 'include', // 필요 시 쿠키 전송
-    })
+  const response = await fetch(`${baseUrl}/api/posts/featured`, {
+    method: 'GET',
+    credentials: 'include', // 필요 시 쿠키 전송
+  })
 
-    if (!response.ok) {
-      throw new Error(`Failed to fetch posts: ${response.status} ${response.statusText}`)
-    }
-    const data: Post[] = await response.json()
-    return data
+  if (!response.ok) {
+    console.error('fetchFeaturePost failed with status', response.status)
+    return []
+  }
+  const data: Post[] = await response.json()
+  return data
 }
 
 // 카테고리별 추천 게시물
@@ -94,7 +98,8 @@ export async function fetchRecommendedPosts(category: string, excludeSlug: strin
   });
 
   if (!res.ok) {
-    throw new Error(`추천 게시물을 불러오는 데 실패했습니다: ${res.status}`);
+    console.error('fetchRecommendedPosts failed with status', res.status)
+    return []
   }
 
   return await res.json();
@@ -121,14 +126,15 @@ export async function fetchPostsByEditor(editorName: string): Promise<Post[]> {
   )
 
   if (!res.ok) {
-    throw new Error(`에디터 게시물을 불러오는 데 실패했습니다: ${res.status}`)
+    console.error('fetchPostsByEditor failed with status', res.status)
+    return []
   }
 
   return await res.json()
 }
 
 // slug를 이용해 단일 포스트 가져오기
-export async function fetchPostBySlug(slug: string, signal?: AbortSignal): Promise<Post> {
+export async function fetchPostBySlug(slug: string, signal?: AbortSignal): Promise<Post | null> {
 
   const isServer = typeof window === 'undefined';
 
@@ -142,7 +148,8 @@ export async function fetchPostBySlug(slug: string, signal?: AbortSignal): Promi
     signal,
   })
   if (!res.ok) {
-    throw new Error(`게시글(슬러그: ${slug})을 불러오지 못했습니다. (${res.status})`)
+    console.error('fetchPostBySlug failed with status', res.status)
+    return null
   }
   const post: Post = await res.json()
   return post

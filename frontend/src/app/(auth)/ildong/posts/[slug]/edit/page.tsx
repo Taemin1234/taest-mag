@@ -20,7 +20,11 @@ export default function EditPostPage() {
     const ac = new AbortController();
 
     fetchPostBySlug(slug, ac.signal)
-      .then((data: Post) => {
+      .then((data: Post | null) => {
+        if (!data) {
+          setError('포스트를 찾을 수 없습니다.');
+          return;
+        }
         setInitialData(data as FormData);
       })
       .catch(err => {
