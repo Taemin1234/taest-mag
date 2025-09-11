@@ -16,7 +16,8 @@ export const useUserStore = create<UserRoleState>((set) => ({
       });
 
       if (!res.ok) {
-        throw new Error(`HTTP ${res.status}`);
+        set({ tier: null });
+        return;
       }
 
       // 응답 타입 안전하게 지정

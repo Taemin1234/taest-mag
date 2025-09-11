@@ -10,7 +10,7 @@ export default function EditPostPage() {
   const params = useParams();
   const rawSlug = params?.slug as string | string[] | undefined;
   const slug = Array.isArray(rawSlug) ? rawSlug[0] : rawSlug;
-  
+
   const [initialData, setInitialData] = useState<FormData | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -18,7 +18,7 @@ export default function EditPostPage() {
   useEffect(() => {
     if (!slug) return;
     const ac = new AbortController();
-  
+
     fetchPostBySlug(slug, ac.signal)
       .then((data: Post) => {
         setInitialData(data as FormData);
@@ -28,12 +28,12 @@ export default function EditPostPage() {
         console.error(err);
         setError('포스트를 불러오는 중 오류가 발생했습니다.');
       });
-  
+
     return () => ac.abort(); // 언마운트 시 취소
   }, [slug]);
 
   // 2) 수정 요청 핸들러
-  const handleUpdate = async (data: FormData) => {
+  const handleUpdate = async (data: FormData): Promise<void> => {
     if (!slug) return;
     try {
       const res = await fetch(`/api/posts/${encodeURIComponent(slug)}`, {
@@ -43,10 +43,11 @@ export default function EditPostPage() {
         body: JSON.stringify(data),
       });
       if (!res.ok) {
-        const maybeJson = await res
-          .json()
-          .catch(() => ({ message: '수정 중 오류가 발생했습니다.' }));
-        throw new Error(maybeJson?.message || `HTTP ${res.status}`);
+        // 서버가 JSON을 반환하지 않을 수도 있으므로 안전 파싱
+        const maybeJson = await res.json().catch(() => ({} as any));
+        const msg = maybeJson?.message || `수정 실패 (코드 ${res.status})`;
+        setError(msg);
+        return;
       }
       // 필요시 성공 후 처리 (예: 라우팅) 추가
     } catch (e: any) {

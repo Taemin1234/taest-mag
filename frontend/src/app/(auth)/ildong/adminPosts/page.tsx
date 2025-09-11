@@ -29,19 +29,19 @@ const AdminPosts = () => {
     useEffect(() => {
         setIsLoading(true)
         fetchEditors()
-        .then((data: Editor[]) => {
-            const opts: Option[] = data.map((editor) => ({
-            value: editor.name,
-            label: editor.name,
-            }))
-            setEditorName(opts)
-        })
-        .catch((err) => {
-            console.error('에디터 로딩 실패:', err)
-        })
-        .finally(() => {
-            setIsLoading(false)
-        })
+            .then((data: Editor[]) => {
+                const opts: Option[] = data.map((editor) => ({
+                    value: editor.name,
+                    label: editor.name,
+                }))
+                setEditorName(opts)
+            })
+            .catch((err) => {
+                console.error('에디터 로딩 실패:', err)
+            })
+            .finally(() => {
+                setIsLoading(false)
+            })
     }, []);
 
 
@@ -49,15 +49,15 @@ const AdminPosts = () => {
     useEffect(() => {
         setIsLoading(true)
         fetchPosts()
-        .then((data: Post[]) => {
-            setPosts(data)
-        })
-        .catch((err) => {
-            console.error('게시물 로딩 실패:', err)
-        })
-        .finally(() => {
-            setIsLoading(false)
-        })
+            .then((data: Post[]) => {
+                setPosts(data)
+            })
+            .catch((err) => {
+                console.error('게시물 로딩 실패:', err)
+            })
+            .finally(() => {
+                setIsLoading(false)
+            })
     }, []);
 
     // 삭제 이벤트
@@ -68,7 +68,10 @@ const AdminPosts = () => {
                 method: 'DELETE',
                 credentials: 'include',
             })
-            if (!res.ok) throw new Error(`${res.status} ${res.statusText}`)
+            if (!res.ok) {
+                alert(`삭제 실패 (코드 ${res.status})`);
+                return;
+            }
             setPosts(prev =>
                 prev.filter(posts => posts.slug !== slug)
             );

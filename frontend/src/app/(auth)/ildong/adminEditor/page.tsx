@@ -25,7 +25,11 @@ export default function AdminEditor() {
           signal: ac.signal,
         });
 
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        if (!res.ok) {
+          setEditors([]); // 안전한 기본값
+          console.error(`에디터 목록 불러오기 실패: ${res.status}`);
+          return; // 여기서 함수 종료
+        }
 
         const text = await res.text();
         const data = text ? JSON.parse(text) : [];
@@ -77,7 +81,10 @@ export default function AdminEditor() {
           credentials: 'include',
         }
         );
-        if (!uploadRes.ok) throw new Error(`Upload failed: HTTP ${uploadRes.status}`);
+        if (!uploadRes.ok) {
+          alert(`이미지 업로드 실패 (코드 ${uploadRes.status})`);
+          return;
+        }
         const { url } = (await uploadRes.json()) as { url: string };
         imageUrl = url;
       }
@@ -104,7 +111,10 @@ export default function AdminEditor() {
         body: JSON.stringify(payload),
       });
 
-      if (!res.ok) throw new Error(`Save failed: HTTP ${res.status}`);
+      if (!res.ok) {
+        alert(`에디터 저장 실패 (코드 ${res.status})`);
+        return;
+      }
       const saved = (await res.json()) as Editor;
 
       setEditors(prev =>
@@ -127,7 +137,8 @@ export default function AdminEditor() {
         });
 
       if (!res.ok) {
-        throw new Error(`삭제 실패 (status: ${res.status})`);
+        alert(`삭제 실패 (코드 ${res.status})`);
+        return;
       }
 
       setEditors(prev =>

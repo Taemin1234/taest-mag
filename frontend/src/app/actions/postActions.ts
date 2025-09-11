@@ -74,7 +74,9 @@ export async function uploadThumbnail(formData: FormData) {
         });
 
         if (!response.ok) {
-            throw new Error("썸네일 업로드 실패");
+            const text = await response.text().catch(() => '');
+            console.error('썸네일 업로드 실패:', response.status, text);
+            return { ok: false, message: `썸네일 업로드 실패 (코드 ${response.status})` };
         }
 
         const data = await response.json() as { url: string };

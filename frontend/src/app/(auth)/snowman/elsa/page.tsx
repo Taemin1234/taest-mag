@@ -53,9 +53,12 @@ export default function LoginPage() {
       if (!res.ok) {
         const message = data?.message || `로그인 실패 (status: ${res.status})`;
         const remainingAttempts = data?.remainingAttempts;
-        const error = new Error(message) as Error & { remainingAttempts?: number };
-        if (remainingAttempts !== undefined) error.remainingAttempts = remainingAttempts;
-        throw error;
+
+        return {
+          ok: false,
+          message,
+          remainingAttempts,
+        };
       }
 
 

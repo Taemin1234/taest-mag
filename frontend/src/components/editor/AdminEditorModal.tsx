@@ -104,7 +104,9 @@ export default function AdminEditorModal({ editor, onClose, onSave }: EditorModa
                     } catch {
                         /* ignore parse errors */
                     }
-                    throw new Error(errMsg);
+                    setError(errMsg);
+                    setUploading(false);
+                    return;
                 }
 
                 // 4) 성공 시 JSON 파싱하여 URL 꺼내기

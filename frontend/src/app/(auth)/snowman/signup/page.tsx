@@ -67,9 +67,11 @@ export default function SignUpPage() {
       if (!res.ok) {
         const message = data?.message || `회원가입 실패 (status: ${res.status})`;
         const remainingAttempts = data?.remainingAttempts;
-        const error = new Error(message) as Error & { remainingAttempts?: number };
-        if (remainingAttempts !== undefined) error.remainingAttempts = remainingAttempts;
-        throw error;
+        const fullMessage = remainingAttempts !== undefined
+          ? `${message} (남은 시도: ${remainingAttempts})`
+          : message;
+        setError(fullMessage);
+        return;
       }
 
       // 4) 회원가입 성공 시 로그인 페이지로 이동

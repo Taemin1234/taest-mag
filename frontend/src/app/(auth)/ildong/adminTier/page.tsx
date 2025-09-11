@@ -8,6 +8,7 @@ export default function AdminTier() {
   const [users, setUsers] = useState<Users[]>([]);
   const [selectedRoles, setSelectedRoles] = useState<Record<string, Role>>({});
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
 
   useEffect(() => {
@@ -22,15 +23,20 @@ export default function AdminTier() {
           signal: ac.signal,
         })
 
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data:Users[] = await res.json();
+        if (!res.ok) {
+          setError(`유저 목록을 불러오지 못했습니다. (코드 ${res.status})`);
+          setUsers([]);
+          return;
+        }
+
+        const data: Users[] = await res.json();
         setUsers(data)  // 배열 전체를 상태에 저장
 
         const init: Record<string, Role> = {};
         data.forEach(u => { init[u.email] = u.role as Role });
         setSelectedRoles(init);
       } catch (error: any) {
-        if (error?.name === 'AbortError') return; 
+        if (error?.name === 'AbortError') return;
         console.error('유저 로딩 실패:', error);
       }
     }
@@ -55,9 +61,11 @@ export default function AdminTier() {
       });
 
       if (!res.ok) {
-        const { message } =
-          (await res.json().catch(() => ({ message: `HTTP ${res.status}` })));
-        throw new Error(message);
+        // 서버가 JSON 메시지를 줄 수도 있고 아닐 수도 있으니 안전 파싱
+        const fallback = { message: `티어 변경 실패 (코드 ${res.status})` };
+        const data = await res.json().catch(() => fallback);
+        setError(data?.message ?? fallback.message);
+        return;
       }
 
       // 로컬 users 상태도 업데이트
@@ -111,7 +119,7 @@ export default function AdminTier() {
               </td>
               <td>
                 <button className={styles.button} onClick={() => handleRoleSubmit(user.email)}>
-                    변경하기
+                  변경하기
                 </button>
               </td>
             </tr>
