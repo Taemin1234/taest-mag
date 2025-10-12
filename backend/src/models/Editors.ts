@@ -54,25 +54,27 @@ const EditorSchema = new Schema<IEditor>(
   },
   {
     timestamps: true,
+    versionKey: false,
     toJSON: {
-      transform(doc, ret) {
+      transform(doc, ret: any) {
         ret.id = ret._id;
-        delete ret._id;
-        delete ret.__v;
+        ret._id = undefined;
+        return ret;
       }
     },
     toObject: {
-      transform(doc, ret) {
+      virtuals: true,
+      transform(_doc, ret: any) {
         ret.id = ret._id;
-        delete ret._id;
-        delete ret.__v;
-      }
+        ret._id = undefined;
+        return ret;
+      },
     }
   }
 );
 
 // Auto-increment slug 생성 훅
-EditorSchema.pre<IEditor>('validate', async function(next) {
+EditorSchema.pre<IEditor>('validate', async function (next) {
   if (this.isNew) {
     const counter = await Counter.findByIdAndUpdate(
       { _id: 'editorSlug' }, //레코드 찾고
