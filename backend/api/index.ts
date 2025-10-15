@@ -71,6 +71,11 @@ app.use('/user', userRouter);
 
 app.use('/admin', adminRouter)
 
+app.use('*', (req, res) => {
+  console.error('NOT_FOUND', req.method, req.originalUrl);
+  res.status(404).json({ ok: false, path: req.originalUrl });
+});
+
 // 헬스체크 (로드밸런서/모니터링용)
 // eslint-disable-next-line spellcheck/spell-checker
 app.get('/healthz', (_req, res) => {
