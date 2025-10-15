@@ -27,7 +27,7 @@ const NODE_ENV = process.env.NODE_ENV || 'development'
 connectDB();
 
 // ========= [필수] 프록시 인지 (HTTPS/리버스 프록시 뒤에 둘 경우) =========
-app.set('trust proxy', 1)
+// app.set('trust proxy', 1)
 
 // ========= [필수] CORS 설정 (환경변수 기반) =========
 /**
