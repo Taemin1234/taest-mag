@@ -63,11 +63,11 @@ app.use(cookieParser());
 // ========= [필수] 미들웨어 =========
 app.use(express.json());
 
-app.use('/api/editors', editorRoutes);
-app.use('/api/upload', uploadRouter);
-app.use('/api/auth', authRouter);
-app.use('/api/posts', postRouter);
-app.use('/api/user', userRouter);
+app.use('/editors', editorRoutes);
+app.use('/upload', uploadRouter);
+app.use('/auth', authRouter);
+app.use('/posts', postRouter);
+app.use('/user', userRouter);
 
 app.use('/admin', adminRouter)
 
