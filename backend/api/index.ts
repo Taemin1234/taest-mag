@@ -21,7 +21,7 @@ const app = express();
 
 // ========= [필수] 기본 환경 =========
 const NODE_ENV = process.env.NODE_ENV || 'development'
-const PORT = Number(process.env.PORT) || 3001
+// const PORT = Number(process.env.PORT) || 3001
 
 // MongoDB 연결
 connectDB();
@@ -71,10 +71,6 @@ app.use('/user', userRouter);
 
 app.use('/admin', adminRouter)
 
-app.use('*', (req, res) => {
-  console.error('NOT_FOUND', req.method, req.originalUrl);
-  res.status(404).json({ ok: false, path: req.originalUrl });
-});
 
 // 헬스체크 (로드밸런서/모니터링용)
 // eslint-disable-next-line spellcheck/spell-checker
@@ -88,22 +84,26 @@ app.get('/', (_req, res) => {
 })
 
 // ========= [필수] 404 & 에러 핸들러 =========
-app.use((_req, res) => {
-  res.status(404).json({ message: 'Not Found' })
-})
+app.use('*', (req, res) => {
+  console.error('NOT_FOUND', req.method, req.originalUrl);
+  res.status(404).json({ ok: false, path: req.originalUrl });
+});
 
 // ========= [필수] 기동 & 우아한 종료 =========
-const server = app.listen(PORT, '0.0.0.0', () => {
-  console.log(`🚀 서버 실행 중: http://0.0.0.0:${PORT} (env: ${NODE_ENV})`)
-})
+// const server = app.listen(PORT, '0.0.0.0', () => {
+//   console.log(`🚀 서버 실행 중: http://0.0.0.0:${PORT} (env: ${NODE_ENV})`)
+// })
 
-process.on('SIGTERM', () => {
-  console.log('SIGTERM received. Shutting down gracefully...')
-  server.close(() => {
-    // TODO: DB 연결 종료 등 정리
-    process.exit(0)
-  })
-})
+// process.on('SIGTERM', () => {
+//   console.log('SIGTERM received. Shutting down gracefully...')
+//   server.close(() => {
+//     // TODO: DB 연결 종료 등 정리
+//     process.exit(0)
+//   })
+// })
 
 // Vercel이 인식하는 CommonJS export 형식
-export = serverless(app);
+// export = serverless(app);
+
+// ========= [Vercel Export - serverless] =========
+export default serverless(app);
