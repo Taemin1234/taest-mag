@@ -68,7 +68,7 @@ app.use('/user', userRouter);
 app.use('/admin', adminRouter);
 
 // 헬스체크
-app.get('/health', (_req, res) => res.status(200).send('ok'));
+app.get('/health', (_req, res) => res.send('ok'));
 
 // 루트
 app.get('/', (_req, res) => {
