@@ -4,8 +4,8 @@
     "icn1"
   ],
   "functions": {
-    "api/**/*": {
-      "maxDuration": 30
+    "api/*.js": {
+      "runtime": "nodejs20.x"
     }
   }
 }
