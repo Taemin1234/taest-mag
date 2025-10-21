@@ -26,7 +26,7 @@ export default function WebEditor({
       try {
         const form = new FormData();
         form.append('webEditor', blobInfo.blob(), blobInfo.filename());
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/upload/webEditor`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/upload/webEditor`, {
           method: 'POST',
           body: form,
           credentials: 'include',

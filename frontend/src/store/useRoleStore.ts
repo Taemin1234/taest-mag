@@ -10,7 +10,7 @@ export const useUserStore = create<UserRoleState>((set) => ({
   tier: null,
   fetchUserRole: async () => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/user/user`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/user`, {
         method: 'GET',
         credentials: 'include',
       });
