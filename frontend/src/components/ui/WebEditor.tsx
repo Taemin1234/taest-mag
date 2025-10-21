@@ -26,7 +26,7 @@ export default function WebEditor({
       try {
         const form = new FormData();
         form.append('webEditor', blobInfo.blob(), blobInfo.filename());
-        const res = await fetch('/api/upload/webEditor', {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/upload/webEditor`, {
           method: 'POST',
           body: form,
           credentials: 'include',
@@ -68,7 +68,7 @@ export default function WebEditor({
     placeholder: '내용을 입력하세요…',
     language: 'ko_KR',
   }), []);
-  
+
 
   return (
     <Editor

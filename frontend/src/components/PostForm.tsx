@@ -84,7 +84,7 @@ export default function PostForm({
                 setIsLoading(true);
 
                 const res = await fetch("/api/editors", {
-                    method: 'GET', 
+                    method: 'GET',
                     credentials: "include",
                     signal: controller.signal,
                 });
@@ -92,16 +92,16 @@ export default function PostForm({
                     setError(`에디터 목록을 불러올 수 없습니다. (코드 ${res.status})`);
                     return;
                 }
-                
+
                 const data: Editor[] = await res.json();
 
                 const opts = data.map((editor: Editor) => ({
                     value: editor.name,
                     label: editor.name,
-                  }));
+                }));
 
                 setEditorName(opts);
-            } catch (error:any) {
+            } catch (error: any) {
                 if (error?.name === "AbortError") return;
             } finally {
                 // abort된 경우에도 setState 호출 방지 (선택)
@@ -159,7 +159,7 @@ export default function PostForm({
                 const thumbForm = new FormData();
                 thumbForm.append('thumbnail', thumbnailFile);
 
-                const thumbRes = await fetch('/api/upload/thumbnail', {
+                const thumbRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/upload/thumbnail`, {
                     method: 'POST',
                     body: thumbForm,
                     credentials: 'include'
@@ -183,7 +183,7 @@ export default function PostForm({
                 await onSubmit(finalFormData)
             } else {
                 // 새 글 작성 모드: 기본 POST
-                const postRes = await fetch('/api/posts', {
+                const postRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/posts`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     credentials: 'include',

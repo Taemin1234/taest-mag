@@ -75,7 +75,7 @@ export default function AdminEditor() {
         form.append('image', file);
 
         // 백엔드 /api/upload 엔드포인트로 전송
-        const uploadRes = await fetch('/api/upload', {
+        const uploadRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/upload`, {
           method: 'POST',
           body: form,
           credentials: 'include',

@@ -3,17 +3,17 @@
 import { useRouter } from 'next/navigation'
 import { useCallback } from 'react'
 
-export default function useLogout () {
+export default function useLogout() {
   const router = useRouter()
 
   const logout = useCallback(async () => {
     try {
-      const res = await fetch('/api/auth/logout',{ 
-          method:"POST",
-          credentials: "include",
-          cache: 'no-store',
-          keepalive: true,
-         }
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/auth/logout`, {
+        method: "POST",
+        credentials: "include",
+        cache: 'no-store',
+        keepalive: true,
+      }
       )
 
       if (!res.ok) {
@@ -25,10 +25,10 @@ export default function useLogout () {
             const data = await res.json();
             if (data?.message) message = data.message;
           }
-        } catch {}
+        } catch { }
         return { ok: false, message: message };
       }
-  
+
       router.replace('/snowman/elsa');
     } catch (error) {
       console.error('로그아웃 실패:', error)
