@@ -1,12 +1,9 @@
 import { Editor, Post } from "@/types"
 
+const baseUrl = process.env.NEXT_PUBLIC_API_URL;
+
 // 에디터
 export async function fetchEditors(): Promise<Editor[]> {
-  const isServer = typeof window === 'undefined';
-
-  const baseUrl = isServer
-    ? process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
-    : '';
 
   const response = await fetch(`${baseUrl}/api/editors`, {
     method: 'GET',
@@ -22,12 +19,6 @@ export async function fetchEditors(): Promise<Editor[]> {
 
 // 게시물 post
 export async function fetchPosts(): Promise<Post[]> {
-  // 서버(Next.js 서버 컴포넌트) vs 클라이언트 구분
-  const isServer = typeof window === 'undefined';
-
-  const baseUrl = isServer
-    ? process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
-    : '';
 
   const response = await fetch(`${baseUrl}/api/posts`, {
     method: 'GET',
@@ -43,12 +34,6 @@ export async function fetchPosts(): Promise<Post[]> {
 
 // 특별 게시물 제외한 post
 export async function fetchNotFeaturePosts(): Promise<Post[]> {
-  // 서버(Next.js 서버 컴포넌트) vs 클라이언트 구분
-  const isServer = typeof window === 'undefined';
-
-  const baseUrl = isServer
-    ? process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
-    : '';
 
   const response = await fetch(`${baseUrl}/api/posts/notFeatured`, {
     method: 'GET',
@@ -64,12 +49,6 @@ export async function fetchNotFeaturePosts(): Promise<Post[]> {
 
 // 특별 게시물 가져오기
 export async function fetchFeaturePost(): Promise<Post[]> {
-  // 서버(Next.js 서버 컴포넌트) vs 클라이언트 구분
-  const isServer = typeof window === 'undefined';
-
-  const baseUrl = isServer
-    ? process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
-    : '';
 
   const response = await fetch(`${baseUrl}/api/posts/featured`, {
     method: 'GET',
@@ -86,11 +65,6 @@ export async function fetchFeaturePost(): Promise<Post[]> {
 
 // 카테고리별 추천 게시물
 export async function fetchRecommendedPosts(category: string, excludeSlug: string): Promise<Post[]> {
-  const isServer = typeof window === 'undefined';
-
-  const baseUrl = isServer
-    ? process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
-    : '';
 
   const res = await fetch(`${baseUrl}/api/posts/recommend?category=${category}&exclude=${excludeSlug}`, {
     method: 'GET',
@@ -107,12 +81,6 @@ export async function fetchRecommendedPosts(category: string, excludeSlug: strin
 
 // 특정에디터가 작성한 게시물
 export async function fetchPostsByEditor(editorName: string): Promise<Post[]> {
-  // 서버(Next.js 서버 컴포넌트) vs 클라이언트 구분
-  const isServer = typeof window === 'undefined';
-
-  const baseUrl = isServer
-    ? process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
-    : '';
 
   // URL에 한글이나 특수문자가 있을 수 있으니 인코딩
   const encodedName = encodeURIComponent(editorName)
@@ -136,11 +104,6 @@ export async function fetchPostsByEditor(editorName: string): Promise<Post[]> {
 // slug를 이용해 단일 포스트 가져오기
 export async function fetchPostBySlug(slug: string, signal?: AbortSignal): Promise<Post | null> {
 
-  const isServer = typeof window === 'undefined';
-
-  const baseUrl = isServer
-    ? process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
-    : '';
 
   const res = await fetch(`${baseUrl}/api/posts/${encodeURIComponent(slug)}`, {
     method: 'GET',
