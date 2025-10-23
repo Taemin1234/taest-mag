@@ -1,7 +1,6 @@
 import { Editor, Post } from "@/types"
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL;
-console.log('[DEBUG] NEXT_PUBLIC_API_URL =', baseUrl);
 
 // 에디터
 export async function fetchEditors(): Promise<Editor[]> {

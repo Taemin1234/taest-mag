@@ -64,7 +64,7 @@ const AdminPosts = () => {
     const handleDelete = async (slug: string) => {
         if (!window.confirm('삭제하시겠어요? 돌이킬수 없습니다?')) return;
         try {
-            const res = await fetch(`/api/posts/${slug}`, {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/posts/${slug}`, {
                 method: 'DELETE',
                 credentials: 'include',
             })

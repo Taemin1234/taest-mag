@@ -8,7 +8,7 @@ interface ViewTrackerProps {
 
 export default function ViewTracker({ slug }: ViewTrackerProps) {
   useEffect(() => {
-    fetch(`/api/post/${slug}/views`, { method: 'POST' })
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/post/${slug}/views`, { method: 'POST' })
       .catch(console.error)
   }, [slug])
 

@@ -98,7 +98,7 @@ export default function AdminEditor() {
 
       // 3) 추가/수정 API 호출
       const isUpdate = Boolean(payload.id);
-      const endpoint = isUpdate ? `/api/editors/${payload.id}` : '/api/editors';
+      const endpoint = isUpdate ? `${process.env.NEXT_PUBLIC_API_URL}/api/editors/${payload.id}` : '/api/editors';
       const method = isUpdate ? 'PUT' : 'POST';
 
       const res = await fetch(endpoint, {
@@ -130,7 +130,7 @@ export default function AdminEditor() {
   const handleDelete = async (id: string) => {
     if (!window.confirm('삭제하시겠어요?')) return;
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/api/editors/${id}`,
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/editors/${id}`,
         {
           method: 'DELETE',
           credentials: 'include',

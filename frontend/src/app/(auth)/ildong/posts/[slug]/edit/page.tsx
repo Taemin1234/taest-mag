@@ -40,7 +40,7 @@ export default function EditPostPage() {
   const handleUpdate = async (data: FormData): Promise<void> => {
     if (!slug) return;
     try {
-      const res = await fetch(`/api/posts/${encodeURIComponent(slug)}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/posts/${encodeURIComponent(slug)}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
