@@ -53,7 +53,7 @@ app.use(cors({
 
 // ===== 보안/성능 공통 =====
 app.use(helmet({
-    crossOriginResourcePolicy: { policy: 'cross-origin' },
+    crossOriginResourcePolicy: false,
 }));
 app.use(compression());
 app.use(cookieParser());
