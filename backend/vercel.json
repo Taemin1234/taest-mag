@@ -6,7 +6,7 @@
   "functions": {
     "api/index.ts": {
       "maxDuration": 30,
-      "runtime": "nodejs22.x",
+      "runtime": "vercel/node@22.x",
       "memory": 1024
     }
   },
