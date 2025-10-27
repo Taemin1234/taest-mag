@@ -32,24 +32,11 @@ app.set('trust proxy', 1);
  * 로컬 개발 허용하려면 CORS_ALLOW_LOCALHOST=true
  * CORS_ORIGINS: 쉼표로 구분된 도메인 목록
  */
-const allowList = (process.env.CORS_ORIGINS || '')
-    .split(',')
-    .map(s => s.trim())
-    .filter(Boolean);
-
-const allowLocalhost = process.env.CORS_ALLOW_LOCALHOST === 'true';
-
-const corsOrigin = (origin: string | undefined, cb: (err: Error | null, allowed?: boolean) => void) => {
-    if (!origin) return cb(null, true); // 서버-서버 호출 등 Origin 없는 경우 허용
-    if (allowList.includes(origin)) return cb(null, true);
-    if (allowLocalhost && /^http:\/\/localhost:\d+$/.test(origin)) return cb(null, true);
-    cb(new Error('Not allowed by CORS'));
-};
-
 app.use(cors({
-    origin: corsOrigin,
-    credentials: true,
-}));
+    origin: ['https://taest-mag-front.vercel.app'],
+    credentials: true
+}))
+app.options('*', cors())
 
 // ===== 보안/성능 공통 =====
 app.use(helmet({
@@ -68,7 +55,9 @@ app.use('/user', userRouter);
 app.use('/admin', adminRouter);
 
 // 헬스체크
-app.get('/health', (_req, res) => res.send('ok'));
+app.get('/health', (_req, res) => {
+    res.json({ ok: true, time: new Date().toISOString() })
+});
 
 // 루트
 app.get('/', (_req, res) => {
