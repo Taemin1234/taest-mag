@@ -54,7 +54,7 @@ app.use('/posts', postRouter);
 app.use('/user', userRouter);
 app.use('/admin', adminRouter);
 
-// 헬스체크
+// 헬스체크 체크
 app.get('/health', (_req, res) => {
     res.json({ ok: true, time: new Date().toISOString() })
 });
