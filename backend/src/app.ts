@@ -33,35 +33,39 @@ app.set('trust proxy', 1);
  * CORS_ORIGINS: 쉼표로 구분된 도메인 목록
  */
 app.use(cors({
-    origin: ['https://taest-mag-front.vercel.app'],
+    origin: [
+        'https://taest-mag-front.vercel.app',
+        'http://localhost:3000',
+        'http://localhost:5173'
+    ],
     credentials: true
 }))
-app.options('*', cors())
+
 
 // ===== 보안/성능 공통 =====
 app.use(helmet({
-    crossOriginResourcePolicy: false,
+    crossOriginResourcePolicy: { policy: 'cross-origin' }, // 외부로 이미지 제공 시 편의
 }));
 app.use(compression());
 app.use(cookieParser());
 app.use(express.json());
 
-// ===== 라우트 (여기선 '/api' prefix 절대 붙이지 않기!) =====
-app.use('/editors', editorRoutes);
-app.use('/upload', uploadRouter);
-app.use('/auth', authRouter);
-app.use('/posts', postRouter);
-app.use('/user', userRouter);
-app.use('/admin', adminRouter);
+// ===== 라우트 =====
+app.use('/api/editors', editorRoutes);
+app.use('/api/upload', uploadRouter);
+app.use('/api/auth', authRouter);
+app.use('/api/posts', postRouter);
+app.use('/api/user', userRouter);
+app.use('/api/admin', adminRouter);
 
 // 헬스체크 체크
-app.get('/health', (_req, res) => {
+app.get('/api/health', (_req, res) => {
     res.json({ ok: true, time: new Date().toISOString() })
 });
 
 // 루트
 app.get('/', (_req, res) => {
-    res.send(`🟢 Express up (env: ${NODE_ENV})`);
+    res.send(`🟢 Express up (env: ${NODE_ENV}) 서버가 잘 작동 중입니다.`);
 });
 
 // 404 핸들러 (마지막)
