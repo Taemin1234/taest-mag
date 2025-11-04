@@ -1,11 +1,10 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "main": "index.js",
   "scripts": {
     "dev": "cross-env NODE_ENV=development ts-node-dev --respawn --transpile-only src/server.ts",
     "build": "tsc",
-    "start": "cross-env NODE_ENV=production node dist/index.js",
+    "start": "cross-env NODE_ENV=production node dist/server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start:scheduler": "ts-node src/scheduler/clearIdleLogins.ts"
   },
@@ -30,7 +29,6 @@
     "node-cron": "^4.0.5",
     "nodemailer": "^6.10.1",
     "nodemon": "^3.1.9",
-    "serverless-http": "^4.0.0",
     "streamifier": "^0.1.1"
   },
   "devDependencies": {

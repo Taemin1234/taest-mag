@@ -32,14 +32,21 @@ app.set('trust proxy', 1);
  * 로컬 개발 허용하려면 CORS_ALLOW_LOCALHOST=true
  * CORS_ORIGINS: 쉼표로 구분된 도메인 목록
  */
-app.use(cors({
-    origin: [
-        'https://taest-mag-front.vercel.app',
-        'http://localhost:3000',
-        'http://localhost:5173'
-    ],
-    credentials: true
-}))
+const allowList = (process.env.CORS_ORIGINS || '')
+  .split(',')
+  .map(s => s.trim())
+  .filter(Boolean);
+
+// 개발 편의: origin 없으면 허용(서버-서버 호출)
+const corsOptions: cors.CorsOptions = {
+  origin(origin, cb) {
+    if (!origin) return cb(null, true);
+    if (allowList.includes(origin)) return cb(null, true);
+    return cb(new Error('Not allowed by CORS'));
+  },
+  credentials: true,
+};
+app.use(cors(corsOptions));
 
 
 // ===== 보안/성능 공통 =====
