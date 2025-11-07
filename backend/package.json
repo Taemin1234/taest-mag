@@ -4,7 +4,7 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development ts-node-dev --respawn --transpile-only src/server.ts",
     "build": "tsc",
-    "start": "cross-env NODE_ENV=production node dist/server.js",
+    "start": "node dist/server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start:scheduler": "ts-node src/scheduler/clearIdleLogins.ts"
   },
@@ -13,7 +13,6 @@
   "description": "",
   "dependencies": {
     "axios": "^1.9.0",
-    "bcrypt": "^5.1.1",
     "bcryptjs": "^3.0.2",
     "cloudinary": "^2.6.0",
     "compression": "^1.8.1",
@@ -28,7 +27,7 @@
     "multer": "^1.4.5-lts.2",
     "node-cron": "^4.0.5",
     "nodemailer": "^6.10.1",
-    "nodemon": "^3.1.9",
+    
     "streamifier": "^0.1.1"
   },
   "devDependencies": {
@@ -46,6 +45,10 @@
     "cross-env": "^7.0.3",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "nodemon": "^3.1.9"
+  },
+  "engines": {
+    "node": ">=18 <23"
   }
 }
