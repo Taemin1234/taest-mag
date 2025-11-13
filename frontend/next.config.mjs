@@ -15,7 +15,7 @@ const nextConfig = {
     async rewrites() {
       return [{
         source: '/api/:path*',
-        destination: 'http://localhost:3001/api/:path*',
+        destination: 'https://api.taest-mag.kr/api/:path*',
       }];
     },
 };
