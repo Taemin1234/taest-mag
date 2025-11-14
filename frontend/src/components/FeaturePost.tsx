@@ -14,9 +14,8 @@ import { getCategoryLabel } from '@/utils/getCategoryLabel'
 
 export default function FeaturePost({posts}:{posts:Post[]}) {
 
-
     if (!posts || posts.length === 0) {
-        return <p className={styles.noPosts}>게시물이 없습니다.</p>;
+        return <p></p>;
     }
 
     return (

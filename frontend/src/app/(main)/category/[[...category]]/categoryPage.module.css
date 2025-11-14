@@ -1,5 +1,10 @@
 .category_page {
     margin-top: 80px;
+    padding: 0 20px;
+}
+
+.category_page [class*="title_"] {
+    font-size: 50px;
 }
 
 .sub_categories {
@@ -8,6 +13,11 @@
     align-items: center;
     gap: 20px;
     margin-top: 20px;
+    font-size: 20px;
+}
+
+.list_wrap {
+    margin: 40px 0;
 }
 
 .title_living {
@@ -30,4 +40,27 @@
 
 .title_default {
     color: #444;
+}
+
+@media (max-width: 768px) {
+
+}
+
+@media (max-width: 600px) {
+	.category_page {
+        margin-top: 40px;
+        padding: 0 20px;
+    }
+
+    .category_page [class*="title_"] {
+        font-size: 32px;
+    }
+
+    .sub_categories {
+        font-size: 16px;
+    }
+
+    .list_wrap {
+        margin: 20px 0;
+    }
 }

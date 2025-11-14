@@ -8,6 +8,7 @@ import 'swiper/css'
 import 'swiper/css/navigation';
 import { Navigation } from 'swiper/modules';
 import { useInView } from 'react-intersection-observer'
+import NoPost from "@/components/NoPost"
 
 import styles from './PostList.module.css'
 import { Post } from '@/types'
@@ -23,7 +24,7 @@ interface PostBasicListProps {
 export default function PostList({ posts, variant = 'sub', enableSwiper = false, }: PostBasicListProps) {
 
     if (!posts || posts.length === 0) {
-        return <p className={styles.noPosts}>게시물이 없습니다.</p>;
+        return < NoPost />;
     }
 
     // Swiper 모드

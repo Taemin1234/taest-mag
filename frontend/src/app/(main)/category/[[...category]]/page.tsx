@@ -114,7 +114,7 @@ export default function CategoryPage(props: CategoryPageProps) {
           </li>
         ))}
       </ul>
-      <div>
+      <div className={styles.list_wrap}>
         <Suspense fallback={<PostSkeleton variant="sub" enableSwiper={true}/>}>
           <GetPost variant="sub" enableSwiper={false} category={category}/>
         </Suspense>

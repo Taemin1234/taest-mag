@@ -26,7 +26,7 @@
     overflow: hidden;
     border-radius: 10px;
     transition: all 0.35s cubic-bezier(.4, 0, .2, 1);
-
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.2), 0 2px 8px rgba(0,0,0,0.05);
 }
 
 .postlist_wrap li.active {
@@ -170,14 +170,6 @@
 .swiperContainer :global(.swiper-button-next:hover),
 .swiperContainer :global(.swiper-button-prev:hover) {
     background-color: rgba(0, 0, 0);
-}
-
-
-.noPosts {
-    width: 100%;
-    padding: 50px 20px;
-    font-size: 18px;
-    text-align: center;
 }
 
 @media (max-width: 1024px) {

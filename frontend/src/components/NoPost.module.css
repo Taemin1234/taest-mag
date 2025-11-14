@@ -1,0 +1,27 @@
+
+.noPosts {
+    width: 100%;
+    padding: 50px 20px;
+    font-size: 20px;
+    font-weight: 700;
+    text-align: center;
+}
+
+.noPosts p {
+    position: relative;
+    padding-top: 130px;
+    display: inline-block;
+}
+
+.noPosts p:before {
+    position: absolute;
+    content: '';
+    width: 100px;
+    height: 100px;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    background-image: url('../../public/icon_empty.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+}

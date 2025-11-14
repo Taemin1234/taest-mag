@@ -8,7 +8,7 @@ export default function MainLayout({
   children: React.ReactNode;
 }) {
   return (
-    <>
+    <div className='content_layout'>
       <Header />
       <main className='content_wrapper'>
         <div className='content'>
@@ -17,6 +17,6 @@ export default function MainLayout({
         </div>
       </main>
       <Footer />
-    </>
+    </div>
   );
 }
