@@ -75,7 +75,7 @@ export default function AdminEditor() {
         form.append('image', file);
 
         // 백엔드 /api/upload 엔드포인트로 전송
-        const uploadRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/upload`, {
+        const uploadRes = await fetch('/api/upload', {
           method: 'POST',
           body: form,
           credentials: 'include',
@@ -98,7 +98,7 @@ export default function AdminEditor() {
 
       // 3) 추가/수정 API 호출
       const isUpdate = Boolean(payload.id);
-      const endpoint = isUpdate ? `${process.env.NEXT_PUBLIC_API_URL}/api/editors/${payload.id}` : '/api/editors';
+      const endpoint = isUpdate ? `/api/editors/${payload.id}` : '/api/editors';
       const method = isUpdate ? 'PUT' : 'POST';
 
       const res = await fetch(endpoint, {
