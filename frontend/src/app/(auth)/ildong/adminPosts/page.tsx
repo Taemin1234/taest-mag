@@ -173,7 +173,7 @@ const AdminPosts = () => {
                             </select>
                         </div>
                         <Link
-                            href="/admin/posts/new"
+                            href="/ildong/posts/new"
                             className={styles.btn_post_add}
                         >
                             글 추가하기
