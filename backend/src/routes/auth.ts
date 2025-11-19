@@ -75,11 +75,11 @@ router.post('/login', (async (req: Request, res: Response) => {
     }
 
     // 중복 로그인 검증
-    if (user.isLoggedIn) {
-        return res
-            .status(401)
-            .json({ message: "이미 다른 기기에서 로그인되어 있습니다." });
-    }
+    // if (user.isLoggedIn) {
+    //     return res
+    //         .status(401)
+    //         .json({ message: "이미 다른 기기에서 로그인되어 있습니다." });
+    // }
 
     // Users 스키마에서 비밀번호 검증
     const isMatch = await user.comparePassword(password);
