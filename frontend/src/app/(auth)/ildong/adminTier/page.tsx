@@ -17,7 +17,7 @@ export default function AdminTier() {
     const fetchUsers = async () => {
       try {
         // API가 Users[] 형태로 반환한다고 가정
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user`, {
+        const res = await fetch('/api/user', {
           method: 'GET',
           credentials: 'include',
           signal: ac.signal,
@@ -53,7 +53,7 @@ export default function AdminTier() {
     const newRole = selectedRoles[email];
     setLoading(true);
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/role`, {
+      const res = await fetch('/api/user/role', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',

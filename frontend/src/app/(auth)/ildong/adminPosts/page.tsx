@@ -64,7 +64,7 @@ const AdminPosts = () => {
     const handleDelete = async (slug: string) => {
         if (!window.confirm('삭제하시겠어요? 돌이킬수 없습니다?')) return;
         try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/posts/${slug}`, {
+            const res = await fetch(`/api/posts/${slug}`, {
                 method: 'DELETE',
                 credentials: 'include',
             })
@@ -173,7 +173,7 @@ const AdminPosts = () => {
                             </select>
                         </div>
                         <Link
-                            href="/admin/posts/new"
+                            href="/ildong/posts/new"
                             className={styles.btn_post_add}
                         >
                             글 추가하기

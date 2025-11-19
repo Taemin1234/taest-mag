@@ -159,7 +159,7 @@ export default function PostForm({
                 const thumbForm = new FormData();
                 thumbForm.append('thumbnail', thumbnailFile);
 
-                const thumbRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/upload/thumbnail`, {
+                const thumbRes = await fetch('/api/upload/thumbnail', {
                     method: 'POST',
                     body: thumbForm,
                     credentials: 'include'
@@ -183,7 +183,7 @@ export default function PostForm({
                 await onSubmit(finalFormData)
             } else {
                 // 새 글 작성 모드: 기본 POST
-                const postRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/posts`, {
+                const postRes = await fetch('/api/posts', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     credentials: 'include',

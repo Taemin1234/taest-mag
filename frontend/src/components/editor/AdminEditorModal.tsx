@@ -87,7 +87,7 @@ export default function AdminEditorModal({ editor, onClose, onSave }: EditorModa
                 form.append('profile', imageFile);
 
                 // 2) fetch로 POST 요청 보내기
-                const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/upload/profile`, {
+                const response = await fetch('/api/upload/profile', {
                     method: 'POST',
                     body: form,
                     // 쿠키 전송을 위해 include
