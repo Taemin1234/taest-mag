@@ -9,7 +9,7 @@ Taest Magazine은 다양한 분야의 에디터가 글을 게시하고 독자가
 
 ## 기술스택
 
-- 프론트엔드 : Next.js (15v), react(19v), CSS Modules, Swiper, Typescript
+- 프론트엔드 : Next.js (15v), react(19v), CSS Modules, Swiper, Typescript, Zustand
 - 백엔드 : Node.js + Express
 - DB : MongoDB + Mongoose
 
