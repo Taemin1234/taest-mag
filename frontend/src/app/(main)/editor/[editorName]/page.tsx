@@ -106,8 +106,8 @@ export default async function EditorPage(props: PostPageProps) {
           <GetEditor editorName={editor} />
         </Suspense>
       </div>
-      <div>
-        <p>게시물 보기</p>
+      <div className={styles.edit_postList}>
+        <p className={styles.title}>게시물 보기</p>
         <Suspense fallback={<PostSkeleton variant="sub" />}>
           <GetPost editorName={editor} variant="sub" enableSwiper={false} />
         </Suspense>

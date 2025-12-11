@@ -2,3 +2,13 @@
     position: relative;
     padding: 6rem 2rem;
 }
+
+.edit_postList {
+    margin-top: 4rem;
+}
+
+.edit_postList .title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+}

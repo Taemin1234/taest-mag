@@ -86,12 +86,19 @@
     align-items: center;
 }
 
+.postlist_wrap .post_list .list_top > p {
+    flex: 1;
+}
+
 .postlist_wrap .post_list .list_top .list_category {
-    /* font-size: 20px; */
     font-size: 15px;
     font-weight: 600;
     letter-spacing: 0.5px;
     text-transform: uppercase;
+}
+
+.postlist_wrap .post_list .list_top .list_category + p {
+    text-align: right;
 }
 
 .postlist_wrap .post_list .list_title {
