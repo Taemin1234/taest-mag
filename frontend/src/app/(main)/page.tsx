@@ -10,8 +10,6 @@ import { Post } from "@/types"
 import type { Metadata } from 'next'
 import logo from '@/assets/main_logo_b.png';
 
-export const dynamic = 'force-dynamic';
-
 export const metadata: Metadata = {
   title: "테이스트 매거진",
   description: "심도보단 감도, 트렌드보단 당신의 결. 취향을 수집하는 매거진",
@@ -46,23 +44,15 @@ interface PostListProps {
   enableSwiper?: boolean;
 }
 
-const GetPost = (
-  props: PostListProps
-) => {
-  const posts = use(fetchNotFeaturePosts()) as Post[]
+const GetPost = async (props: PostListProps) => {
+  const posts = await fetchNotFeaturePosts();
+  return <PostList posts={posts} {...props} />;
+};
 
-  return (
-    <PostList posts={posts} {...props} />
-  )
-}
-
-const GetFeaturePost = () => {
-  const posts = use(fetchFeaturePost()) as Post[]
-
-  return (
-    <FeaturePost posts={posts}/>
-  )
-}
+const GetFeaturePost = async () => {
+  const posts = await fetchFeaturePost();
+  return <FeaturePost posts={posts} />;
+};
 
 export default function Home() {
 

@@ -22,7 +22,7 @@ export async function fetchPosts(): Promise<Post[]> {
 
   const response = await fetch(`${baseUrl}/api/posts`, {
     method: 'GET',
-    credentials: 'include', // 필요 시 쿠키 전송
+    next: { revalidate: 60 },
   })
   if (!response.ok) {
     console.error('fetchPosts failed with status', response.status)
@@ -37,7 +37,7 @@ export async function fetchNotFeaturePosts(): Promise<Post[]> {
 
   const response = await fetch(`${baseUrl}/api/posts/notFeatured`, {
     method: 'GET',
-    credentials: 'include', // 필요 시 쿠키 전송
+    next: { revalidate: 60 },
   })
   if (!response.ok) {
     console.error('fetchNotFeaturePosts failed with status', response.status)
@@ -52,7 +52,7 @@ export async function fetchFeaturePost(): Promise<Post[]> {
 
   const response = await fetch(`${baseUrl}/api/posts/featured`, {
     method: 'GET',
-    credentials: 'include', // 필요 시 쿠키 전송
+    next: { revalidate: 60 },
   })
 
   if (!response.ok) {
@@ -69,6 +69,7 @@ export async function fetchRecommendedPosts(category: string, excludeSlug: strin
   const res = await fetch(`${baseUrl}/api/posts/recommend?category=${category}&exclude=${excludeSlug}`, {
     method: 'GET',
     credentials: 'include',
+    next: { revalidate: 60 },
   });
 
   if (!res.ok) {
