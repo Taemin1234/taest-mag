@@ -91,6 +91,7 @@ export async function fetchPostsByEditor(editorName: string): Promise<Post[]> {
     {
       method: 'GET',
       credentials: 'include',
+      next: { revalidate: 60 },
     }
   )
 
@@ -110,6 +111,7 @@ export async function fetchPostBySlug(slug: string, signal?: AbortSignal): Promi
     method: 'GET',
     credentials: 'include',
     signal,
+    next: { revalidate: 30 },
   })
   if (!res.ok) {
     console.error('fetchPostBySlug failed with status', res.status)
