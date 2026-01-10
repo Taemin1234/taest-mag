@@ -1,4 +1,3 @@
-// src/app/post/[slug]/page.tsx
 import { notFound } from 'next/navigation'
 import { Post, Editor } from '@/types'
 import { fetchPostBySlug, fetchEditors, fetchRecommendedPosts } from '@/lib/api'

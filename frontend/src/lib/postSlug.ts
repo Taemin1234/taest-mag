@@ -1,4 +1,3 @@
-// src/lib/data/post.ts
 import { cache } from "react";
 import { fetchPostBySlug } from "@/lib/api";
 import type { Post } from "@/types";

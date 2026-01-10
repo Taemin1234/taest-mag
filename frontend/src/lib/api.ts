@@ -109,7 +109,6 @@ export async function fetchPostBySlug(slug: string, signal?: AbortSignal): Promi
 
   const res = await fetch(`${baseUrl}/api/posts/${encodeURIComponent(slug)}`, {
     method: 'GET',
-    credentials: 'include',
     signal,
     next: { revalidate: 30 },
   })
