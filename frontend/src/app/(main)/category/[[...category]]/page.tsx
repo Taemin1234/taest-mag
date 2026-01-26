@@ -9,8 +9,6 @@ import { fetchPosts } from '@/lib/api'
 import { Post } from "@/types"
 import type { Metadata, ResolvingMetadata } from 'next'
 
-export const dynamic = 'force-dynamic'
-
 interface CategoryPageProps {
   params: Promise<{ category: string[] }>
 }

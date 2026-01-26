@@ -8,8 +8,6 @@ import React, { use, Suspense } from 'react';
 import { Post, Editor } from "@/types"
 import type { Metadata, ResolvingMetadata } from 'next'
 
-export const dynamic = 'force-dynamic';
-
 interface PostListProps {
   variant?: 'main' | 'sub';
   enableSwiper?: boolean;
