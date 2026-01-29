@@ -21,6 +21,21 @@ interface PostBasicListProps {
     swiperBreakpoint?: number
 }
 
+// Cloudinary Loader 함수
+const cloudinaryLoader = ({ src, width, quality }: { src: string; width: number; quality?: number }) => {
+    // 1. 이미 최적화 파라미터가 포함되어 있다면 그대로 반환
+    if (src.includes('f_auto')) return src;
+  
+    // 2. 파라미터 조립 (너비 조절 w_${width} 포함)
+    const params = ['f_auto', 'q_auto', `w_${width}`];
+    if (quality) params.push(`q_${quality}`);
+    
+    const paramsString = params.join(',');
+  
+    // 3. /upload/ 뒤에 파라미터 삽입
+    return src.replace('/upload/', `/upload/${paramsString}/`);
+};
+
 export default function PostList({ posts, variant = 'sub', enableSwiper = false, }: PostBasicListProps) {
 
     if (!posts || posts.length === 0) {
@@ -47,16 +62,19 @@ export default function PostList({ posts, variant = 'sub', enableSwiper = false,
                 }}
                 className={styles.swiperContainer} // 필요시 추가 스타일
             >
-                {posts.map(post => (
+                {posts.map((post, index) => (
                     <SwiperSlide key={post.slug} className={styles.postlist_wrap}>
                         <Link href={`/post/${post.slug}`}>
                             <div className={styles.thumbnailWrapper}>
                                 <Image
+                                    loader={cloudinaryLoader}
                                     src={post.thumbnailUrl || '/default-thumb.png'}
                                     alt={post.title}
                                     fill
                                     className={styles.post_thumbnail}
                                     sizes="(max-width: 640px) 100vw, (max-width: 768px) 33vw, 25vw"
+                                    priority={index === 0}
+                                    crossOrigin="anonymous"
                                 />
                             </div>
                             <div className={styles.post_list}>
@@ -87,14 +105,14 @@ export default function PostList({ posts, variant = 'sub', enableSwiper = false,
 
     return (
         <ul className={containerClassName}>
-            {posts.map((post) => (
-                <CardList key={post.slug} post={post} />
+            {posts.map((post, index) => (
+                <CardList key={post.slug} post={post} index={index} />
             ))}
         </ul>
     )
 }
 
-function CardList({ post }: { post: Post }) {
+function CardList({ post, index }: { post: Post; index: number }) {
     const { ref, inView } = useInView({
         threshold: 0.15,
         triggerOnce: true,
@@ -105,11 +123,14 @@ function CardList({ post }: { post: Post }) {
             <Link href={`/post/${post.slug}`} >
                 <div className={styles.thumbnailWrapper}>
                     <Image
+                        loader={cloudinaryLoader}
                         src={post.thumbnailUrl || '/default-thumb.png'}
                         alt={post.title}
                         fill
                         className={styles.post_thumbnail}
                         sizes="(max-width: 640px) 100vw, 33vw"
+                        priority={index < 2}
+                        crossOrigin="anonymous"
                     />
                 </div>
                 <div className={styles.post_list}>
