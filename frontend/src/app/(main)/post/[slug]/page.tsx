@@ -1,14 +1,15 @@
+import React, { Suspense } from 'react';
 import { notFound } from 'next/navigation'
-import { Post, Editor } from '@/types'
-import { fetchPostBySlug, fetchEditors, fetchRecommendedPosts } from '@/lib/api'
+import { fetchEditors, fetchRecommendedPosts } from '@/lib/api'
 import { getPostBySlugCached } from "@/lib/postSlug";
 import { EditorInfo } from '@/components/editor/EditorInfo'
 import PostList from '@/components/PostList'
+import PostSkeleton from "@/components/skeleton/PostSkeleton";
 import { getCategoryLabel } from '@/utils/getCategoryLabel'
 import styles from './postPage.module.css'
-import DOMPurify, { Config } from 'isomorphic-dompurify';
 import LinkCopyButton from '@/components/LinkCopyButton';
-import type { Metadata, ResolvingMetadata } from 'next'
+import SafeHtml from '@/components/SafeHtml';
+import type { Metadata } from 'next'
 
 interface PostPageProps {
   params: Promise<{ slug: string }>
@@ -21,9 +22,11 @@ export async function generateMetadata(
 
   const postMeta = await getPostBySlugCached(slug);
 
+  const defaultDes = "테이스트 매거진에서 제안하는 최신 트렌드와 깊이 있는 아티클을 만나보세요"
+
   return {
-    title: postMeta?.title,
-    description: postMeta?.subtitle,
+    title: postMeta?.title || "Taest Mag",
+    description: postMeta?.subtitle || defaultDes,
     keywords: ["매거진", "트렌드", "취향", "테이스트", `${postMeta?.category}`, `${postMeta?.subCategory}`],
     authors: [{ name: "테이스트 팀" }],
     openGraph: {
@@ -31,8 +34,8 @@ export async function generateMetadata(
       locale: "ko_KR",
       url: `${process.env.NEXT_PUBLIC_BASE_URL}/post/${slug}`,
       siteName: "테이스트 매거진",
-      title: postMeta?.title,
-      description: postMeta?.subtitle,
+      title: postMeta?.title || "Taest Mag",
+      description: postMeta?.subtitle || defaultDes,
       images: [
         {
           url: postMeta?.thumbnailUrl ?? '/thumbnail.png',
@@ -42,8 +45,8 @@ export async function generateMetadata(
     },
     twitter: {
       card: "summary_large_image",
-      title: postMeta?.title,
-      description: postMeta?.subtitle,
+      title: postMeta?.title || "Taest Mag",
+      description: postMeta?.subtitle || defaultDes,
       images: [
         {
           url: postMeta?.thumbnailUrl ?? '/thumbnail.png',
@@ -51,6 +54,31 @@ export async function generateMetadata(
         }
       ]
     }
+  }
+}
+
+// 1. 에디터 정보 컴포넌트
+async function EditorSection({ editorName }: { editorName: string }) {
+  try {
+    const editors = await fetchEditors();
+    const editor = editors?.find((e) => e.name === editorName);
+    
+    if (!editor) return null;
+    return <EditorInfo editor={editor} />;
+  } catch (err) {
+    console.error('에디터 조회 실패:', err);
+    return null;
+  }
+}
+
+// 2. 추천 게시물 컴포넌트
+async function RecommendedSection({ category, slug }: { category: string; slug: string }) {
+  try {
+    const recommendedPosts = await fetchRecommendedPosts(category, slug);
+    return <PostList posts={recommendedPosts} enableSwiper={true} />;
+  } catch (err) {
+    console.error('추천 게시물 조회 실패:', err);
+    return null;
   }
 }
 
@@ -62,43 +90,6 @@ export default async function PostPage({ params }: PostPageProps) {
   if (!post) {
     notFound() // 404 페이지로 이동
   }
-
-  // 해당 에디터 불러오기
-  let editors: Editor[] | null = null
-  try {
-    editors = await fetchEditors()
-  } catch (err) {
-    console.error('에디터 조회 중 오류:', err)
-    editors = null
-  }
-
-  const editor = editors?.find(editor => editor.name === post.editor)
-
-  // 추천 게시물 가져오기
-  let recommendedPosts: Post[] = []
-  try {
-    if (post) {
-      recommendedPosts = await fetchRecommendedPosts(post.category, post.slug);
-    }
-  } catch (err) {
-    console.error('추천 게시물 조회 중 오류:', err);
-  }
-
-
-  // Config 타입으로 옵션 객체 선언
-  const sanitizeOptions: Config = {
-    ADD_TAGS: [
-      'h1', 'h2', 'h3', 'p', 'span', 'strong', 'b', 'i', 'u', 's', 'em', 'blockquote',
-      'ul', 'ol', 'li', 'a', 'img', 'pre', 'code', 'br', 'hr', 'div',
-      'table', 'thead', 'tbody', 'tr', 'th', 'td', 'sup', 'sub'
-    ],
-    ADD_ATTR: [
-      'href', 'src', 'alt', 'title', 'style', 'class', 'target', 'rel', 'width', 'height', 'align'
-    ],
-  };
-
-  // 허용할 태그·속성·스타일을 명시적으로 추가
-  const cleanHtml = DOMPurify.sanitize(post.content, sanitizeOptions)
 
   return (
     <main className={styles.post_page}>
@@ -117,21 +108,24 @@ export default async function PostPage({ params }: PostPageProps) {
 
           {/* {post.subtitle && <p>{post.subtitle}</p>} */}
 
-          <div className={styles.post_content}
-            dangerouslySetInnerHTML={{ __html: cleanHtml }}
-          />
+          <div className={styles.post_content}>
+            <SafeHtml html={post.content} className={styles.post_content} />
+          </div>
         </section>
         <div className={styles.link_copy_btn}>
           <LinkCopyButton />
         </div>
-        {editor &&
-          <section className={styles.post_editor}>
-            <EditorInfo editor={editor} />
-          </section>}
+        <section className={styles.post_editor}>
+          <Suspense fallback={<div>에디터 정보 로딩 중...</div>}>
+            <EditorSection editorName={post.editor} />
+          </Suspense>
+        </section>
 
         <section className={styles.post_recommend}>
           <p className={styles.subtitle}>추천 게시물</p>
-          <PostList posts={recommendedPosts} enableSwiper={true} />
+          <Suspense fallback={<PostSkeleton variant="sub" />}>
+            <RecommendedSection category={post.category} slug={post.slug} />
+          </Suspense>
         </section>
       </article>
     </main>
