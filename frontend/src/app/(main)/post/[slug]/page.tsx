@@ -5,11 +5,14 @@ import { getPostBySlugCached } from "@/lib/postSlug";
 import { EditorInfo } from '@/components/editor/EditorInfo'
 import PostList from '@/components/PostList'
 import PostSkeleton from "@/components/skeleton/PostSkeleton";
+import EditorSkeleton from "@/components/skeleton/EditorSkeleton";
 import { getCategoryLabel } from '@/utils/getCategoryLabel'
 import styles from './postPage.module.css'
 import LinkCopyButton from '@/components/LinkCopyButton';
 import SafeHtml from '@/components/SafeHtml';
 import type { Metadata } from 'next'
+
+export const revalidate = 60;
 
 interface PostPageProps {
   params: Promise<{ slug: string }>
@@ -62,7 +65,7 @@ async function EditorSection({ editorName }: { editorName: string }) {
   try {
     const editors = await fetchEditors();
     const editor = editors?.find((e) => e.name === editorName);
-    
+
     if (!editor) return null;
     return <EditorInfo editor={editor} />;
   } catch (err) {
@@ -108,22 +111,20 @@ export default async function PostPage({ params }: PostPageProps) {
 
           {/* {post.subtitle && <p>{post.subtitle}</p>} */}
 
-          <div className={styles.post_content}>
-            <SafeHtml html={post.content} className={styles.post_content} />
-          </div>
+          <SafeHtml html={post.content} className={styles.post_content} />
         </section>
         <div className={styles.link_copy_btn}>
           <LinkCopyButton />
         </div>
         <section className={styles.post_editor}>
-          <Suspense fallback={<div>에디터 정보 로딩 중...</div>}>
+          <Suspense fallback={<EditorSkeleton />}>
             <EditorSection editorName={post.editor} />
           </Suspense>
         </section>
 
         <section className={styles.post_recommend}>
           <p className={styles.subtitle}>추천 게시물</p>
-          <Suspense fallback={<PostSkeleton variant="sub" />}>
+          <Suspense fallback={<PostSkeleton variant="sub" enableSwiper={true} />}>
             <RecommendedSection category={post.category} slug={post.slug} />
           </Suspense>
         </section>

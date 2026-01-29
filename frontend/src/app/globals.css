@@ -52,7 +52,7 @@ canvas,
 svg {
   display: block;
   max-width: 100%;
-  height: auto;
+  /* height: auto; */
 }
 
 input,
@@ -131,7 +131,7 @@ pre {
 .content_wrapper .content {
   max-width: 1200px;
   width: 100%;
-	margin: 0 auto;
+  margin: 0 auto;
   flex: 1;
 }
 

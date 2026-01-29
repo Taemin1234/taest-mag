@@ -7,7 +7,7 @@ export async function fetchEditors(): Promise<Editor[]> {
 
   const response = await fetch(`${baseUrl}/api/editors`, {
     method: 'GET',
-    credentials: 'include', // 쿠키 전송이 필요하다면 포함
+    next: { revalidate: 120 },
   })
   if (!response.ok) {
     console.error('fetchEditors failed with status', response.status)
@@ -68,7 +68,6 @@ export async function fetchRecommendedPosts(category: string, excludeSlug: strin
 
   const res = await fetch(`${baseUrl}/api/posts/recommend?category=${category}&exclude=${excludeSlug}`, {
     method: 'GET',
-    credentials: 'include',
     next: { revalidate: 60 },
   });
 
@@ -90,7 +89,6 @@ export async function fetchPostsByEditor(editorName: string): Promise<Post[]> {
     `${baseUrl}/api/posts/editor/${encodedName}`,
     {
       method: 'GET',
-      credentials: 'include',
       next: { revalidate: 60 },
     }
   )

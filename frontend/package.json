@@ -13,7 +13,6 @@
     "@tinymce/tinymce-react": "^6.2.1",
     "dompurify": "^3.2.6",
     "fs-extra": "^11.3.0",
-    "isomorphic-dompurify": "^2.26.0",
     "lodash": "^4.17.21",
     "next": "15.3.6",
     "quill": "^2.0.3",
@@ -35,6 +34,11 @@
     "eslint-config-next": "15.3.0",
     "typescript": "^5.8.3"
   },
+  "browserslist": [
+    "last 2 versions",
+    "not dead",
+    "> 0.2%"
+  ],
   "description": "This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).",
   "main": "index.js",
   "author": "",
